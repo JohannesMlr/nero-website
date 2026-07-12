@@ -7,7 +7,7 @@
   <meta name="description" content="We work with Europe's most ambitious minds to build a better future for our continent." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@600;700;800&display=swap" rel="stylesheet" />
   <style>
     /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -94,7 +94,14 @@
 
     /* ── PAGES ── */
     .page { display: none; padding-top: 64px; }
-    .page.active { display: block; }
+    .page.active {
+      display: block;
+      animation: pageFadeIn 0.2s ease-out;
+    }
+    @keyframes pageFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
     /* ── HERO ── */
     .hero {
@@ -141,6 +148,7 @@
       padding: 0 2rem;
     }
     .hero-h1 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(2rem, 5vw, 3.25rem);
       font-weight: 800;
       color: #fff;
@@ -203,6 +211,7 @@
       margin-bottom: 0.75rem;
     }
     .mission-h1 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(2.2rem, 5vw, 3.75rem);
       font-weight: 800;
       color: #fff;
@@ -892,6 +901,7 @@
     @media (prefers-reduced-motion: reduce) {
       .reveal { transition: none; opacity: 1; transform: none; }
       .modal { animation: none; }
+      .page.active { animation: none; }
     }
   </style>
 </head>
@@ -1575,9 +1585,9 @@
 
 <script>
   function showPage(id) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
     setTimeout(initReveal, 80);
   }
 
