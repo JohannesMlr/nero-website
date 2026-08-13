@@ -161,7 +161,7 @@
       font-size: clamp(0.95rem, 1.5vw, 1.1rem);
       color: rgba(255,255,255,0.85);
       font-weight: 400;
-      max-width: 52ch;
+      max-width: 70ch;
       margin: 0 auto;
     }
 
@@ -910,7 +910,7 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" onclick="showPage('home')" href="#">NERO</a>
+    <a class="nav-logo" onclick="showPage('home'); return false;" href="/">NERO</a>
     <div class="nav-right">
       <span class="nav-link" onclick="showPage('mission')">Our Mission</span>
       <span class="btn-pill" onclick="showPage('involved')">Get involved</span>
@@ -981,7 +981,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:48px;width:auto;" />
+        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
@@ -1125,7 +1125,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:48px;width:auto;" />
+        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
@@ -1170,7 +1170,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:48px;width:auto;" />
+        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
@@ -1212,7 +1212,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:48px;width:auto;" />
+        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
@@ -1390,7 +1390,7 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:48px;width:auto;" />
+        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
@@ -1577,12 +1577,39 @@
 </div>
 
 <script>
-  function showPage(id) {
+  const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech' };
+  const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech' };
+
+  function idFromPath(pathname) {
+    const slug = pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    return SLUG_TO_ID.hasOwnProperty(slug) ? SLUG_TO_ID[slug] : null;
+  }
+
+  function showPage(id, opts) {
+    opts = opts || {};
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
     setTimeout(initReveal, 80);
+    if (opts.updateHistory !== false) {
+      const path = '/' + (ID_TO_SLUG.hasOwnProperty(id) ? ID_TO_SLUG[id] : '');
+      if (location.pathname !== path) history.pushState({ id }, '', path);
+    }
   }
+
+  window.addEventListener('popstate', (e) => {
+    const id = (e.state && e.state.id) || idFromPath(location.pathname) || 'home';
+    showPage(id, { updateHistory: false });
+  });
+
+  (function initRouteFromURL() {
+    const id = idFromPath(location.pathname);
+    if (id && id !== 'home') {
+      showPage(id, { updateHistory: false });
+    } else if (location.pathname !== '/') {
+      history.replaceState({ id: 'home' }, '', '/');
+    }
+  })();
 
   function initReveal() {
     const els = document.querySelectorAll('.page.active .reveal:not(.visible)');
