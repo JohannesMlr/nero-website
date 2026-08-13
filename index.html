@@ -1702,9 +1702,9 @@
       lastY = y;
 
       const now = performance.now();
-      if (now - lastSpawn < 230) return;
+      if (now - lastSpawn < 170) return;
       lastSpawn = now;
-      if (Math.random() > 0.38) return;
+      if (Math.random() > 0.55) return;
       spawn(x, y, dirX, dirY);
       ensureLoop();
     });
