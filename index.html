@@ -60,7 +60,7 @@
       font-size: 1.25rem;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: var(--ink);
+      color: #5A5869;
       text-decoration: none;
     }
     .nav-right {
@@ -141,6 +141,12 @@
       height: 45%;
     }
     .hero-mountains svg { width: 100%; height: 100%; display: block; }
+    .hero-sparkle-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
     .hero-text {
       position: relative;
       z-index: 2;
@@ -924,7 +930,8 @@
 <div id="page-home" class="page active">
 
   <!-- HERO -->
-  <div class="hero">
+  <div class="hero" id="hero">
+    <canvas class="hero-sparkle-canvas" id="heroSparkleCanvas"></canvas>
     <div class="hero-text">
       <h1 class="hero-h1">The European story of the 21st century has yet to be written</h1>
       <p class="hero-sub">We work with Europe's most ambitious minds to build a better future for our continent.</p>
@@ -1609,6 +1616,98 @@
     } else if (location.pathname !== '/') {
       history.replaceState({ id: 'home' }, '', '/');
     }
+  })();
+
+  (function initHeroSparkles() {
+    const hero = document.getElementById('hero');
+    const canvas = document.getElementById('heroSparkleCanvas');
+    if (!hero || !canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let rafId = null;
+    let lastSpawn = 0;
+    let lastX = null, lastY = null;
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+    function resize() {
+      const rect = hero.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      canvas.style.width = rect.width + 'px';
+      canvas.style.height = rect.height + 'px';
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function spawn(x, y, dirX, dirY) {
+      const baseAngle = Math.atan2(dirY, dirX);
+      const angle = baseAngle + (Math.random() - 0.5) * 0.9;
+      const speed = (0.12 + Math.random() * 0.22) * dpr;
+      particles.push({
+        x: (x + (Math.random() - 0.5) * 8) * dpr,
+        y: (y + (Math.random() - 0.5) * 8) * dpr,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed,
+        size: (0.25 + Math.random() * 0.35) * dpr,
+        baseAlpha: 0.65 + Math.random() * 0.35,
+        phase: Math.random() * Math.PI * 2,
+        age: 0,
+        maxLife: 500 + Math.random() * 500,
+      });
+    }
+
+    function tick(now) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles = particles.filter(p => p.age < p.maxLife);
+      for (const p of particles) {
+        p.age += 16.7;
+        p.x += p.vx;
+        p.y += p.vy;
+        const lifeRatio = p.age / p.maxLife;
+        const fade = lifeRatio < 0.15 ? lifeRatio / 0.15 : 1 - Math.pow((lifeRatio - 0.15) / 0.85, 2);
+        const twinkle = 0.7 + 0.3 * Math.sin(p.age * 0.025 + p.phase);
+        const alpha = Math.max(0, p.baseAlpha * fade * twinkle);
+        const r = p.size * 1.15;
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+        grad.addColorStop(0, `rgba(255,255,255,${alpha})`);
+        grad.addColorStop(0.55, `rgba(255,255,255,${alpha * 0.85})`);
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      if (particles.length > 0) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = null;
+      }
+    }
+
+    function ensureLoop() {
+      if (rafId === null) rafId = requestAnimationFrame(tick);
+    }
+
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      let dirX = 1, dirY = 0;
+      if (lastX !== null) {
+        const dx = x - lastX, dy = y - lastY;
+        const dist = Math.hypot(dx, dy);
+        if (dist > 0.5) { dirX = dx / dist; dirY = dy / dist; }
+      }
+      lastX = x;
+      lastY = y;
+
+      const now = performance.now();
+      if (now - lastSpawn < 300) return;
+      lastSpawn = now;
+      if (Math.random() > 0.25) return;
+      spawn(x, y, dirX, dirY);
+      ensureLoop();
+    });
   })();
 
   function initReveal() {
