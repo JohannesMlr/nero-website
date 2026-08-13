@@ -1648,7 +1648,7 @@
         y: (y + (Math.random() - 0.5) * 8) * dpr,
         vx: Math.cos(angle) * speed,
         vy: Math.sin(angle) * speed,
-        size: (0.25 + Math.random() * 0.35) * dpr,
+        size: (0.35 + Math.random() * 0.45) * dpr,
         baseAlpha: 0.65 + Math.random() * 0.35,
         phase: Math.random() * Math.PI * 2,
         age: 0,
@@ -1702,9 +1702,9 @@
       lastY = y;
 
       const now = performance.now();
-      if (now - lastSpawn < 300) return;
+      if (now - lastSpawn < 230) return;
       lastSpawn = now;
-      if (Math.random() > 0.25) return;
+      if (Math.random() > 0.38) return;
       spawn(x, y, dirX, dirY);
       ensureLoop();
     });
