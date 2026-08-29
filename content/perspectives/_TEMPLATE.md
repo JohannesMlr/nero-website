@@ -2,6 +2,7 @@
 slug: kebab-case-unique-id
 groups: tech
 author: kebab-case-author-slug
+image: /assets/images/articles/kebab-case-unique-id.jpg
 type: Essay
 date: 2026-01-01
 title: Article Title In Title Case

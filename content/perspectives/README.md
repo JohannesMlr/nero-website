@@ -9,6 +9,7 @@ Each article is one Markdown file in this folder, named `<slug>.md`. Use `_TEMPL
 | `slug`   | kebab-case, unique                  | Must match the filename (without `.md`) and the entry in `manifest.json`. |
 | `groups` | comma-separated list, or empty      | See below — controls color, tag pill and filtering. |
 | `author` | an author slug (optional)           | Must match a file in `authors/`. See `authors/README.md`. Omit if unattributed — no byline is shown. |
+| `image`  | path to an image (optional)         | e.g. `/assets/images/articles/<slug>.jpg`. The article's title image — used as the hero on the article page and as the thumbnail on cards. If omitted, the group's colour or hero image is used, exactly as before. |
 | `type`   | short label                         | e.g. `Essay`, `Report`, `Commentary`, `Interview`, `Commonplace` — any label works, shown as "TYPE · DATE" on cards. |
 | `date`   | `YYYY-MM-DD`                        | Controls sort order (newest first) and the "3 latest" homepage preview. |
 | `title`  | plain text                          | Full headline. |
@@ -33,6 +34,17 @@ Only the single-group case gets the colored tag/filter treatment — this is del
 `narrative`, `tech`, `state-governance`, `capital-market`, `citizenship`, `local-ecosystems`, `infrastructure`, `defense`, `education`, `energy`
 
 (These correspond to NERO's ten action fields; the color, name, and hero image per group are defined in `index.html`, not per-article.)
+
+## Title images
+
+Put the file in `assets/images/articles/` named after the article's slug, and reference it from
+frontmatter as `image: /assets/images/articles/<slug>.jpg`. It is rendered full-bleed behind the
+headline on the article page (a dark overlay sits on top, so the headline stays legible over a busy
+image) and as the card thumbnail in every listing.
+
+Landscape works best — roughly 3:2 or wider, at least 1600px on the long edge. The field is optional:
+without it an article falls back to its group's hero image or colour, which is how every article
+behaved before this field existed.
 
 ## Authors
 
