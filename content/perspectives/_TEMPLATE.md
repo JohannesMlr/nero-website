@@ -1,6 +1,6 @@
 ---
 slug: kebab-case-unique-id
-group: tech
+groups: tech
 type: Essay
 date: 2026-01-01
 title: Article Title In Title Case

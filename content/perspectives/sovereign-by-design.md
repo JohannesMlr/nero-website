@@ -1,6 +1,6 @@
 ---
 slug: sovereign-by-design
-group: energy
+groups: energy
 type: Commentary
 date: 2026-07-29
 title: Sovereign by Design: Europe's Path to Energy Abundance

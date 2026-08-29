@@ -1,6 +1,6 @@
 ---
 slug: the-ten-minute-town
-group: local-ecosystems
+groups: local-ecosystems
 type: Commentary
 date: 2026-06-10
 title: The Ten-Minute Town: Rebuilding Community at Walking Distance

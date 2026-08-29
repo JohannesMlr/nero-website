@@ -1,6 +1,6 @@
 ---
 slug: the-story-europe-forgot
-group: narrative
+groups: narrative
 type: Essay
 date: 2026-04-30
 title: The Story Europe Forgot to Tell Itself

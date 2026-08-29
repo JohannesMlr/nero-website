@@ -1,6 +1,6 @@
 ---
 slug: public-goods-rebuilt
-group: infrastructure
+groups: infrastructure
 type: Essay
 date: 2026-05-28
 title: Public Goods, Rebuilt: A New Philosophy for European Infrastructure

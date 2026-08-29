@@ -1,6 +1,6 @@
 ---
 slug: turning-savers-into-owners
-group: capital-market
+groups: capital-market
 type: Report
 date: 2026-06-22
 title: Turning Savers into Owners: The Case for a European Investment Culture

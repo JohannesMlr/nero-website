@@ -1,6 +1,6 @@
 ---
 slug: deterrence-is-a-design-problem
-group: defense
+groups: defense
 type: Essay
 date: 2026-07-18
 title: Deterrence Is a Design Problem

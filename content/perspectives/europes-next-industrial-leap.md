@@ -1,6 +1,6 @@
 ---
 slug: europes-next-industrial-leap
-group: tech
+groups: tech
 type: Essay
 date: 2026-08-18
 title: Europe's Next Industrial Leap: Why Deep Tech Needs a Continental Strategy

@@ -1,6 +1,6 @@
 ---
 slug: citizens-not-spectators
-group: citizenship
+groups: citizenship
 type: Essay
 date: 2026-05-14
 title: Citizens, Not Spectators: Reclaiming Agency in a Complex World

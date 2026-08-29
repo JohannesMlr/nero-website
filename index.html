@@ -440,33 +440,31 @@
       margin-top: 2rem;
     }
     .article-card {
-      border: 1px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
-      background: #fff;
+      background: transparent;
       display: flex;
       flex-direction: column;
-      transition: box-shadow 0.15s, transform 0.15s;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       text-decoration: none;
       color: inherit;
     }
-    .article-card:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
-    }
+    .article-card:hover { transform: translateY(-4px); opacity: 0.92; }
     .article-img {
       width: 100%;
-      height: 160px;
+      height: 200px;
       object-fit: cover;
       display: block;
+      border-radius: 14px;
     }
     .article-img-placeholder {
       width: 100%;
-      height: 160px;
+      height: 200px;
       display: block;
+      border-radius: 14px;
     }
     .article-body {
-      padding: 1.1rem 1.25rem 1.5rem;
+      padding: 1.1rem 0 0;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -480,18 +478,19 @@
       margin-bottom: 0.5rem;
     }
     .article-title {
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
       color: var(--ink);
-      line-height: 1.4;
+      line-height: 1.35;
+      letter-spacing: -0.01em;
       margin-bottom: 0.6rem;
       flex: 1;
     }
     .article-teaser {
-      font-size: 0.825rem;
+      font-size: 0.875rem;
       color: var(--gray-text);
       line-height: 1.65;
-      margin-bottom: 1rem;
     }
     .article-link {
       font-size: 0.8rem;
@@ -1105,14 +1104,13 @@
       grid-template-columns: 1.15fr 1fr;
       border-radius: 20px;
       overflow: hidden;
-      background: #fff;
-      box-shadow: 0 20px 60px rgba(10,12,28,0.18);
+      background: transparent;
       text-decoration: none;
       color: inherit;
       cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.2s;
+      transition: opacity 0.2s ease;
     }
-    .mag-featured-card:hover { box-shadow: 0 26px 70px rgba(10,12,28,0.24); transform: translateY(-2px); }
+    .mag-featured-card:hover { opacity: 0.92; }
     .mag-featured-img { position: relative; min-height: 340px; background-size: cover; background-position: center; }
     .mag-featured-img .article-tag-pill { position: absolute; left: 1.25rem; bottom: 1.25rem; }
     .mag-featured-body { padding: 2.25rem 2.5rem; display: flex; flex-direction: column; justify-content: center; gap: 0.85rem; }
@@ -1126,9 +1124,6 @@
       letter-spacing: -0.01em;
     }
     .mag-featured-body p { color: var(--gray-text); font-size: 0.95rem; line-height: 1.7; }
-    .mag-featured-read { font-size: 0.85rem; font-weight: 600; color: var(--ink); display: inline-flex; gap: 0.35rem; align-items: center; }
-    .mag-featured-read::after { content: "→"; transition: transform 0.15s; }
-    .mag-featured-card:hover .mag-featured-read::after { transform: translateX(3px); }
 
     .mag-toolbar {
       max-width: var(--max);
@@ -1416,6 +1411,20 @@
     </div>
   </div>
 
+  <!-- PERSPECTIVES PREVIEW -->
+  <div class="mag-preview">
+    <div class="mag-preview-inner">
+      <div class="mag-preview-header reveal">
+        <div>
+          <h2>Perspectives</h2>
+          <p>Stories, facts and ideas that define Europe's future.</p>
+        </div>
+        <a class="mag-view-all" onclick="showPage('perspectives')">Visit Perspectives</a>
+      </div>
+      <div class="articles-grid" id="homeMagPreview"></div>
+    </div>
+  </div>
+
   <!-- MISSION STATEMENT -->
   <div class="mission-statement">
     <h2 class="reveal">We strive to ignite the ideas and strengthen the foundations for a bright future of Europe.</h2>
@@ -1435,20 +1444,6 @@
       <div class="goal-card reveal" onclick="openModal('modal-8')"><div class="goal-thumb thumb-8"></div><span class="goal-card-label">New Defense and Resilience</span></div>
       <div class="goal-card reveal" onclick="openModal('modal-9')"><div class="goal-thumb thumb-9"></div><span class="goal-card-label">New Education</span></div>
       <div class="goal-card last-solo reveal" onclick="openModal('modal-10')"><div class="goal-thumb thumb-10"></div><span class="goal-card-label">New Energy</span></div>
-    </div>
-  </div>
-
-  <!-- PERSPECTIVES PREVIEW -->
-  <div class="mag-preview">
-    <div class="mag-preview-inner">
-      <div class="mag-preview-header reveal">
-        <div>
-          <h2>From Perspectives</h2>
-          <p>Essays, reports and commentary from the groups building Europe's next chapter.</p>
-        </div>
-        <a class="mag-view-all" onclick="showPage('perspectives')">Visit Perspectives</a>
-      </div>
-      <div class="articles-grid" id="homeMagPreview"></div>
     </div>
   </div>
 
@@ -2171,7 +2166,7 @@
         const { data, body } = parseFrontmatter(raw);
         return {
           slug: data.slug || slug,
-          group: data.group,
+          groups: (data.groups || '').split(',').map(s => s.trim()).filter(Boolean),
           type: data.type,
           date: data.date,
           title: data.title,
@@ -2189,6 +2184,10 @@
   }
 
   /* ── PERSPECTIVES: HELPERS ── */
+  const NEUTRAL_GRADIENT = 'linear-gradient(135deg, #9a95a8 0%, #5f5a6e 100%)';
+  // Pseudo-category for browsing articles not tied to exactly one action field (zero or multiple groups).
+  const COMMONPLACE_FILTER = { slug: 'commonplace', name: 'Commonplace Monthly', short: 'Commonplace Monthly', gradient: NEUTRAL_GRADIENT };
+
   function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
   function articleBySlug(slug) { return ARTICLES.find(a => a.slug === slug); }
   function sortedArticles() { return ARTICLES.slice().sort((a, b) => new Date(b.date) - new Date(a.date)); }
@@ -2196,23 +2195,29 @@
     const d = new Date(iso + 'T00:00:00');
     return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   }
+  // An article shows a field tag/color/filter membership only when it names exactly one
+  // action field. Zero fields (unaffiliated) or multiple fields both render neutrally.
+  function articleSingleGroup(article) {
+    const groups = (article.groups || []).map(groupBySlug).filter(Boolean);
+    return groups.length === 1 ? groups[0] : null;
+  }
   function articleThumbStyle(article) {
-    const g = groupBySlug(article.group);
+    const g = articleSingleGroup(article);
+    if (!g) return `background:${NEUTRAL_GRADIENT};`;
     return g.image ? `background-image:url('${g.image}');background-size:cover;background-position:center;` : `background:${g.gradient};`;
   }
   function articleCardHTML(article) {
-    const g = groupBySlug(article.group);
+    const g = articleSingleGroup(article);
     return `
       <a class="article-card reveal" href="/perspectives/${article.slug}" onclick="event.preventDefault(); openArticle('${article.slug}');">
         <div class="article-img-wrap">
           <div class="article-img-placeholder" style="${articleThumbStyle(article)}"></div>
-          <span class="article-tag-pill">${g.short}</span>
+          ${g ? `<span class="article-tag-pill">${g.short}</span>` : ''}
         </div>
         <div class="article-body">
           <div class="article-source">${article.type} · ${formatDate(article.date)}</div>
           <div class="article-title">${article.title}</div>
           <div class="article-teaser">${article.teaser}</div>
-          <span class="article-link">Read article</span>
         </div>
       </a>`;
   }
@@ -2231,28 +2236,29 @@
     const all = sortedArticles();
     const featured = all[0];
     const rest = all.slice(1);
-    const filtered = magActiveFilter === 'all' ? rest : all.filter(a => a.group === magActiveFilter);
+    const filtered = magActiveFilter === 'all' ? rest
+      : magActiveFilter === 'commonplace' ? all.filter(a => !articleSingleGroup(a))
+      : all.filter(a => articleSingleGroup(a) && a.groups[0] === magActiveFilter);
 
     const featuredEl = document.getElementById('magFeatured');
     if (featuredEl) {
-      const fg = groupBySlug(featured.group);
+      const fg = articleSingleGroup(featured);
       featuredEl.innerHTML = `
         <a class="mag-featured-card" href="/perspectives/${featured.slug}" onclick="event.preventDefault(); openArticle('${featured.slug}');">
           <div class="mag-featured-img" style="${articleThumbStyle(featured)}">
-            <span class="article-tag-pill">${fg.short}</span>
+            ${fg ? `<span class="article-tag-pill">${fg.short}</span>` : ''}
           </div>
           <div class="mag-featured-body">
             <div class="mag-featured-meta">${featured.type} · ${formatDate(featured.date)}</div>
             <h2>${featured.title}</h2>
             <p>${featured.teaser}</p>
-            <span class="mag-featured-read">Read the story</span>
           </div>
         </a>`;
     }
 
     const filterEl = document.getElementById('magFilterRow');
     if (filterEl) {
-      const chips = [{ slug: 'all', short: 'All' }].concat(GROUPS);
+      const chips = [{ slug: 'all', short: 'All' }].concat(GROUPS).concat([COMMONPLACE_FILTER]);
       filterEl.innerHTML = chips.map(c => `<button class="mag-filter-chip${magActiveFilter === c.slug ? ' active' : ''}" onclick="renderPerspectives('${c.slug}')">${c.short}</button>`).join('');
     }
 
@@ -2268,7 +2274,7 @@
   function openGroupOverlay() {
     const overlay = document.getElementById('magOverlay');
     const list = document.getElementById('magOverlayList');
-    list.innerHTML = GROUPS.map(g => `
+    list.innerHTML = GROUPS.concat([COMMONPLACE_FILTER]).map(g => `
         <div class="mag-overlay-item" data-slug="${g.slug}"
              onmouseenter="magOverlayHover('${g.slug}')" onmouseleave="magOverlayHover(null)"
              onclick="selectGroupFromOverlay('${g.slug}')">
@@ -2287,7 +2293,7 @@
     list.querySelectorAll('.mag-overlay-item').forEach(item => item.classList.toggle('active-hover', item.dataset.slug === slug));
     if (slug) {
       list.classList.add('has-hover');
-      const g = groupBySlug(slug);
+      const g = groupBySlug(slug) || COMMONPLACE_FILTER;
       const hex = g.gradient.match(/#[0-9a-fA-F]{3,6}/);
       glow.style.background = `radial-gradient(ellipse 60% 55% at 50% 50%, ${hex ? hex[0] : '#b89ab5'}55 0%, transparent 65%)`;
     } else {
@@ -2307,14 +2313,20 @@
     opts = opts || {};
     const article = articleBySlug(slug);
     if (!article) { showPage('perspectives'); return; }
-    const g = groupBySlug(article.group);
+    const g = articleSingleGroup(article);
 
     const heroEl = document.getElementById('articleHero');
-    heroEl.style.background = g.image ? `url('${g.image}') center/cover` : g.gradient;
+    heroEl.style.background = g ? (g.image ? `url('${g.image}') center/cover` : g.gradient) : NEUTRAL_GRADIENT;
 
     const tagEl = document.getElementById('articleHeroTag');
-    tagEl.textContent = g.short;
-    tagEl.onclick = () => { showPage('perspectives'); renderPerspectives(article.group); };
+    if (g) {
+      tagEl.style.display = '';
+      tagEl.textContent = g.short;
+      tagEl.onclick = () => { showPage('perspectives'); renderPerspectives(g.slug); };
+    } else {
+      tagEl.style.display = 'none';
+      tagEl.onclick = null;
+    }
 
     document.getElementById('articleHeroTitle').textContent = article.title;
     document.getElementById('articleHeroMeta').textContent = `${article.type} · ${formatDate(article.date)}`;
@@ -2328,8 +2340,13 @@
     }
     document.getElementById('articleBody').innerHTML = bodyHTML;
 
-    document.getElementById('articleRelatedSub').textContent = `Continue exploring ${g.name}`;
-    let related = sortedArticles().filter(a => a.group === article.group && a.slug !== article.slug).slice(0, 3);
+    let related = [];
+    if (g) {
+      document.getElementById('articleRelatedSub').textContent = `Continue exploring ${g.name}`;
+      related = sortedArticles().filter(a => articleSingleGroup(a) === g && a.slug !== article.slug).slice(0, 3);
+    } else {
+      document.getElementById('articleRelatedSub').textContent = `Continue exploring Perspectives`;
+    }
     if (!related.length) related = sortedArticles().filter(a => a.slug !== article.slug).slice(0, 3);
     document.getElementById('articleRelatedGrid').innerHTML = related.map(articleCardHTML).join('');
 

@@ -1,6 +1,6 @@
 ---
 slug: the-boring-revolution
-group: state-governance
+groups: state-governance
 type: Report
 date: 2026-08-12
 title: The Boring Revolution: How One Small State Became Europe's Digital Blueprint

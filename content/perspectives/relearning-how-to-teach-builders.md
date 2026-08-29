@@ -1,6 +1,6 @@
 ---
 slug: relearning-how-to-teach-builders
-group: education
+groups: education
 type: Interview
 date: 2026-07-05
 title: Why Europe's Universities Must Relearn How to Teach Builders
