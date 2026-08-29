@@ -2316,6 +2316,8 @@
 
   function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
   function authorBySlug(slug) { return AUTHORS.find(a => a.slug === slug); }
+  // Every article has an effective author: its own, or "Editorial Team" when unset.
+  function articleAuthorSlug(article) { return article.author || 'editorial-team'; }
   function articleBySlug(slug) { return ARTICLES.find(a => a.slug === slug); }
   function sortedArticles() { return ARTICLES.slice().sort((a, b) => new Date(b.date) - new Date(a.date)); }
   function formatDate(iso) {
@@ -2460,13 +2462,14 @@
     document.getElementById('articleLede').textContent = article.lede;
 
     const bylineEl = document.getElementById('articleByline');
-    const author = article.author ? authorBySlug(article.author) : null;
+    const author = authorBySlug(articleAuthorSlug(article));
     if (author) {
       bylineEl.style.display = '';
       bylineEl.textContent = `By ${author.name}`;
       bylineEl.onclick = () => renderAuthorPage(author.slug);
     } else {
-      bylineEl.style.display = 'none';
+      bylineEl.style.display = '';
+      bylineEl.textContent = 'By Editorial Team';
       bylineEl.onclick = null;
     }
 
@@ -2522,7 +2525,7 @@
     document.getElementById('authorRole').textContent = author.role;
     document.getElementById('authorBio').innerHTML = author.bioHtml || '';
 
-    const theirArticles = sortedArticles().filter(a => a.author === author.slug);
+    const theirArticles = sortedArticles().filter(a => articleAuthorSlug(a) === author.slug);
     document.getElementById('authorArticlesHeading').textContent = `Perspectives by ${author.name} (${theirArticles.length})`;
     document.getElementById('authorArticlesGrid').innerHTML = theirArticles.length
       ? theirArticles.map(articleCardHTML).join('')
