@@ -2,6 +2,7 @@
 slug: governing-with-goals
 groups: narrative, state-governance
 author: johannes-mueller
+image: /assets/images/articles/governing-with-goals.jpg
 type: Essay
 date: 2026-08-29
 title: Goals as Instruments of Political Leadership and Communication
