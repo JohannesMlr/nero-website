@@ -40,6 +40,14 @@ with the East, Kohl reunification and European integration — chancellors remem
 the ones who subordinated their apparatus to one BHAG. Part 2, on goal *processes* and routines in
 parties, governments and administrations, is announced but not yet filed here.
 
+**Field split.** The essay divides cleanly in two, and both halves carry weight. The first — societal
+aimlessness, the defensive communication register, goal-avoidance as a symptom of an unanswered
+identity question, the El-Mafaalani confidence mechanism, focus as the basis of a durable political
+identity — belongs to **01 New European Narrative and Consciousness**, and is synthesised in that
+field's brief. The second — impact chains, separating beneficiaries from contributors, early
+indicators — is the governance instrument, and is why the entry is filed here. Anyone drawing on this
+source for a roundup should take the half that fits the piece, not the whole essay.
+
 ## Why it matters
 
 This is the field's first primary source, and it supplies what Field 03 otherwise lacks: a mechanism.
