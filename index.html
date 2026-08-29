@@ -224,14 +224,8 @@
       color: #fff;
       letter-spacing: -0.02em;
     }
-    /* Mission page hero only: thinner weight (matches home hero) + scroll-driven star trails */
+    /* Mission page hero only: thinner weight, matching the home hero */
     #missionHero .mission-h1 { font-weight: 500; }
-    .mission-star-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-    }
 
     /* ── SECTION WRAPPER ── */
     .section {
@@ -1559,7 +1553,7 @@
 <div id="page-mission" class="page">
 
   <div class="mission-hero" id="missionHero">
-    <canvas class="mission-star-canvas" id="missionStarCanvas"></canvas>
+    <canvas class="hero-sparkle-canvas" id="missionSparkleCanvas"></canvas>
     <div class="mission-text">
       <p class="mission-label">Our Mission</p>
       <h1 class="mission-h1">European unity and growth</h1>
@@ -2612,84 +2606,9 @@
     }
   })();
 
-  (function initMissionStars() {
-    const hero = document.getElementById('missionHero');
-    const canvas = document.getElementById('missionStarCanvas');
-    if (!hero || !canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const ctx = canvas.getContext('2d');
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let w = 0, h = 0;
-    const SKY_FRACTION = 0.55; // keep stars above the mountain silhouette, never sliding over it
-
-    const STAR_COUNT = 70;
-    const stars = Array.from({ length: STAR_COUNT }, () => ({
-      angle0: Math.random() * Math.PI * 2,
-      radiusF: 0.28 + Math.random() * 0.85, // fraction of (skyBottom - pivotY), resolved on draw
-      size: 0.7 + Math.random() * 1.4,
-      alpha: 0.35 + Math.random() * 0.55,
-    }));
-
-    let rotation = 0;
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    function resize() {
-      const rect = hero.getBoundingClientRect();
-      w = rect.width; h = rect.height;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
-      canvas.style.width = w + 'px';
-      canvas.style.height = h + 'px';
-      draw();
-    }
-
-    function draw() {
-      if (!w || !h) return;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, w, h);
-      const skyBottom = h * SKY_FRACTION;
-      const pivotX = w * 0.5;
-      const pivotY = h * -0.25;
-      const maxR = skyBottom - pivotY;
-      ctx.save();
-      ctx.beginPath();
-      ctx.rect(0, 0, w, skyBottom);
-      ctx.clip();
-      stars.forEach(s => {
-        const r = s.radiusF * maxR;
-        // Negative rotation: stars sweep east-to-west, matching apparent sky rotation.
-        const angle = s.angle0 - rotation;
-        const x = pivotX + r * Math.cos(angle);
-        const y = pivotY + r * Math.sin(angle);
-        ctx.beginPath();
-        ctx.arc(x, y, s.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${s.alpha})`;
-        ctx.fill();
-      });
-      ctx.restore();
-    }
-
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const sy = window.scrollY;
-        const delta = sy - lastScrollY;
-        lastScrollY = sy;
-        rotation += delta * 0.003;
-        draw();
-        ticking = false;
-      });
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-    window.addEventListener('scroll', onScroll, { passive: true });
-  })();
-
-  (function initHeroSparkles() {
-    const hero = document.getElementById('hero');
-    const canvas = document.getElementById('heroSparkleCanvas');
+  function initHeroSparkles(heroId, canvasId) {
+    const hero = document.getElementById(heroId);
+    const canvas = document.getElementById(canvasId);
     if (!hero || !canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -2700,13 +2619,20 @@
 
     function resize() {
       const rect = hero.getBoundingClientRect();
+      if (!rect.width || !rect.height) return; // hero's page is hidden (display:none) right now
       canvas.width = Math.round(rect.width * dpr);
       canvas.height = Math.round(rect.height * dpr);
       canvas.style.width = rect.width + 'px';
       canvas.style.height = rect.height + 'px';
     }
     resize();
-    window.addEventListener('resize', resize);
+    // A plain window 'resize' listener misses the hero going from display:none (0x0)
+    // to visible when its page becomes active via showPage() — ResizeObserver catches that too.
+    if (window.ResizeObserver) {
+      new ResizeObserver(resize).observe(hero);
+    } else {
+      window.addEventListener('resize', resize);
+    }
 
     function spawn(x, y, dirX, dirY) {
       const baseAngle = Math.atan2(dirY, dirX);
@@ -2777,7 +2703,9 @@
       spawn(x, y, dirX, dirY);
       ensureLoop();
     });
-  })();
+  }
+  initHeroSparkles('hero', 'heroSparkleCanvas');
+  initHeroSparkles('missionHero', 'missionSparkleCanvas');
 
   function initReveal() {
     const els = document.querySelectorAll('.page.active .reveal:not(.visible)');
