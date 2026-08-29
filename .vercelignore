@@ -1,6 +1,7 @@
 # Internal research/working material ("the Brain") — kept in git for versioning,
-# but not deployed. Only content/perspectives/ (the published magazine) is served.
-content/*
-!content/perspectives/
+# but not deployed. content/perspectives/ (the published magazine) is untouched.
+content/[0-9][0-9]-*/
+content/_templates/
+content/README.md
 outputs/
 nero-brain-bootstrap.zip
