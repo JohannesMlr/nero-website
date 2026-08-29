@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NERO — A New Renaissance</title>
   <meta name="description" content="We work with Europe's most ambitious minds to build a better future for our continent." />
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@500;600;700;800&display=swap" rel="stylesheet" />
@@ -112,7 +113,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: url("assets/images/hero-background.png");
+      background-image: url("/assets/images/hero-background.png");
       background-size: cover;
       background-position: center 50%;
     }
@@ -180,7 +181,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background-image: url("assets/images/hero-background.png");
+      background-image: url("/assets/images/hero-background.png");
       background-size: cover;
       background-position: center 50%;
     }
@@ -610,57 +611,100 @@
       font-style: italic;
     }
 
-    /* ── ACCORDION ── */
-    .accordion-section h2 {
+    /* ── FIELDS WHEEL ── */
+    .wheel-section h2 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 800;
+      font-weight: 700;
       color: var(--ink);
       margin-bottom: 0.35rem;
       letter-spacing: -0.02em;
+      text-align: center;
     }
-    .accordion-section p.sub {
+    .wheel-section p.sub {
       font-size: 0.95rem;
       color: var(--gray-text);
-      margin-bottom: 2rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      max-width: 46em;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .accordion-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 3rem;
+    .wheel-holder { display: flex; justify-content: center; }
+    svg.mission-wheel { width: 100%; max-width: 560px; height: auto; overflow: visible; }
+    .wheel-seg {
+      cursor: pointer;
+      stroke: var(--white);
+      stroke-width: 2;
+      transition: opacity 0.15s ease;
     }
-    .accordion-item {
-      border-bottom: 1px solid var(--border);
-      padding: 1rem 0;
+    .wheel-seg:hover { opacity: 0.85; }
+    .wheel-seg.dim { opacity: 0.28; }
+    .wheel-seg-num { font-size: 20px; font-weight: 700; pointer-events: none; }
+    .wheel-leader { stroke: var(--border); stroke-width: 1; fill: none; }
+    .wheel-leader-dot { r: 2.5; }
+    .wheel-label { font-size: 13.5px; fill: var(--ink-soft); pointer-events: none; }
+    .wheel-label.selected { fill: var(--ink); font-weight: 700; }
+    .wheel-center-num { font-size: 15px; fill: var(--gray-text); }
+    .wheel-center-title {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      fill: var(--ink);
+    }
+    .wheel-center-sub { font-size: 12.5px; fill: var(--gray-text); }
+
+    .wheel-detail {
+      margin: 2.5rem auto 0;
+      max-width: 640px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--gray-bg);
+      padding: 1.75rem 2rem;
+    }
+    .wheel-detail.empty {
+      color: var(--gray-text);
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.95rem;
+    }
+    .wheel-detail-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.35rem; }
+    .wheel-detail-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-    }
-    .accordion-item:hover .accordion-title { color: var(--ink); }
-    .accordion-title {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--ink);
-    }
-    .accordion-chevron {
-      color: var(--gray-text);
-      font-size: 1rem;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
       flex-shrink: 0;
-      margin-left: 1rem;
-      transition: transform 0.2s;
     }
-    .accordion-item.open .accordion-chevron { transform: rotate(180deg); }
-    .accordion-body {
-      font-size: 0.9rem;
-      color: var(--gray-text);
+    .wheel-detail-name {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      margin: 0;
+    }
+    .wheel-detail-blurb {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+      margin: 0.25rem 0 1rem 3.05rem;
+    }
+    .wheel-detail-question {
+      font-size: 0.925rem;
+      font-weight: 500;
+      color: var(--ink-soft);
       line-height: 1.7;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s;
+      border-left: 3px solid var(--mauve);
+      padding-left: 1rem;
+      font-style: italic;
+      margin-left: 3.05rem;
     }
-    .accordion-item.open .accordion-body {
-      max-height: 200px;
-      padding-bottom: 0.75rem;
+    @media (max-width: 640px) {
+      .wheel-detail-blurb, .wheel-detail-question { margin-left: 0; }
     }
 
     /* ── PILLARS ── */
@@ -750,6 +794,76 @@
       transition: background 0.15s, color 0.15s;
     }
     .btn-newsletter:hover { background: #fff; color: var(--ink); }
+
+    /* ── MARQUEE NEWSLETTER ── */
+    .marquee-newsletter {
+      position: relative;
+      overflow: hidden;
+      background: #0d0e1a;
+      padding: 3.5rem 0 3.25rem;
+    }
+    .marquee-newsletter-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 22% 15%, rgba(184,154,181,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 55% at 82% 85%, rgba(74,106,154,0.28) 0%, transparent 60%);
+    }
+    .marquee-row { position: relative; z-index: 1; overflow: hidden; width: 100%; }
+    .marquee-row + .marquee-row { margin-top: 0.25rem; }
+    .marquee-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      will-change: transform;
+    }
+    .marquee-item { display: flex; align-items: center; flex-shrink: 0; }
+    .marquee-text {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.7rem, 5vw, 3.25rem);
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      padding: 0 1.25rem;
+    }
+    .marquee-sep {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: rgba(255,255,255,0.3);
+      flex-shrink: 0;
+    }
+    .marquee-cta { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 2.5rem; }
+    .marquee-signup {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #fff;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .marquee-arrow {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: #fff;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+    }
+    .marquee-signup:hover .marquee-arrow { background: #fff; color: #0d0e1a; transform: translateX(2px); }
+    @media (max-width: 640px) {
+      .marquee-text { font-size: clamp(1.25rem, 7vw, 2rem); padding: 0 0.85rem; }
+    }
 
     /* ── CTA CARDS ── */
     .cta-section {
@@ -890,6 +1004,368 @@
       transform: translateY(0);
     }
 
+    /* ── ARTICLE CARDS (shared: home preview + perspectives grid) ── */
+    .article-img-wrap { position: relative; }
+    .article-tag-pill {
+      position: absolute;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      background: rgba(255,255,255,0.94);
+      color: var(--ink);
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.3rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    /* ── PERSPECTIVES PREVIEW (home) ── */
+    .mag-preview { background: var(--gray-bg); padding: clamp(3rem, 6vw, 5rem) var(--pad); }
+    .mag-preview-inner { max-width: var(--max); margin: 0 auto; }
+    .mag-preview-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .mag-preview-header h2 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+    }
+    .mag-preview-header p { font-size: 0.95rem; color: var(--gray-text); margin-top: 0.35rem; }
+    .mag-view-all {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .mag-view-all::after { content: "→"; transition: transform 0.15s; }
+    .mag-view-all:hover::after { transform: translateX(3px); }
+
+    /* ── PERSPECTIVES PAGE ── */
+    .mag-hero {
+      position: relative;
+      width: 100%;
+      min-height: 420px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 5rem;
+    }
+    .mag-hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 18% 20%, rgba(184,154,181,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 50% at 88% 80%, rgba(74,106,154,0.32) 0%, transparent 60%),
+        #12131f;
+    }
+    .mag-hero-tag {
+      position: relative; z-index: 1;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      margin-bottom: 1rem;
+    }
+    .mag-hero h1 {
+      position: relative; z-index: 1;
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(2.75rem, 7vw, 4.75rem);
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .mag-hero p {
+      position: relative; z-index: 1;
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      color: rgba(255,255,255,0.75);
+      max-width: 46ch;
+    }
+
+    .mag-featured { max-width: var(--max); margin: -3rem auto 0; padding: 0 var(--pad); position: relative; z-index: 2; }
+    .mag-featured-card {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 20px 60px rgba(10,12,28,0.18);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .mag-featured-card:hover { box-shadow: 0 26px 70px rgba(10,12,28,0.24); transform: translateY(-2px); }
+    .mag-featured-img { position: relative; min-height: 340px; background-size: cover; background-position: center; }
+    .mag-featured-img .article-tag-pill { position: absolute; left: 1.25rem; bottom: 1.25rem; }
+    .mag-featured-body { padding: 2.25rem 2.5rem; display: flex; flex-direction: column; justify-content: center; gap: 0.85rem; }
+    .mag-featured-meta { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mauve); }
+    .mag-featured-body h2 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.1rem);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+    .mag-featured-body p { color: var(--gray-text); font-size: 0.95rem; line-height: 1.7; }
+    .mag-featured-read { font-size: 0.85rem; font-weight: 600; color: var(--ink); display: inline-flex; gap: 0.35rem; align-items: center; }
+    .mag-featured-read::after { content: "→"; transition: transform 0.15s; }
+    .mag-featured-card:hover .mag-featured-read::after { transform: translateX(3px); }
+
+    .mag-toolbar {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 3.5rem var(--pad) 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .mag-toolbar h2 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .mag-browse-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.65rem 1.15rem;
+      border-radius: 999px;
+      border: 1.5px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .mag-browse-btn:hover { background: var(--ink); color: #fff; }
+
+    .mag-filter-row {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 1.5rem var(--pad) 0;
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .mag-filter-chip {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .mag-filter-chip:hover { border-color: var(--mauve); color: var(--ink); }
+    .mag-filter-chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+
+    .mag-grid-wrap { max-width: var(--max); margin: 0 auto; padding: 2rem var(--pad) 5rem; }
+    .mag-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 0.5rem; }
+    .mag-empty { color: var(--gray-text); font-size: 0.9rem; padding: 3rem 0; text-align: center; }
+
+    /* ── GROUP SELECTOR OVERLAY ── */
+    .mag-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: #0d0e1a;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .mag-overlay.open { display: flex; animation: magOverlayIn 0.25s ease-out; }
+    @keyframes magOverlayIn { from { opacity: 0; } to { opacity: 1; } }
+    .mag-overlay-glow { position: absolute; inset: 0; transition: background 0.4s ease; }
+    .mag-overlay-close {
+      position: absolute;
+      top: 1.75rem;
+      right: var(--pad);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      background: transparent;
+      color: #fff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      transition: background 0.15s;
+    }
+    .mag-overlay-close:hover { background: rgba(255,255,255,0.12); }
+    .mag-overlay-label {
+      position: absolute;
+      top: 1.9rem;
+      left: var(--pad);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      z-index: 2;
+    }
+    .mag-overlay-list {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 5rem 1.5rem;
+    }
+    .mag-overlay-item {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.4rem, 4.2vw, 2.5rem);
+      font-weight: 600;
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: color 0.3s;
+      padding: 0.3rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .mag-overlay-item .mag-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--mauve);
+      opacity: 0;
+      transition: opacity 0.25s;
+      flex-shrink: 0;
+    }
+    .mag-overlay-item.active-hover { color: #fff; }
+    .mag-overlay-item.active-hover .mag-dot { opacity: 1; }
+    .mag-overlay-list.has-hover .mag-overlay-item:not(.active-hover) { color: rgba(255,255,255,0.22); }
+    .mag-overlay-all {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 0.55rem 1.4rem;
+      border-radius: 999px;
+      transition: color 0.2s, border-color 0.2s;
+      background: transparent;
+      font-family: inherit;
+    }
+    .mag-overlay-all:hover { color: #fff; border-color: #fff; }
+
+    /* ── ARTICLE DETAIL PAGE ── */
+    .article-hero {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      display: flex;
+      align-items: flex-end;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    .article-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(10,12,28,0.15) 0%, rgba(10,12,28,0.8) 100%);
+    }
+    .article-hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 5rem var(--pad) 2.5rem; width: 100%; }
+    .article-hero-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(255,255,255,0.16);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+    }
+    .article-hero h1 {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.85rem;
+    }
+    .article-hero-meta { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+    .article-body-wrap { max-width: 700px; margin: 0 auto; padding: 3rem var(--pad) 1rem; }
+    .article-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-decoration: none;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+    .article-back::before { content: "←"; }
+    .article-lede { font-size: 1.1rem; color: var(--ink-soft); font-weight: 500; line-height: 1.7; margin-bottom: 1.75rem; }
+    .article-body-wrap p.article-p { font-size: 1rem; color: #2b2b3d; line-height: 1.85; margin-bottom: 1.4rem; }
+    .article-pull {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.4;
+      border-left: 3px solid var(--mauve);
+      padding-left: 1.25rem;
+      margin: 2rem 0;
+    }
+    .article-related { background: var(--gray-bg); padding: clamp(3rem, 6vw, 5rem) var(--pad); margin-top: 2rem; }
+    .article-related-inner { max-width: var(--max); margin: 0 auto; }
+
+    @media (max-width: 800px) {
+      .mag-featured-card { grid-template-columns: 1fr; }
+      .mag-featured-img { min-height: 220px; }
+    }
+    @media (max-width: 900px) { .mag-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) {
+      .mag-grid { grid-template-columns: 1fr; }
+      .mag-overlay-item { font-size: 1.4rem; }
+    }
+
     /* ── MOBILE ── */
     @media (max-width: 900px) {
       .goal-cards { grid-template-columns: 1fr 1fr; }
@@ -898,7 +1374,6 @@
     }
     @media (max-width: 640px) {
       .goal-cards { grid-template-columns: 1fr; }
-      .accordion-grid { grid-template-columns: 1fr; }
       .cta-grid { grid-template-columns: 1fr; }
       .pillars-grid { grid-template-columns: 1fr; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
@@ -919,6 +1394,7 @@
     <a class="nav-logo" onclick="showPage('home'); return false;" href="/">NERO</a>
     <div class="nav-right">
       <span class="nav-link" onclick="showPage('mission')">Our Mission</span>
+      <span class="nav-link" onclick="showPage('perspectives')">Perspectives</span>
       <span class="btn-pill" onclick="showPage('involved')">Get involved</span>
     </div>
   </div>
@@ -948,8 +1424,8 @@
   <div class="section" style="padding-top:0;">
     <div class="goal-cards">
       <div class="goal-card reveal" onclick="openModal('modal-5')"><div class="goal-thumb thumb-5"></div><span class="goal-card-label">New European Narrative and Consciousness</span></div>
-      <div class="goal-card reveal" onclick="showPage('tech')"><img src="assets/images/tech.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New Technology Leadership</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-2')"><img src="assets/images/new-state-models.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New State and Governance Models</span></div>
+      <div class="goal-card reveal" onclick="showPage('tech')"><img src="/assets/images/tech.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New Technology Leadership</span></div>
+      <div class="goal-card reveal" onclick="openModal('modal-2')"><img src="/assets/images/new-state-models.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New State and Governance Models</span></div>
       <div class="goal-card reveal" onclick="openModal('modal-3')"><div class="goal-thumb thumb-3"></div><span class="goal-card-label">New Private Capital Market Union</span></div>
       <div class="goal-card reveal" onclick="openModal('modal-1')"><div class="goal-thumb thumb-1"></div><span class="goal-card-label">New Role of Citizenship in Europe</span></div>
       <div class="goal-card reveal" onclick="openModal('modal-6')"><div class="goal-thumb thumb-6"></div><span class="goal-card-label">New Local Ecosystems and Healthy Communities</span></div>
@@ -957,6 +1433,20 @@
       <div class="goal-card reveal" onclick="openModal('modal-8')"><div class="goal-thumb thumb-8"></div><span class="goal-card-label">New Defense and Resilience</span></div>
       <div class="goal-card reveal" onclick="openModal('modal-9')"><div class="goal-thumb thumb-9"></div><span class="goal-card-label">New Education</span></div>
       <div class="goal-card last-solo reveal" onclick="openModal('modal-10')"><div class="goal-thumb thumb-10"></div><span class="goal-card-label">New Energy</span></div>
+    </div>
+  </div>
+
+  <!-- PERSPECTIVES PREVIEW -->
+  <div class="mag-preview">
+    <div class="mag-preview-inner">
+      <div class="mag-preview-header reveal">
+        <div>
+          <h2>From Perspectives</h2>
+          <p>Essays, reports and commentary from the groups building Europe's next chapter.</p>
+        </div>
+        <a class="mag-view-all" onclick="showPage('perspectives')">Visit Perspectives</a>
+      </div>
+      <div class="articles-grid" id="homeMagPreview"></div>
     </div>
   </div>
 
@@ -988,10 +1478,11 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
         <li><a onclick="showPage('involved')">Get involved</a></li>
         <li><a onclick="showPage('informed')">Stay informed</a></li>
         <li><a href="#">Imprint</a></li>
@@ -1012,73 +1503,13 @@
     </div>
   </div>
 
-  <div class="section accordion-section">
+  <div class="section wheel-section">
     <h2 class="reveal">Our ambitions for this decade</h2>
-    <p class="sub reveal">Selection of goals we pursue with our partners, expert groups and local clubs</p>
-    <div class="accordion-grid">
-      <div>
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New European Narrative and Consciousness</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Building a shared sense of European identity and purpose that unites citizens across borders.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Technology Leadership</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Positioning Europe at the forefront of emerging technologies including AI, biotech, and clean energy.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Infrastructure and Public Good Philosophy</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Rethinking infrastructure investment to serve the common good for generations to come.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Energy</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Accelerating Europe's transition to clean, sovereign, and affordable energy systems.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Education</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Transforming learning institutions to prepare Europeans for the challenges and opportunities of tomorrow.</div>
-      </div>
-      <div>
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Role of Citizenship in Europe</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Empowering citizens to take active roles in shaping their communities and the future of Europe.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Private Capital Market</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Creating a deep, integrated European capital market that funds innovation and entrepreneurship at scale.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New State and Governance Models</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Redesigning institutions to be more agile, transparent, and effective for the 21st century.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Local Ecosystems and Healthy Communities</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Strengthening local communities as the foundation of a resilient and prosperous Europe.</div>
-
-        <div class="accordion-item reveal" onclick="toggleAccordion(this)">
-          <span class="accordion-title">New Defense and Resilience</span>
-          <span class="accordion-chevron">⌄</span>
-        </div>
-        <div class="accordion-body">Building a Europe capable of defending its values, sovereignty, and citizens in an uncertain world.</div>
-      </div>
+    <p class="sub reveal">The ten action fields we pursue with our partners, expert groups and local clubs — click a segment to see its focus.</p>
+    <div class="wheel-holder reveal">
+      <svg class="mission-wheel" id="missionWheelSvg" viewBox="0 0 640 640"></svg>
     </div>
+    <div class="wheel-detail empty" id="missionWheelDetail">Select a field to see its focus.</div>
   </div>
 
   <div class="section" style="padding-top:0;">
@@ -1106,11 +1537,19 @@
     </div>
   </div>
 
-  <div class="newsletter-band">
-    <div class="newsletter-band-bg"></div>
-    <div class="newsletter-inner">
-      <p>Sign up for the New Renaissance Newsletter</p>
-      <a class="btn-newsletter" onclick="showPage('informed')">Stay informed</a>
+  <div class="marquee-newsletter">
+    <div class="marquee-newsletter-bg"></div>
+    <div class="marquee-row">
+      <div class="marquee-track" id="missionMarqueeRow1"></div>
+    </div>
+    <div class="marquee-row">
+      <div class="marquee-track marquee-reverse" id="missionMarqueeRow2"></div>
+    </div>
+    <div class="marquee-cta">
+      <a class="marquee-signup" onclick="showPage('informed')">
+        Sign up
+        <span class="marquee-arrow">→</span>
+      </a>
     </div>
   </div>
 
@@ -1132,10 +1571,11 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
         <li><a onclick="showPage('involved')">Get involved</a></li>
         <li><a onclick="showPage('informed')">Stay informed</a></li>
         <li><a href="#">Imprint</a></li>
@@ -1177,10 +1617,11 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
         <li><a onclick="showPage('involved')">Get involved</a></li>
         <li><a onclick="showPage('informed')">Stay informed</a></li>
         <li><a href="#">Imprint</a></li>
@@ -1219,10 +1660,11 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
         <li><a onclick="showPage('involved')">Get involved</a></li>
         <li><a onclick="showPage('informed')">Stay informed</a></li>
         <li><a href="#">Imprint</a></li>
@@ -1239,7 +1681,7 @@
 
   <!-- HERO -->
   <div class="mission-hero">
-    <img src="assets/images/tech.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;z-index:0;" />
+    <img src="/assets/images/tech.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;z-index:0;" />
     <div class="mission-stars"></div>
     <div class="mission-mountains">
       <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
@@ -1397,10 +1839,107 @@
   <footer>
     <div class="footer-inner">
       <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
       </div>
       <ul class="footer-links">
         <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
+        <li><a onclick="showPage('involved')">Get involved</a></li>
+        <li><a onclick="showPage('informed')">Stay informed</a></li>
+        <li><a href="#">Imprint</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════
+     PERSPECTIVES
+════════════════════════════ -->
+<div id="page-perspectives" class="page">
+
+  <div class="mag-hero">
+    <div class="mag-hero-bg"></div>
+    <div class="mag-hero-tag">New Renaissance</div>
+    <h1>Perspectives</h1>
+    <p>Ideas, essays and reporting from the groups building a new European Renaissance.</p>
+  </div>
+
+  <div class="mag-featured" id="magFeatured"></div>
+
+  <div class="mag-toolbar">
+    <h2>Latest from the groups</h2>
+    <button class="mag-browse-btn" onclick="openGroupOverlay()">
+      Browse by group
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
+  </div>
+
+  <div class="mag-filter-row" id="magFilterRow"></div>
+
+  <div class="mag-grid-wrap">
+    <div class="mag-grid" id="magGrid"></div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo-wrap" onclick="showPage('home')">
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+      </div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
+        <li><a onclick="showPage('involved')">Get involved</a></li>
+        <li><a onclick="showPage('informed')">Stay informed</a></li>
+        <li><a href="#">Imprint</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<!-- GROUP SELECTOR OVERLAY -->
+<div class="mag-overlay" id="magOverlay" onclick="if (event.target === this) closeGroupOverlay();">
+  <div class="mag-overlay-glow" id="magOverlayGlow"></div>
+  <div class="mag-overlay-label">Groups</div>
+  <button class="mag-overlay-close" onclick="closeGroupOverlay()">✕</button>
+  <div class="mag-overlay-list" id="magOverlayList"></div>
+</div>
+
+<!-- ════════════════════════════
+     ARTICLE DETAIL
+════════════════════════════ -->
+<div id="page-article" class="page">
+  <div class="article-hero" id="articleHero">
+    <div class="article-hero-inner">
+      <span class="article-hero-tag" id="articleHeroTag" onclick="event.stopPropagation();"></span>
+      <h1 id="articleHeroTitle"></h1>
+      <div class="article-hero-meta" id="articleHeroMeta"></div>
+    </div>
+  </div>
+
+  <div class="article-body-wrap">
+    <a class="article-back" onclick="showPage('perspectives')">Back to Perspectives</a>
+    <p class="article-lede" id="articleLede"></p>
+    <div id="articleBody"></div>
+  </div>
+
+  <div class="article-related">
+    <div class="article-related-inner">
+      <div class="section-header reveal">
+        <h2>More from this group</h2>
+        <p id="articleRelatedSub"></p>
+      </div>
+      <div class="articles-grid" id="articleRelatedGrid"></div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo-wrap" onclick="showPage('home')">
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+      </div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
         <li><a onclick="showPage('involved')">Get involved</a></li>
         <li><a onclick="showPage('informed')">Stay informed</a></li>
         <li><a href="#">Imprint</a></li>
@@ -1434,7 +1973,7 @@
 <div id="modal-2" class="modal-overlay" onclick="overlayClose(event, 'modal-2')">
   <div class="modal">
     <div class="modal-hero">
-      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(assets/images/new-state-models.png);background-size:cover;background-position:center top;"></div>
+      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(/assets/images/new-state-models.png);background-size:cover;background-position:center top;"></div>
       <div class="modal-hero-overlay"></div>
       <button class="modal-close" onclick="closeModal('modal-2')">✕</button>
     </div>
@@ -1468,7 +2007,7 @@
 <div id="modal-4" class="modal-overlay" onclick="overlayClose(event, 'modal-4')">
   <div class="modal">
     <div class="modal-hero">
-      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(assets/images/tech.png);background-size:cover;background-position:center center;"></div>
+      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(/assets/images/tech.png);background-size:cover;background-position:center center;"></div>
       <div class="modal-hero-overlay"></div>
       <button class="modal-close" onclick="closeModal('modal-4')">✕</button>
     </div>
@@ -1584,8 +2123,304 @@
 </div>
 
 <script>
-  const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech' };
-  const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech' };
+  /* ── PERSPECTIVES: DATA ── */
+  const GROUPS = [
+    { slug: 'narrative', name: 'New European Narrative and Consciousness', short: 'Narrative', gradient: 'linear-gradient(135deg, #4a6a9a 0%, #2a4a7a 100%)' },
+    { slug: 'tech', name: 'New Technology Leadership', short: 'Technology', gradient: 'linear-gradient(135deg, #6a8a7a 0%, #4a6a5a 100%)', image: '/assets/images/tech.png' },
+    { slug: 'state-governance', name: 'New State and Governance Models', short: 'State & Governance', gradient: 'linear-gradient(135deg, #7a9ab5 0%, #4a6a8a 100%)', image: '/assets/images/new-state-models.png' },
+    { slug: 'capital-market', name: 'New Private Capital Market', short: 'Capital Markets', gradient: 'linear-gradient(135deg, #a0a0b0 0%, #707090 100%)' },
+    { slug: 'citizenship', name: 'New Role of Citizenship in Europe', short: 'Citizenship', gradient: 'linear-gradient(135deg, #c8a882 0%, #8a6a4a 100%)' },
+    { slug: 'local-ecosystems', name: 'New Local Ecosystems and Healthy Communities', short: 'Local Ecosystems', gradient: 'linear-gradient(135deg, #c0a060 0%, #907040 100%)' },
+    { slug: 'infrastructure', name: 'New Infrastructure and Public Good Philosophy', short: 'Infrastructure', gradient: 'linear-gradient(135deg, #3a5a8a 0%, #1a3a6a 100%)' },
+    { slug: 'defense', name: 'New Defense and Resilience', short: 'Defense', gradient: 'linear-gradient(135deg, #5a8a6a 0%, #3a6a4a 100%)' },
+    { slug: 'education', name: 'New Education', short: 'Education', gradient: 'linear-gradient(135deg, #6a9aca 0%, #4a7aaa 100%)' },
+    { slug: 'energy', name: 'New Energy', short: 'Energy', gradient: 'linear-gradient(135deg, #8aaa7a 0%, #6a8a5a 100%)' },
+  ];
+
+  const ARTICLES = [
+    {
+      slug: 'europes-next-industrial-leap', group: 'tech', type: 'Essay', date: '2026-08-18',
+      title: `Europe's Next Industrial Leap: Why Deep Tech Needs a Continental Strategy`,
+      teaser: `Europe has the talent and industrial depth to lead the next wave of technology — but only if it stops treating deep tech as a national project.`,
+      lede: `From AI to fusion, Europe's breakthroughs keep happening in the lab and commercialising somewhere else. Closing that gap is the defining industrial challenge of the decade.`,
+      body: [
+        `Walk into any leading AI lab, quantum computing startup or advanced materials facility in Europe, and you'll find no shortage of ambition. What's missing is scale. A researcher in Munich and a manufacturer in Lyon operate in different funding systems, different regulatory regimes and, often, different languages of ambition. The result is a continent that invents at a world-class level and commercialises at a regional one.`,
+        `The fix isn't more funding alone — Europe already spends heavily on research. It's coordination: shared testbeds for frontier technologies, procurement rules that reward European scale-ups instead of the cheapest bidder, and a single market for talent that lets the best people move to wherever the hardest problems are being solved.`,
+        `None of this requires new bureaucracy so much as it requires nerve — a willingness to back European champions before they're proven, the way competitors already do. The countries and companies that make that bet first will set the terms for everyone else.`,
+      ],
+      pull: `How can we unleash European pioneering spirit, inventiveness and craftmanship to become a global technology leader again?`,
+    },
+    {
+      slug: 'the-boring-revolution', group: 'state-governance', type: 'Report', date: '2026-08-12',
+      title: `The Boring Revolution: How One Small State Became Europe's Digital Blueprint`,
+      teaser: `A quiet Baltic experiment in digital government has become the most-copied governance model in Europe — and most citizens barely notice it working.`,
+      lede: `The best public institutions are the ones you stop thinking about. A small European state has spent two decades proving that's achievable at scale.`,
+      body: [
+        `There is no ribbon-cutting moment for good governance. It shows up as a form that fills itself in, a permit that arrives before you've finished your coffee, a tax return that takes three minutes instead of three weekends. That mundane efficiency, replicated across an entire state, is what a new generation of European reformers is now trying to reverse-engineer.`,
+        `The underlying model is simple to describe and hard to execute: treat every citizen interaction with the state as a product to be designed, not a process to be endured. That means one login, one identity, and data that moves between agencies so citizens never have to re-enter what the state already knows.`,
+        `Replicating this elsewhere in Europe isn't a technology problem — the tools exist. It's a trust and incentive problem: convincing institutions to give up control of their own data silos for a system that serves citizens better but no single department owns.`,
+      ],
+      pull: `How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?`,
+    },
+    {
+      slug: 'sovereign-by-design', group: 'energy', type: 'Commentary', date: '2026-07-29',
+      title: `Sovereign by Design: Europe's Path to Energy Abundance`,
+      teaser: `Energy security and climate ambition were once framed as trade-offs. Europe's next phase of build-out proves they can be the same project.`,
+      lede: `The continent that once imported its energy anxieties is starting to export energy engineering — the question now is how fast it can build.`,
+      body: [
+        `For a decade, European energy policy was written in the language of dependency: which pipeline, which supplier, which crisis. That framing is starting to give way to a more confident one, built around a simple bet — that a continent with world-class engineering, capital markets and manufacturing can build its way to abundance rather than merely manage scarcity.`,
+        `Getting there means treating permitting speed as seriously as subsidy design. Projects that take a decade to approve lose to capital that can deploy in two years elsewhere. It also means an honest conversation about the full mix — renewables, grid, storage and nuclear — rather than picking technologies for political comfort.`,
+        `Done right, this is not just a climate story. Cheap, sovereign, abundant energy is the foundation under every other ambition on this list — from reshoring industry to powering the compute that AI leadership requires.`,
+      ],
+      pull: `How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?`,
+    },
+    {
+      slug: 'deterrence-is-a-design-problem', group: 'defense', type: 'Essay', date: '2026-07-18',
+      title: `Deterrence Is a Design Problem`,
+      teaser: `Europe doesn't lack the industrial base to defend itself. It lacks the shared design discipline to turn that base into deterrence.`,
+      lede: `Rebuilding military capability is only half the challenge. The harder half is designing systems — procurement, industry, doctrine — that can act as one.`,
+      body: [
+        `Europe's defense industry is larger and more capable than its output suggests. Dozens of programmes, calibres and standards coexist across the continent, each defensible on its own terms and collectively a drag on the speed and scale that deterrence requires.`,
+        `The postwar generation built institutions on the assumption that peace was the default state to protect. The next generation has to build institutions on the assumption that resilience must be actively designed — in supply chains, in reserves, in the civilian systems an adversary would target first.`,
+        `This is uncomfortable territory for a continent that spent decades treating defense as an American given. But the states moving fastest now are the ones treating resilience as an engineering problem to be solved this decade, not a political debate to be managed indefinitely.`,
+      ],
+      pull: `How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?`,
+    },
+    {
+      slug: 'relearning-how-to-teach-builders', group: 'education', type: 'Interview', date: '2026-07-05',
+      title: `Why Europe's Universities Must Relearn How to Teach Builders`,
+      teaser: `A conversation on why Europe trains excellent analysts but too few founders — and what changes when institutions optimise for builders instead.`,
+      lede: `Europe's universities are exceptional at producing people who understand the world. The next challenge is producing more who are willing to rebuild parts of it.`,
+      body: [
+        `"The talent isn't the bottleneck," says one educator working to redesign a technical curriculum from the ground up. "Confidence is. Our best students can tell you exactly why a venture might fail. We spend far less time teaching them to try anyway."`,
+        `That imbalance, she argues, is structural rather than cultural. Grading rewards the correct critique over the risky attempt; career pipelines reward the safe internship over the shaky first company. Changing the incentive, not the students, is where reform has to start.`,
+        `Some institutions are already testing the fix — giving credit for ventures that fail honestly, pairing technical programmes directly with founders-in-residence, and treating a failed startup on a CV the way a failed experiment is treated in a physics lab: as data, not disgrace.`,
+      ],
+      pull: `How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today's world?`,
+    },
+    {
+      slug: 'turning-savers-into-owners', group: 'capital-market', type: 'Report', date: '2026-06-22',
+      title: `Turning Savers into Owners: The Case for a European Investment Culture`,
+      teaser: `Europeans save more than Americans and own far less. Closing that gap could be the single biggest lever for European wealth and growth.`,
+      lede: `Trillions of euros sit in low-yield accounts across the continent while European companies raise growth capital abroad. The fix is cultural as much as regulatory.`,
+      body: [
+        `The numbers are almost embarrassing in their simplicity: European households hold a smaller share of their savings in capital markets than almost any comparable region, while European startups routinely cross the Atlantic to raise the capital that will fund their growth. The savings exist. The plumbing to connect them to opportunity does not.`,
+        `Part of the fix is regulatory — a genuine single market for capital, not twenty-seven overlapping ones. Part of it is product: retirement and investment vehicles designed for ordinary savers, not just institutions. And part of it is cultural — treating ownership of European growth as a civic good, not a gamble reserved for professionals.`,
+        `Countries that have made this shift — turning savers into shareholders through simple, well-designed vehicles — have seen both household wealth and domestic investment rise together. There's no reason that has to remain a national story rather than a European one.`,
+      ],
+      pull: `How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?`,
+    },
+    {
+      slug: 'the-ten-minute-town', group: 'local-ecosystems', type: 'Commentary', date: '2026-06-10',
+      title: `The Ten-Minute Town: Rebuilding Community at Walking Distance`,
+      teaser: `A growing movement of European towns is redesigning daily life around one simple constraint: everything that matters, ten minutes away.`,
+      lede: `Resilient nations are built from resilient neighbourhoods. A quiet planning movement is trying to make that literal, one town at a time.`,
+      body: [
+        `The idea sounds almost too simple to be a policy: design towns so that school, work, healthcare, groceries and green space are all within a short walk or ride. But behind that simplicity is a real rebuttal to decades of planning that optimised for cars and commutes over community and contact.`,
+        `The towns doing this well didn't start with grand infrastructure spending. They started by removing the small frictions — a closed-off street reopened to foot traffic, a vacant storefront turned into a shared workspace, a school playground that doubles as a public park after hours.`,
+        `The payoff shows up in metrics planners care about — lower emissions, higher local spending — but also in ones harder to measure: neighbours who know each other's names, and communities with enough daily contact to organise when it matters.`,
+      ],
+      pull: `How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?`,
+    },
+    {
+      slug: 'public-goods-rebuilt', group: 'infrastructure', type: 'Essay', date: '2026-05-28',
+      title: `Public Goods, Rebuilt: A New Philosophy for European Infrastructure`,
+      teaser: `Europe built the infrastructure of the 20th century to last a hundred years. Rebuilding it for the 21st requires a different kind of ambition.`,
+      lede: `The bridges, grids and rail lines that make daily European life possible are ageing into a rebuilding moment — and a chance to reset how public goods get built.`,
+      body: [
+        `Much of the infrastructure Europeans rely on daily was designed for a different century, financed by a different generation, and is now reaching the point where patching it costs more than reimagining it. That is an unusually rare opportunity: a forced rebuild that can be shaped by today's priorities instead of yesterday's constraints.`,
+        `The old model treated public infrastructure as something the state built once and maintained forever. The better model treats it as a living system — instrumented, adaptive, and funded in a way that makes long-term maintenance as politically rewarding as the ribbon-cutting was.`,
+        `Getting this right over the next decade will do more for European quality of life than almost any other single policy area, precisely because it is the invisible layer everything else depends on.`,
+      ],
+      pull: `How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?`,
+    },
+    {
+      slug: 'citizens-not-spectators', group: 'citizenship', type: 'Essay', date: '2026-05-14',
+      title: `Citizens, Not Spectators: Reclaiming Agency in a Complex World`,
+      teaser: `A strong Europe needs engaged citizens, not just good institutions. What does it take to turn spectators back into participants?`,
+      lede: `Democracies don't fail only when institutions break. They fail, more quietly, when citizens stop believing their participation changes anything.`,
+      body: [
+        `It is easy to blame institutions for civic disengagement, and often fair. But the deeper problem is a learned passivity — a sense, reinforced over years, that showing up to a town hall or joining a local board changes little in a system built at national or continental scale.`,
+        `Reversing that requires putting real, visible decisions back within reach of ordinary citizens — participatory budgets that fund things people can see, local boards with actual authority, and civic education that treats engagement as a practical skill rather than an abstract virtue.`,
+        `The goal isn't nostalgia for small-town democracy. It's proof, repeated often enough to become instinct again, that showing up still works — because a Europe of confident citizens is a precondition for everything else on this list, not a nice-to-have alongside it.`,
+      ],
+      pull: `How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?`,
+    },
+    {
+      slug: 'the-story-europe-forgot', group: 'narrative', type: 'Essay', date: '2026-04-30',
+      title: `The Story Europe Forgot to Tell Itself`,
+      teaser: `Europe still inspires imitation across the world. It has simply stopped telling that story to its own citizens.`,
+      lede: `Ask people abroad what Europe represents and you'll hear ambition. Ask Europeans the same question, and the answer is often smaller than the reality deserves.`,
+      body: [
+        `Europe's civilisational record is, by any honest measure, extraordinary — in science, in culture, in the sheer density of ideas that reshaped how the world lives and governs itself. And yet the internal story Europeans tell about their own continent has drifted toward caution, apology and managed decline.`,
+        `That gap between reality and narrative matters more than it sounds. Confidence is not just a mood; it is a precondition for the risk-taking that built the technology, capital markets and institutions this continent now needs to rebuild. A story of decline produces citizens who manage. A story of renaissance produces citizens who build.`,
+        `None of this requires inventing anything. It requires the discipline to tell the true story — ambitious, plural, unfinished — with the same confidence competitors tell their own.`,
+      ],
+      pull: `How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?`,
+    },
+  ];
+
+  /* ── PERSPECTIVES: HELPERS ── */
+  function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
+  function articleBySlug(slug) { return ARTICLES.find(a => a.slug === slug); }
+  function sortedArticles() { return ARTICLES.slice().sort((a, b) => new Date(b.date) - new Date(a.date)); }
+  function formatDate(iso) {
+    const d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function articleThumbStyle(article) {
+    const g = groupBySlug(article.group);
+    return g.image ? `background-image:url('${g.image}');background-size:cover;background-position:center;` : `background:${g.gradient};`;
+  }
+  function articleCardHTML(article) {
+    const g = groupBySlug(article.group);
+    return `
+      <a class="article-card reveal" href="/perspectives/${article.slug}" onclick="event.preventDefault(); openArticle('${article.slug}');">
+        <div class="article-img-wrap">
+          <div class="article-img-placeholder" style="${articleThumbStyle(article)}"></div>
+          <span class="article-tag-pill">${g.short}</span>
+        </div>
+        <div class="article-body">
+          <div class="article-source">${article.type} · ${formatDate(article.date)}</div>
+          <div class="article-title">${article.title}</div>
+          <div class="article-teaser">${article.teaser}</div>
+          <span class="article-link">Read article</span>
+        </div>
+      </a>`;
+  }
+
+  /* ── PERSPECTIVES: RENDER ── */
+  function renderHomeMagPreview() {
+    const el = document.getElementById('homeMagPreview');
+    if (!el) return;
+    el.innerHTML = sortedArticles().slice(0, 3).map(articleCardHTML).join('');
+  }
+
+  let magActiveFilter = 'all';
+
+  function renderPerspectives(filterSlug) {
+    if (filterSlug) magActiveFilter = filterSlug;
+    const all = sortedArticles();
+    const featured = all[0];
+    const rest = all.slice(1);
+    const filtered = magActiveFilter === 'all' ? rest : all.filter(a => a.group === magActiveFilter);
+
+    const featuredEl = document.getElementById('magFeatured');
+    if (featuredEl) {
+      const fg = groupBySlug(featured.group);
+      featuredEl.innerHTML = `
+        <a class="mag-featured-card" href="/perspectives/${featured.slug}" onclick="event.preventDefault(); openArticle('${featured.slug}');">
+          <div class="mag-featured-img" style="${articleThumbStyle(featured)}">
+            <span class="article-tag-pill">${fg.short}</span>
+          </div>
+          <div class="mag-featured-body">
+            <div class="mag-featured-meta">${featured.type} · ${formatDate(featured.date)}</div>
+            <h2>${featured.title}</h2>
+            <p>${featured.teaser}</p>
+            <span class="mag-featured-read">Read the story</span>
+          </div>
+        </a>`;
+    }
+
+    const filterEl = document.getElementById('magFilterRow');
+    if (filterEl) {
+      const chips = [{ slug: 'all', short: 'All' }].concat(GROUPS);
+      filterEl.innerHTML = chips.map(c => `<button class="mag-filter-chip${magActiveFilter === c.slug ? ' active' : ''}" onclick="renderPerspectives('${c.slug}')">${c.short}</button>`).join('');
+    }
+
+    const gridEl = document.getElementById('magGrid');
+    if (gridEl) {
+      gridEl.innerHTML = filtered.length
+        ? filtered.map(articleCardHTML).join('')
+        : '<div class="mag-empty">No articles in this group yet — check back soon.</div>';
+    }
+    setTimeout(initReveal, 80);
+  }
+
+  function openGroupOverlay() {
+    const overlay = document.getElementById('magOverlay');
+    const list = document.getElementById('magOverlayList');
+    list.innerHTML = GROUPS.map(g => `
+        <div class="mag-overlay-item" data-slug="${g.slug}"
+             onmouseenter="magOverlayHover('${g.slug}')" onmouseleave="magOverlayHover(null)"
+             onclick="selectGroupFromOverlay('${g.slug}')">
+          <span class="mag-dot"></span>${g.name}
+        </div>`).join('') + `<div class="mag-overlay-all" onclick="selectGroupFromOverlay('all')">View all articles</div>`;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeGroupOverlay() {
+    document.getElementById('magOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function magOverlayHover(slug) {
+    const list = document.getElementById('magOverlayList');
+    const glow = document.getElementById('magOverlayGlow');
+    list.querySelectorAll('.mag-overlay-item').forEach(item => item.classList.toggle('active-hover', item.dataset.slug === slug));
+    if (slug) {
+      list.classList.add('has-hover');
+      const g = groupBySlug(slug);
+      const hex = g.gradient.match(/#[0-9a-fA-F]{3,6}/);
+      glow.style.background = `radial-gradient(ellipse 60% 55% at 50% 50%, ${hex ? hex[0] : '#b89ab5'}55 0%, transparent 65%)`;
+    } else {
+      list.classList.remove('has-hover');
+      glow.style.background = 'transparent';
+    }
+  }
+  function selectGroupFromOverlay(slug) {
+    closeGroupOverlay();
+    if (!document.getElementById('page-perspectives').classList.contains('active')) {
+      showPage('perspectives');
+    }
+    renderPerspectives(slug);
+  }
+
+  function renderArticle(slug, opts) {
+    opts = opts || {};
+    const article = articleBySlug(slug);
+    if (!article) { showPage('perspectives'); return; }
+    const g = groupBySlug(article.group);
+
+    const heroEl = document.getElementById('articleHero');
+    heroEl.style.background = g.image ? `url('${g.image}') center/cover` : g.gradient;
+
+    const tagEl = document.getElementById('articleHeroTag');
+    tagEl.textContent = g.short;
+    tagEl.onclick = () => { showPage('perspectives'); renderPerspectives(article.group); };
+
+    document.getElementById('articleHeroTitle').textContent = article.title;
+    document.getElementById('articleHeroMeta').textContent = `${article.type} · ${formatDate(article.date)}`;
+    document.getElementById('articleLede').textContent = article.lede;
+
+    let bodyHTML = '';
+    article.body.forEach((p, i) => {
+      bodyHTML += `<p class="article-p">${p}</p>`;
+      if (i === 0 && article.pull) bodyHTML += `<div class="article-pull">${article.pull}</div>`;
+    });
+    document.getElementById('articleBody').innerHTML = bodyHTML;
+
+    document.getElementById('articleRelatedSub').textContent = `Continue exploring ${g.name}`;
+    let related = sortedArticles().filter(a => a.group === article.group && a.slug !== article.slug).slice(0, 3);
+    if (!related.length) related = sortedArticles().filter(a => a.slug !== article.slug).slice(0, 3);
+    document.getElementById('articleRelatedGrid').innerHTML = related.map(articleCardHTML).join('');
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-article').classList.add('active');
+    setTimeout(initReveal, 80);
+
+    if (opts.updateHistory !== false) {
+      const path = '/perspectives/' + article.slug;
+      if (location.pathname !== path) history.pushState({ article: article.slug }, '', path);
+    }
+  }
+  function openArticle(slug) { renderArticle(slug); }
+
+  renderHomeMagPreview();
+  renderPerspectives('all');
+
+  const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech', 'perspectives': 'perspectives' };
+  const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech', perspectives: 'perspectives' };
 
   function idFromPath(pathname) {
     const slug = pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
@@ -1605,11 +2440,20 @@
   }
 
   window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.article) { renderArticle(e.state.article, { updateHistory: false }); return; }
     const id = (e.state && e.state.id) || idFromPath(location.pathname) || 'home';
     showPage(id, { updateHistory: false });
   });
 
   (function initRouteFromURL() {
+    const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    if (path.indexOf('perspectives/') === 0) {
+      const slug = path.slice('perspectives/'.length);
+      if (ARTICLES.some(a => a.slug === slug)) {
+        renderArticle(slug, { updateHistory: false });
+        return;
+      }
+    }
     const id = idFromPath(location.pathname);
     if (id && id !== 'home') {
       showPage(id, { updateHistory: false });
@@ -1724,11 +2568,189 @@
     els.forEach(el => io.observe(el));
   }
 
-  function toggleAccordion(item) {
-    const wasOpen = item.classList.contains('open');
-    item.closest('.accordion-grid').querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
-    if (!wasOpen) item.classList.add('open');
+  /* ── FIELDS WHEEL (Mission page) ── */
+  const MISSION_FIELDS = [
+    { num: 1, shortName: 'Citizenship', fullName: 'New Role of Citizenship in Europe', color: '#c8a882',
+      blurb: 'A strong continent in a complex world needs independent and engaged individuals.',
+      question: 'How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?' },
+    { num: 2, shortName: 'State & Governance', fullName: 'New State and Governance Models', color: '#7a9ab5',
+      blurb: 'A robust and competitive democracy needs to deliver superior outcomes for its citizens.',
+      question: 'How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?' },
+    { num: 3, shortName: 'Capital Markets', fullName: 'New Private Capital Market', color: '#a0a0b0',
+      blurb: 'Entrepreneurial drive, financial security and personal freedom are built on ownership.',
+      question: 'How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?' },
+    { num: 4, shortName: 'Technology', fullName: 'New Technology Leadership', color: '#6a8a7a',
+      blurb: "Technological innovation and its adoption define a society's prosperity and power.",
+      question: 'How can we unleash European pioneering spirit, inventiveness and craftmanship to become a global technology leader again?' },
+    { num: 5, shortName: 'Narrative', fullName: 'New European Narrative and Consciousness', color: '#4a6a9a',
+      blurb: 'Our civilisatory achievements and cultural richness still inspire hope and desire.',
+      question: 'How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?' },
+    { num: 6, shortName: 'Local Ecosystems', fullName: 'New Local Ecosystems and Healthy Communities', color: '#c0a060',
+      blurb: 'Safe, healthy, connected and fulfilling lives are primarily enabled by local communities.',
+      question: 'How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?' },
+    { num: 7, shortName: 'Infrastructure', fullName: 'New Infrastructure and Public Good Philosophy', color: '#3a5a8a',
+      blurb: 'Superior public infrastructure for everyone is a cornerstone of the European identity.',
+      question: 'How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?' },
+    { num: 8, shortName: 'Defense', fullName: 'New Defense and Resilience', color: '#5a8a6a',
+      blurb: 'A peaceful and war-weary Europe has now become a target, unable to defend itself.',
+      question: 'How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?' },
+    { num: 9, shortName: 'Education', fullName: 'New Education', color: '#6a9aca',
+      blurb: 'Strong independent public education and research are now needed more than ever.',
+      question: 'How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today\'s world?' },
+    { num: 10, shortName: 'Energy', fullName: 'New Energy', color: '#8aaa7a',
+      blurb: 'Energy is the most important enabler for a thriving society and its economy.',
+      question: 'How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?' },
+  ];
+
+  let missionSelectedNum = null;
+
+  function wheelTextColor(hex) {
+    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum > 0.6 ? '#14141f' : '#ffffff';
   }
+
+  function wheelPolar(cx, cy, r, angDeg) {
+    const a = (angDeg - 90) * Math.PI / 180;
+    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
+  }
+
+  function wheelDonutPath(cx, cy, rOut, rIn, a0, a1) {
+    const p0 = wheelPolar(cx, cy, rOut, a1), p1 = wheelPolar(cx, cy, rOut, a0);
+    const p2 = wheelPolar(cx, cy, rIn, a0), p3 = wheelPolar(cx, cy, rIn, a1);
+    const large = (a1 - a0) > 180 ? 1 : 0;
+    return `M ${p0.x} ${p0.y} A ${rOut} ${rOut} 0 ${large} 0 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${rIn} ${rIn} 0 ${large} 1 ${p3.x} ${p3.y} Z`;
+  }
+
+  function renderMissionWheel() {
+    const svg = document.getElementById('missionWheelSvg');
+    if (!svg) return;
+    const CX = 320, CY = 320, R_OUT = 250, R_IN = 128, LABEL_R = 300;
+    const step = 360 / MISSION_FIELDS.length;
+    let html = '';
+    MISSION_FIELDS.forEach((f, i) => {
+      const a0 = i * step + 1.2, a1 = (i + 1) * step - 1.2;
+      const mid = (a0 + a1) / 2;
+      const d = wheelDonutPath(CX, CY, R_OUT, R_IN, a0, a1);
+      const isSel = missionSelectedNum === f.num;
+      const dimCls = (missionSelectedNum && !isSel) ? ' dim' : '';
+      const midPt = wheelPolar(CX, CY, (R_OUT + R_IN) / 2, mid);
+      html += `<path class="wheel-seg${dimCls}" d="${d}" fill="${f.color}" data-num="${f.num}"></path>`;
+      html += `<text class="wheel-seg-num" x="${midPt.x}" y="${midPt.y + 7}" text-anchor="middle" fill="${wheelTextColor(f.color)}" pointer-events="none">${String(f.num).padStart(2, '0')}</text>`;
+
+      const edgePt = wheelPolar(CX, CY, R_OUT + 2, mid);
+      const labelPt = wheelPolar(CX, CY, LABEL_R, mid);
+      const anchor = labelPt.x > CX + 6 ? 'start' : (labelPt.x < CX - 6 ? 'end' : 'middle');
+      const dx = anchor === 'start' ? 8 : (anchor === 'end' ? -8 : 0);
+      html += `<line class="wheel-leader" x1="${edgePt.x}" y1="${edgePt.y}" x2="${labelPt.x}" y2="${labelPt.y}"></line>`;
+      html += `<circle class="wheel-leader-dot" cx="${labelPt.x}" cy="${labelPt.y}" fill="${f.color}"></circle>`;
+      html += `<text class="wheel-label${isSel ? ' selected' : ''}" x="${labelPt.x + dx}" y="${labelPt.y + 4}" text-anchor="${anchor}">${f.shortName}</text>`;
+    });
+
+    const centerField = missionSelectedNum ? MISSION_FIELDS.find(f => f.num === missionSelectedNum) : null;
+    if (centerField) {
+      html += `<text class="wheel-center-sub" x="${CX}" y="${CY - 14}" text-anchor="middle">FIELD ${String(centerField.num).padStart(2, '0')}</text>`;
+      html += `<text class="wheel-center-title" x="${CX}" y="${CY + 12}" text-anchor="middle">${centerField.shortName}</text>`;
+      html += `<text class="wheel-center-sub" x="${CX}" y="${CY + 34}" text-anchor="middle">focus below ↓</text>`;
+    } else {
+      html += `<text class="wheel-center-title" x="${CX}" y="${CY - 6}" text-anchor="middle">NERO</text>`;
+      html += `<text class="wheel-center-num" x="${CX}" y="${CY + 18}" text-anchor="middle">10 action fields</text>`;
+    }
+
+    svg.innerHTML = html;
+    svg.querySelectorAll('.wheel-seg').forEach(el => {
+      el.addEventListener('click', () => selectMissionField(Number(el.getAttribute('data-num'))));
+    });
+  }
+
+  function renderMissionWheelDetail() {
+    const panel = document.getElementById('missionWheelDetail');
+    if (!panel) return;
+    if (!missionSelectedNum) {
+      panel.className = 'wheel-detail empty';
+      panel.innerHTML = 'Select a field to see its focus.';
+      return;
+    }
+    const f = MISSION_FIELDS.find(x => x.num === missionSelectedNum);
+    panel.className = 'wheel-detail';
+    panel.innerHTML = `
+      <div class="wheel-detail-head">
+        <span class="wheel-detail-num" style="background:${f.color};color:${wheelTextColor(f.color)}">${String(f.num).padStart(2, '0')}</span>
+        <h3 class="wheel-detail-name">${f.fullName}</h3>
+      </div>
+      <p class="wheel-detail-blurb">${f.blurb}</p>
+      <p class="wheel-detail-question">${f.question}</p>
+    `;
+  }
+
+  function selectMissionField(num) {
+    missionSelectedNum = (missionSelectedNum === num) ? null : num;
+    renderMissionWheel();
+    renderMissionWheelDetail();
+  }
+
+  renderMissionWheel();
+  renderMissionWheelDetail();
+
+  /* ── MARQUEE NEWSLETTER (Mission page) ── */
+  (function initMissionMarquee() {
+    const row1 = document.getElementById('missionMarqueeRow1');
+    const row2 = document.getElementById('missionMarqueeRow2');
+    if (!row1 || !row2) return;
+
+    const ROW_1_PHRASES = ['Proud Citizenship', 'Progressive Education', 'New Renaissance'];
+    const ROW_2_PHRASES = ['Bold Entrepreneurship', 'New Technology and Media', 'European Unity'];
+
+    function buildTrack(phrases, repeats) {
+      let sequence = '';
+      for (let r = 0; r < repeats; r++) {
+        phrases.forEach(phrase => {
+          sequence += `<span class="marquee-item"><span class="marquee-text">${phrase}</span><span class="marquee-sep">✦</span></span>`;
+        });
+      }
+      return sequence + sequence;
+    }
+
+    row1.innerHTML = buildTrack(ROW_1_PHRASES, 4);
+    row2.innerHTML = buildTrack(ROW_2_PHRASES, 4);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let half1 = row1.scrollWidth / 2;
+    let half2 = row2.scrollWidth / 2;
+    let posA = 0, posB = 0;
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const SPEED = 1.1;
+
+    function wrapMod(v, half) {
+      if (!half) return 0;
+      let m = v % half;
+      if (m < 0) m += half;
+      return m;
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const sy = window.scrollY;
+        const delta = sy - lastScrollY;
+        lastScrollY = sy;
+        posA = wrapMod(posA + delta * SPEED, half1);
+        posB = wrapMod(posB - delta * SPEED, half2);
+        row1.style.transform = `translateX(${-posA}px)`;
+        row2.style.transform = `translateX(${-posB}px)`;
+        ticking = false;
+      });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      half1 = row1.scrollWidth / 2 || half1;
+      half2 = row2.scrollWidth / 2 || half2;
+    });
+  })();
 
   function openModal(id) {
     document.getElementById(id).classList.add('open');
@@ -1750,6 +2772,7 @@
         m.classList.remove('open');
         document.body.style.overflow = '';
       });
+      if (document.getElementById('magOverlay').classList.contains('open')) closeGroupOverlay();
     }
   });
 
