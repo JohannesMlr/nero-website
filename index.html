@@ -1342,7 +1342,9 @@
     }
     .article-back::before { content: "←"; }
     .article-lede { font-size: 1.1rem; color: var(--ink-soft); font-weight: 500; line-height: 1.7; margin-bottom: 1.75rem; }
-    .article-body-wrap p.article-p { font-size: 1rem; color: #2b2b3d; line-height: 1.85; margin-bottom: 1.4rem; }
+    #articleBody p { font-size: 1rem; color: #2b2b3d; line-height: 1.85; margin-bottom: 1.4rem; }
+    #articleBody a { color: var(--ink); }
+    #articleBody ul, #articleBody ol { margin: 0 0 1.4rem 1.25rem; color: #2b2b3d; line-height: 1.85; }
     .article-pull {
       font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: clamp(1.2rem, 2.4vw, 1.5rem);
@@ -2122,6 +2124,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
 <script>
   /* ── PERSPECTIVES: DATA ── */
   const GROUPS = [
@@ -2137,128 +2140,53 @@
     { slug: 'energy', name: 'New Energy', short: 'Energy', gradient: 'linear-gradient(135deg, #8aaa7a 0%, #6a8a5a 100%)' },
   ];
 
-  const ARTICLES = [
-    {
-      slug: 'europes-next-industrial-leap', group: 'tech', type: 'Essay', date: '2026-08-18',
-      title: `Europe's Next Industrial Leap: Why Deep Tech Needs a Continental Strategy`,
-      teaser: `Europe has the talent and industrial depth to lead the next wave of technology — but only if it stops treating deep tech as a national project.`,
-      lede: `From AI to fusion, Europe's breakthroughs keep happening in the lab and commercialising somewhere else. Closing that gap is the defining industrial challenge of the decade.`,
-      body: [
-        `Walk into any leading AI lab, quantum computing startup or advanced materials facility in Europe, and you'll find no shortage of ambition. What's missing is scale. A researcher in Munich and a manufacturer in Lyon operate in different funding systems, different regulatory regimes and, often, different languages of ambition. The result is a continent that invents at a world-class level and commercialises at a regional one.`,
-        `The fix isn't more funding alone — Europe already spends heavily on research. It's coordination: shared testbeds for frontier technologies, procurement rules that reward European scale-ups instead of the cheapest bidder, and a single market for talent that lets the best people move to wherever the hardest problems are being solved.`,
-        `None of this requires new bureaucracy so much as it requires nerve — a willingness to back European champions before they're proven, the way competitors already do. The countries and companies that make that bet first will set the terms for everyone else.`,
-      ],
-      pull: `How can we unleash European pioneering spirit, inventiveness and craftmanship to become a global technology leader again?`,
-    },
-    {
-      slug: 'the-boring-revolution', group: 'state-governance', type: 'Report', date: '2026-08-12',
-      title: `The Boring Revolution: How One Small State Became Europe's Digital Blueprint`,
-      teaser: `A quiet Baltic experiment in digital government has become the most-copied governance model in Europe — and most citizens barely notice it working.`,
-      lede: `The best public institutions are the ones you stop thinking about. A small European state has spent two decades proving that's achievable at scale.`,
-      body: [
-        `There is no ribbon-cutting moment for good governance. It shows up as a form that fills itself in, a permit that arrives before you've finished your coffee, a tax return that takes three minutes instead of three weekends. That mundane efficiency, replicated across an entire state, is what a new generation of European reformers is now trying to reverse-engineer.`,
-        `The underlying model is simple to describe and hard to execute: treat every citizen interaction with the state as a product to be designed, not a process to be endured. That means one login, one identity, and data that moves between agencies so citizens never have to re-enter what the state already knows.`,
-        `Replicating this elsewhere in Europe isn't a technology problem — the tools exist. It's a trust and incentive problem: convincing institutions to give up control of their own data silos for a system that serves citizens better but no single department owns.`,
-      ],
-      pull: `How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?`,
-    },
-    {
-      slug: 'sovereign-by-design', group: 'energy', type: 'Commentary', date: '2026-07-29',
-      title: `Sovereign by Design: Europe's Path to Energy Abundance`,
-      teaser: `Energy security and climate ambition were once framed as trade-offs. Europe's next phase of build-out proves they can be the same project.`,
-      lede: `The continent that once imported its energy anxieties is starting to export energy engineering — the question now is how fast it can build.`,
-      body: [
-        `For a decade, European energy policy was written in the language of dependency: which pipeline, which supplier, which crisis. That framing is starting to give way to a more confident one, built around a simple bet — that a continent with world-class engineering, capital markets and manufacturing can build its way to abundance rather than merely manage scarcity.`,
-        `Getting there means treating permitting speed as seriously as subsidy design. Projects that take a decade to approve lose to capital that can deploy in two years elsewhere. It also means an honest conversation about the full mix — renewables, grid, storage and nuclear — rather than picking technologies for political comfort.`,
-        `Done right, this is not just a climate story. Cheap, sovereign, abundant energy is the foundation under every other ambition on this list — from reshoring industry to powering the compute that AI leadership requires.`,
-      ],
-      pull: `How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?`,
-    },
-    {
-      slug: 'deterrence-is-a-design-problem', group: 'defense', type: 'Essay', date: '2026-07-18',
-      title: `Deterrence Is a Design Problem`,
-      teaser: `Europe doesn't lack the industrial base to defend itself. It lacks the shared design discipline to turn that base into deterrence.`,
-      lede: `Rebuilding military capability is only half the challenge. The harder half is designing systems — procurement, industry, doctrine — that can act as one.`,
-      body: [
-        `Europe's defense industry is larger and more capable than its output suggests. Dozens of programmes, calibres and standards coexist across the continent, each defensible on its own terms and collectively a drag on the speed and scale that deterrence requires.`,
-        `The postwar generation built institutions on the assumption that peace was the default state to protect. The next generation has to build institutions on the assumption that resilience must be actively designed — in supply chains, in reserves, in the civilian systems an adversary would target first.`,
-        `This is uncomfortable territory for a continent that spent decades treating defense as an American given. But the states moving fastest now are the ones treating resilience as an engineering problem to be solved this decade, not a political debate to be managed indefinitely.`,
-      ],
-      pull: `How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?`,
-    },
-    {
-      slug: 'relearning-how-to-teach-builders', group: 'education', type: 'Interview', date: '2026-07-05',
-      title: `Why Europe's Universities Must Relearn How to Teach Builders`,
-      teaser: `A conversation on why Europe trains excellent analysts but too few founders — and what changes when institutions optimise for builders instead.`,
-      lede: `Europe's universities are exceptional at producing people who understand the world. The next challenge is producing more who are willing to rebuild parts of it.`,
-      body: [
-        `"The talent isn't the bottleneck," says one educator working to redesign a technical curriculum from the ground up. "Confidence is. Our best students can tell you exactly why a venture might fail. We spend far less time teaching them to try anyway."`,
-        `That imbalance, she argues, is structural rather than cultural. Grading rewards the correct critique over the risky attempt; career pipelines reward the safe internship over the shaky first company. Changing the incentive, not the students, is where reform has to start.`,
-        `Some institutions are already testing the fix — giving credit for ventures that fail honestly, pairing technical programmes directly with founders-in-residence, and treating a failed startup on a CV the way a failed experiment is treated in a physics lab: as data, not disgrace.`,
-      ],
-      pull: `How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today's world?`,
-    },
-    {
-      slug: 'turning-savers-into-owners', group: 'capital-market', type: 'Report', date: '2026-06-22',
-      title: `Turning Savers into Owners: The Case for a European Investment Culture`,
-      teaser: `Europeans save more than Americans and own far less. Closing that gap could be the single biggest lever for European wealth and growth.`,
-      lede: `Trillions of euros sit in low-yield accounts across the continent while European companies raise growth capital abroad. The fix is cultural as much as regulatory.`,
-      body: [
-        `The numbers are almost embarrassing in their simplicity: European households hold a smaller share of their savings in capital markets than almost any comparable region, while European startups routinely cross the Atlantic to raise the capital that will fund their growth. The savings exist. The plumbing to connect them to opportunity does not.`,
-        `Part of the fix is regulatory — a genuine single market for capital, not twenty-seven overlapping ones. Part of it is product: retirement and investment vehicles designed for ordinary savers, not just institutions. And part of it is cultural — treating ownership of European growth as a civic good, not a gamble reserved for professionals.`,
-        `Countries that have made this shift — turning savers into shareholders through simple, well-designed vehicles — have seen both household wealth and domestic investment rise together. There's no reason that has to remain a national story rather than a European one.`,
-      ],
-      pull: `How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?`,
-    },
-    {
-      slug: 'the-ten-minute-town', group: 'local-ecosystems', type: 'Commentary', date: '2026-06-10',
-      title: `The Ten-Minute Town: Rebuilding Community at Walking Distance`,
-      teaser: `A growing movement of European towns is redesigning daily life around one simple constraint: everything that matters, ten minutes away.`,
-      lede: `Resilient nations are built from resilient neighbourhoods. A quiet planning movement is trying to make that literal, one town at a time.`,
-      body: [
-        `The idea sounds almost too simple to be a policy: design towns so that school, work, healthcare, groceries and green space are all within a short walk or ride. But behind that simplicity is a real rebuttal to decades of planning that optimised for cars and commutes over community and contact.`,
-        `The towns doing this well didn't start with grand infrastructure spending. They started by removing the small frictions — a closed-off street reopened to foot traffic, a vacant storefront turned into a shared workspace, a school playground that doubles as a public park after hours.`,
-        `The payoff shows up in metrics planners care about — lower emissions, higher local spending — but also in ones harder to measure: neighbours who know each other's names, and communities with enough daily contact to organise when it matters.`,
-      ],
-      pull: `How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?`,
-    },
-    {
-      slug: 'public-goods-rebuilt', group: 'infrastructure', type: 'Essay', date: '2026-05-28',
-      title: `Public Goods, Rebuilt: A New Philosophy for European Infrastructure`,
-      teaser: `Europe built the infrastructure of the 20th century to last a hundred years. Rebuilding it for the 21st requires a different kind of ambition.`,
-      lede: `The bridges, grids and rail lines that make daily European life possible are ageing into a rebuilding moment — and a chance to reset how public goods get built.`,
-      body: [
-        `Much of the infrastructure Europeans rely on daily was designed for a different century, financed by a different generation, and is now reaching the point where patching it costs more than reimagining it. That is an unusually rare opportunity: a forced rebuild that can be shaped by today's priorities instead of yesterday's constraints.`,
-        `The old model treated public infrastructure as something the state built once and maintained forever. The better model treats it as a living system — instrumented, adaptive, and funded in a way that makes long-term maintenance as politically rewarding as the ribbon-cutting was.`,
-        `Getting this right over the next decade will do more for European quality of life than almost any other single policy area, precisely because it is the invisible layer everything else depends on.`,
-      ],
-      pull: `How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?`,
-    },
-    {
-      slug: 'citizens-not-spectators', group: 'citizenship', type: 'Essay', date: '2026-05-14',
-      title: `Citizens, Not Spectators: Reclaiming Agency in a Complex World`,
-      teaser: `A strong Europe needs engaged citizens, not just good institutions. What does it take to turn spectators back into participants?`,
-      lede: `Democracies don't fail only when institutions break. They fail, more quietly, when citizens stop believing their participation changes anything.`,
-      body: [
-        `It is easy to blame institutions for civic disengagement, and often fair. But the deeper problem is a learned passivity — a sense, reinforced over years, that showing up to a town hall or joining a local board changes little in a system built at national or continental scale.`,
-        `Reversing that requires putting real, visible decisions back within reach of ordinary citizens — participatory budgets that fund things people can see, local boards with actual authority, and civic education that treats engagement as a practical skill rather than an abstract virtue.`,
-        `The goal isn't nostalgia for small-town democracy. It's proof, repeated often enough to become instinct again, that showing up still works — because a Europe of confident citizens is a precondition for everything else on this list, not a nice-to-have alongside it.`,
-      ],
-      pull: `How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?`,
-    },
-    {
-      slug: 'the-story-europe-forgot', group: 'narrative', type: 'Essay', date: '2026-04-30',
-      title: `The Story Europe Forgot to Tell Itself`,
-      teaser: `Europe still inspires imitation across the world. It has simply stopped telling that story to its own citizens.`,
-      lede: `Ask people abroad what Europe represents and you'll hear ambition. Ask Europeans the same question, and the answer is often smaller than the reality deserves.`,
-      body: [
-        `Europe's civilisational record is, by any honest measure, extraordinary — in science, in culture, in the sheer density of ideas that reshaped how the world lives and governs itself. And yet the internal story Europeans tell about their own continent has drifted toward caution, apology and managed decline.`,
-        `That gap between reality and narrative matters more than it sounds. Confidence is not just a mood; it is a precondition for the risk-taking that built the technology, capital markets and institutions this continent now needs to rebuild. A story of decline produces citizens who manage. A story of renaissance produces citizens who build.`,
-        `None of this requires inventing anything. It requires the discipline to tell the true story — ambitious, plural, unfinished — with the same confidence competitors tell their own.`,
-      ],
-      pull: `How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?`,
-    },
-  ];
+  let ARTICLES = [];
+
+  /* ── PERSPECTIVES: CONTENT LOADING (Markdown + frontmatter) ── */
+  function parseFrontmatter(raw) {
+    const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+    if (!match) return { data: {}, body: raw };
+    const [, fm, body] = match;
+    const data = {};
+    fm.split('\n').forEach(line => {
+      const idx = line.indexOf(':');
+      if (idx === -1) return;
+      const key = line.slice(0, idx).trim();
+      let value = line.slice(idx + 1).trim();
+      if (value.length > 1 && ((value[0] === '"' && value[value.length - 1] === '"') || (value[0] === "'" && value[value.length - 1] === "'"))) {
+        value = value.slice(1, -1);
+      }
+      data[key] = value;
+    });
+    return { data, body: body.trim() };
+  }
+
+  async function loadPerspectiveArticles() {
+    try {
+      const manifestRes = await fetch('/content/perspectives/manifest.json');
+      const slugs = await manifestRes.json();
+      const loaded = await Promise.all(slugs.map(async (slug) => {
+        const res = await fetch(`/content/perspectives/${slug}.md`);
+        const raw = await res.text();
+        const { data, body } = parseFrontmatter(raw);
+        return {
+          slug: data.slug || slug,
+          group: data.group,
+          type: data.type,
+          date: data.date,
+          title: data.title,
+          teaser: data.teaser,
+          lede: data.lede,
+          pull: data.pull || '',
+          bodyHtml: window.marked ? marked.parse(body) : body,
+        };
+      }));
+      ARTICLES = loaded;
+    } catch (err) {
+      console.error('Failed to load Perspectives articles', err);
+      ARTICLES = [];
+    }
+  }
 
   /* ── PERSPECTIVES: HELPERS ── */
   function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
@@ -2392,11 +2320,12 @@
     document.getElementById('articleHeroMeta').textContent = `${article.type} · ${formatDate(article.date)}`;
     document.getElementById('articleLede').textContent = article.lede;
 
-    let bodyHTML = '';
-    article.body.forEach((p, i) => {
-      bodyHTML += `<p class="article-p">${p}</p>`;
-      if (i === 0 && article.pull) bodyHTML += `<div class="article-pull">${article.pull}</div>`;
-    });
+    let bodyHTML = article.bodyHtml || '';
+    if (article.pull) {
+      const insertAt = bodyHTML.indexOf('</p>');
+      const pullHTML = `<div class="article-pull">${article.pull}</div>`;
+      bodyHTML = insertAt === -1 ? pullHTML + bodyHTML : bodyHTML.slice(0, insertAt + 4) + pullHTML + bodyHTML.slice(insertAt + 4);
+    }
     document.getElementById('articleBody').innerHTML = bodyHTML;
 
     document.getElementById('articleRelatedSub').textContent = `Continue exploring ${g.name}`;
@@ -2415,9 +2344,6 @@
     }
   }
   function openArticle(slug) { renderArticle(slug); }
-
-  renderHomeMagPreview();
-  renderPerspectives('all');
 
   const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech', 'perspectives': 'perspectives' };
   const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech', perspectives: 'perspectives' };
@@ -2448,17 +2374,30 @@
   (function initRouteFromURL() {
     const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
     if (path.indexOf('perspectives/') === 0) {
-      const slug = path.slice('perspectives/'.length);
-      if (ARTICLES.some(a => a.slug === slug)) {
-        renderArticle(slug, { updateHistory: false });
-        return;
-      }
+      // Article deep links are resolved once Perspectives content has loaded — see bootstrapPerspectives() below.
+      return;
     }
     const id = idFromPath(location.pathname);
     if (id && id !== 'home') {
       showPage(id, { updateHistory: false });
     } else if (location.pathname !== '/') {
       history.replaceState({ id: 'home' }, '', '/');
+    }
+  })();
+
+  (async function bootstrapPerspectives() {
+    await loadPerspectiveArticles();
+    renderHomeMagPreview();
+    renderPerspectives('all');
+
+    const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    if (path.indexOf('perspectives/') === 0) {
+      const slug = path.slice('perspectives/'.length);
+      if (articleBySlug(slug)) {
+        renderArticle(slug, { updateHistory: false });
+      } else {
+        showPage('perspectives', { updateHistory: false });
+      }
     }
   })();
 
