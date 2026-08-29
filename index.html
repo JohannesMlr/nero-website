@@ -224,6 +224,14 @@
       color: #fff;
       letter-spacing: -0.02em;
     }
+    /* Mission page hero only: thinner weight (matches home hero) + scroll-driven star trails */
+    #missionHero .mission-h1 { font-weight: 500; }
+    .mission-star-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
 
     /* ── SECTION WRAPPER ── */
     .section {
@@ -1550,7 +1558,8 @@
 ════════════════════════════ -->
 <div id="page-mission" class="page">
 
-  <div class="mission-hero">
+  <div class="mission-hero" id="missionHero">
+    <canvas class="mission-star-canvas" id="missionStarCanvas"></canvas>
     <div class="mission-text">
       <p class="mission-label">Our Mission</p>
       <h1 class="mission-h1">European unity and growth</h1>
@@ -2601,6 +2610,81 @@
         showPage('perspectives', { updateHistory: false });
       }
     }
+  })();
+
+  (function initMissionStarTrails() {
+    const hero = document.getElementById('missionHero');
+    const canvas = document.getElementById('missionStarCanvas');
+    if (!hero || !canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = canvas.getContext('2d');
+    let dpr = Math.min(window.devicePixelRatio || 1, 2);
+    let w = 0, h = 0;
+
+    const STAR_COUNT = 65;
+    const stars = Array.from({ length: STAR_COUNT }, () => ({
+      angle0: Math.random() * Math.PI * 2,
+      radius: 0.18 + Math.random() * 0.95,  // fraction of a reference span, resolved on draw
+      trail: 0.10 + Math.random() * 0.24,   // streak length in radians
+      size: 0.7 + Math.random() * 1.5,
+      alpha: 0.35 + Math.random() * 0.55,
+    }));
+
+    let rotation = 0;
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+
+    function resize() {
+      const rect = hero.getBoundingClientRect();
+      w = rect.width; h = rect.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      canvas.style.width = w + 'px';
+      canvas.style.height = h + 'px';
+      draw();
+    }
+
+    function draw() {
+      if (!w || !h) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const pivotX = w * 0.5;
+      const pivotY = h * -0.25;
+      const span = Math.max(w, h) * 1.15;
+      stars.forEach(s => {
+        const r = s.radius * span;
+        const head = s.angle0 + rotation;
+        const tail = head - s.trail;
+        ctx.beginPath();
+        ctx.arc(pivotX, pivotY, r, tail, head);
+        ctx.strokeStyle = `rgba(255,255,255,${s.alpha})`;
+        ctx.lineWidth = s.size;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+        const hx = pivotX + r * Math.cos(head);
+        const hy = pivotY + r * Math.sin(head);
+        ctx.beginPath();
+        ctx.arc(hx, hy, s.size * 0.85, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${Math.min(1, s.alpha + 0.25)})`;
+        ctx.fill();
+      });
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const sy = window.scrollY;
+        const delta = sy - lastScrollY;
+        lastScrollY = sy;
+        rotation += delta * 0.003;
+        draw();
+        ticking = false;
+      });
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('scroll', onScroll, { passive: true });
   })();
 
   (function initHeroSparkles() {
