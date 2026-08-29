@@ -2,12 +2,13 @@
 
 Each article is one Markdown file in this folder, named `<slug>.md`. Use `_TEMPLATE.md` as the starting point.
 
-## Frontmatter fields (all required except `groups` and `pull`)
+## Frontmatter fields (all required except `groups`, `author` and `pull`)
 
 | Field    | Format                              | Notes |
 |----------|--------------------------------------|-------|
 | `slug`   | kebab-case, unique                  | Must match the filename (without `.md`) and the entry in `manifest.json`. |
 | `groups` | comma-separated list, or empty      | See below — controls color, tag pill and filtering. |
+| `author` | an author slug (optional)           | Must match a file in `authors/`. See `authors/README.md`. Omit if unattributed — no byline is shown. |
 | `type`   | short label                         | e.g. `Essay`, `Report`, `Commentary`, `Interview`, `Commonplace` — any label works, shown as "TYPE · DATE" on cards. |
 | `date`   | `YYYY-MM-DD`                        | Controls sort order (newest first) and the "3 latest" homepage preview. |
 | `title`  | plain text                          | Full headline. |
@@ -33,8 +34,13 @@ Only the single-group case gets the colored tag/filter treatment — this is del
 
 (These correspond to NERO's ten action fields; the color, name, and hero image per group are defined in `index.html`, not per-article.)
 
+## Authors
+
+Author profiles (name, role, photo, bio) live in `authors/` as their own Markdown files, separate from articles. See `authors/README.md` for that format. An article links to an author by slug via the `author` field above; the author's profile page then lists all their articles automatically — no need to maintain that list by hand.
+
 ## Publishing a new article
 
 1. Add `content/perspectives/<slug>.md` following the schema above.
 2. Add `"<slug>"` to `content/perspectives/manifest.json` (order doesn't matter — articles are sorted by `date`).
-3. Commit and push. The site fetches and renders these files client-side at page load — no build step required.
+3. If the author doesn't have a profile yet, add one under `authors/` first (see `authors/README.md`).
+4. Commit and push. The site fetches and renders these files client-side at page load — no build step required.

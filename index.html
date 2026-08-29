@@ -1323,6 +1323,15 @@
       margin-bottom: 0.85rem;
     }
     .article-hero-meta { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+    .article-byline {
+      display: inline-block;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.9);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .article-byline:hover { text-decoration: underline; }
     .article-body-wrap { max-width: 700px; margin: 0 auto; padding: 3rem var(--pad) 1rem; }
     .article-back {
       display: inline-flex;
@@ -1352,6 +1361,60 @@
     }
     .article-related { background: var(--gray-bg); padding: clamp(3rem, 6vw, 5rem) var(--pad); margin-top: 2rem; }
     .article-related-inner { max-width: var(--max); margin: 0 auto; }
+
+    /* ── AUTHOR PAGE ── */
+    .author-hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: clamp(6rem, 10vw, 8rem) var(--pad) clamp(3rem, 6vw, 4rem);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: clamp(2rem, 5vw, 3.5rem);
+      align-items: start;
+    }
+    .author-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 16px;
+      object-fit: cover;
+      display: block;
+      background: var(--gray-bg);
+    }
+    .author-photo-placeholder {
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fff;
+      background: linear-gradient(160deg, #9a95a8 0%, #5f5a6e 100%);
+    }
+    .author-name {
+      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.4rem;
+    }
+    .author-role {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mauve);
+      margin-bottom: 1.25rem;
+    }
+    .author-bio p { font-size: 0.975rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 1.1rem; }
+    .author-articles { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) clamp(3rem, 6vw, 5rem); }
+    @media (max-width: 640px) {
+      .author-hero { grid-template-columns: 1fr; }
+      .author-photo, .author-photo-placeholder { max-width: 160px; }
+    }
 
     @media (max-width: 800px) {
       .mag-featured-card { grid-template-columns: 1fr; }
@@ -1910,6 +1973,7 @@
       <span class="article-hero-tag" id="articleHeroTag" onclick="event.stopPropagation();"></span>
       <h1 id="articleHeroTitle"></h1>
       <div class="article-hero-meta" id="articleHeroMeta"></div>
+      <a class="article-byline" id="articleByline" style="display:none;"></a>
     </div>
   </div>
 
@@ -1927,6 +1991,43 @@
       </div>
       <div class="articles-grid" id="articleRelatedGrid"></div>
     </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo-wrap" onclick="showPage('home')">
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
+      </div>
+      <ul class="footer-links">
+        <li><a onclick="showPage('mission')">Our Mission</a></li>
+        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
+        <li><a onclick="showPage('involved')">Get involved</a></li>
+        <li><a onclick="showPage('informed')">Stay informed</a></li>
+        <li><a href="#">Imprint</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<!-- ════════════════════════════
+     AUTHOR PROFILE
+════════════════════════════ -->
+<div id="page-author" class="page">
+  <div class="author-hero">
+    <img class="author-photo" id="authorPhoto" style="display:none;" alt="" />
+    <div class="author-photo-placeholder" id="authorPhotoPlaceholder" style="display:none;"></div>
+    <div>
+      <h1 class="author-name" id="authorName"></h1>
+      <div class="author-role" id="authorRole"></div>
+      <div class="author-bio" id="authorBio"></div>
+    </div>
+  </div>
+
+  <div class="author-articles">
+    <div class="section-header reveal">
+      <h2 id="authorArticlesHeading"></h2>
+    </div>
+    <div class="articles-grid" id="authorArticlesGrid"></div>
   </div>
 
   <footer>
@@ -2167,6 +2268,7 @@
         return {
           slug: data.slug || slug,
           groups: (data.groups || '').split(',').map(s => s.trim()).filter(Boolean),
+          author: data.author || '',
           type: data.type,
           date: data.date,
           title: data.title,
@@ -2183,12 +2285,37 @@
     }
   }
 
+  let AUTHORS = [];
+
+  async function loadAuthors() {
+    try {
+      const manifestRes = await fetch('/content/perspectives/authors/manifest.json');
+      const slugs = await manifestRes.json();
+      AUTHORS = await Promise.all(slugs.map(async (slug) => {
+        const res = await fetch(`/content/perspectives/authors/${slug}.md`);
+        const raw = await res.text();
+        const { data, body } = parseFrontmatter(raw);
+        return {
+          slug: data.slug || slug,
+          name: data.name,
+          role: data.role || '',
+          photo: data.photo || '',
+          bioHtml: window.marked ? marked.parse(body) : body,
+        };
+      }));
+    } catch (err) {
+      console.error('Failed to load Perspectives authors', err);
+      AUTHORS = [];
+    }
+  }
+
   /* ── PERSPECTIVES: HELPERS ── */
   const NEUTRAL_GRADIENT = 'linear-gradient(135deg, #9a95a8 0%, #5f5a6e 100%)';
   // Pseudo-category for browsing articles not tied to exactly one action field (zero or multiple groups).
   const COMMONPLACE_FILTER = { slug: 'commonplace', name: 'Commonplace Monthly', short: 'Commonplace Monthly', gradient: NEUTRAL_GRADIENT };
 
   function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
+  function authorBySlug(slug) { return AUTHORS.find(a => a.slug === slug); }
   function articleBySlug(slug) { return ARTICLES.find(a => a.slug === slug); }
   function sortedArticles() { return ARTICLES.slice().sort((a, b) => new Date(b.date) - new Date(a.date)); }
   function formatDate(iso) {
@@ -2332,6 +2459,17 @@
     document.getElementById('articleHeroMeta').textContent = `${article.type} · ${formatDate(article.date)}`;
     document.getElementById('articleLede').textContent = article.lede;
 
+    const bylineEl = document.getElementById('articleByline');
+    const author = article.author ? authorBySlug(article.author) : null;
+    if (author) {
+      bylineEl.style.display = '';
+      bylineEl.textContent = `By ${author.name}`;
+      bylineEl.onclick = () => renderAuthorPage(author.slug);
+    } else {
+      bylineEl.style.display = 'none';
+      bylineEl.onclick = null;
+    }
+
     let bodyHTML = article.bodyHtml || '';
     if (article.pull) {
       const insertAt = bodyHTML.indexOf('</p>');
@@ -2362,6 +2500,45 @@
   }
   function openArticle(slug) { renderArticle(slug); }
 
+  function renderAuthorPage(slug, opts) {
+    opts = opts || {};
+    const author = authorBySlug(slug);
+    if (!author) { showPage('perspectives'); return; }
+
+    const photoEl = document.getElementById('authorPhoto');
+    const placeholderEl = document.getElementById('authorPhotoPlaceholder');
+    if (author.photo) {
+      photoEl.src = author.photo;
+      photoEl.alt = author.name;
+      photoEl.style.display = '';
+      placeholderEl.style.display = 'none';
+    } else {
+      photoEl.style.display = 'none';
+      placeholderEl.style.display = '';
+      placeholderEl.textContent = (author.name || '?').charAt(0).toUpperCase();
+    }
+
+    document.getElementById('authorName').textContent = author.name;
+    document.getElementById('authorRole').textContent = author.role;
+    document.getElementById('authorBio').innerHTML = author.bioHtml || '';
+
+    const theirArticles = sortedArticles().filter(a => a.author === author.slug);
+    document.getElementById('authorArticlesHeading').textContent = `Perspectives by ${author.name} (${theirArticles.length})`;
+    document.getElementById('authorArticlesGrid').innerHTML = theirArticles.length
+      ? theirArticles.map(articleCardHTML).join('')
+      : '<div class="mag-empty">No articles yet.</div>';
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-author').classList.add('active');
+    setTimeout(initReveal, 80);
+
+    if (opts.updateHistory !== false) {
+      const path = '/perspectives/author/' + author.slug;
+      if (location.pathname !== path) history.pushState({ author: author.slug }, '', path);
+    }
+  }
+
   const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech', 'perspectives': 'perspectives' };
   const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech', perspectives: 'perspectives' };
 
@@ -2384,6 +2561,7 @@
 
   window.addEventListener('popstate', (e) => {
     if (e.state && e.state.article) { renderArticle(e.state.article, { updateHistory: false }); return; }
+    if (e.state && e.state.author) { renderAuthorPage(e.state.author, { updateHistory: false }); return; }
     const id = (e.state && e.state.id) || idFromPath(location.pathname) || 'home';
     showPage(id, { updateHistory: false });
   });
@@ -2403,15 +2581,22 @@
   })();
 
   (async function bootstrapPerspectives() {
-    await loadPerspectiveArticles();
+    await Promise.all([loadPerspectiveArticles(), loadAuthors()]);
     renderHomeMagPreview();
     renderPerspectives('all');
 
     const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
     if (path.indexOf('perspectives/') === 0) {
-      const slug = path.slice('perspectives/'.length);
-      if (articleBySlug(slug)) {
-        renderArticle(slug, { updateHistory: false });
+      const rest = path.slice('perspectives/'.length);
+      if (rest.indexOf('author/') === 0) {
+        const authorSlug = rest.slice('author/'.length);
+        if (authorBySlug(authorSlug)) {
+          renderAuthorPage(authorSlug, { updateHistory: false });
+        } else {
+          showPage('perspectives', { updateHistory: false });
+        }
+      } else if (articleBySlug(rest)) {
+        renderArticle(rest, { updateHistory: false });
       } else {
         showPage('perspectives', { updateHistory: false });
       }

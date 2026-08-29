@@ -1,0 +1,6 @@
+# Internal research/working material ("the Brain") — kept in git for versioning,
+# but not deployed. Only content/perspectives/ (the published magazine) is served.
+content/*
+!content/perspectives/
+outputs/
+nero-brain-bootstrap.zip
