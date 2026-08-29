@@ -2,6 +2,7 @@
 slug: johannes-mueller
 name: Johannes Mueller
 role: Founder & Chairman
+photo: /assets/images/authors/johannes-mueller.jpg
 ---
 
 Johannes Mueller is the founder of NERO, the New European Renaissance Organisation.
