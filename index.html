@@ -48,7 +48,19 @@
       display: flex;
       align-items: center;
       padding: 0 var(--pad);
+      transition: background 0.25s ease, border-color 0.25s ease;
     }
+    nav.nav-over-hero:not(.nav-scrolled) {
+      background: transparent;
+      border-bottom-color: transparent;
+    }
+    nav.nav-over-hero:not(.nav-scrolled) .nav-logo { color: #fff; }
+    nav.nav-over-hero:not(.nav-scrolled) .nav-link,
+    nav.nav-over-hero:not(.nav-scrolled) .btn-pill {
+      color: #fff;
+      font-weight: 600;
+    }
+    nav.nav-over-hero:not(.nav-scrolled) .btn-pill { background: transparent; }
     .nav-inner {
       width: 100%;
       max-width: var(--max);
@@ -58,11 +70,12 @@
       justify-content: space-between;
     }
     .nav-logo {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.02em;
       color: #5A5869;
       text-decoration: none;
+      transition: color 0.25s ease;
     }
     .nav-right {
       display: flex;
@@ -75,6 +88,7 @@
       color: var(--ink);
       text-decoration: none;
       cursor: pointer;
+      transition: color 0.25s ease;
     }
     .nav-link:hover { text-decoration: underline; }
     .btn-pill {
@@ -89,12 +103,12 @@
       text-decoration: none;
       border: none;
       cursor: pointer;
-      transition: background 0.15s, opacity 0.15s;
+      transition: background 0.15s, opacity 0.15s, color 0.15s;
     }
     .btn-pill:hover { opacity: 0.85; }
 
     /* ── PAGES ── */
-    .page { display: none; padding-top: 64px; }
+    .page { display: none; }
     .page.active {
       display: block;
       animation: pageFadeIn 0.2s ease-out;
@@ -2494,6 +2508,7 @@
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-article').classList.add('active');
+    updateNavForPage('article');
     setTimeout(initReveal, 80);
 
     if (opts.updateHistory !== false) {
@@ -2534,6 +2549,7 @@
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-author').classList.add('active');
+    updateNavForPage('author');
     setTimeout(initReveal, 80);
 
     if (opts.updateHistory !== false) {
@@ -2550,11 +2566,35 @@
     return SLUG_TO_ID.hasOwnProperty(slug) ? SLUG_TO_ID[slug] : null;
   }
 
+  // Pages whose first section is the dawn-photo hero — these get the
+  // transparent, overlaid nav that solidifies once scrolled past it.
+  const DAWN_HERO_PAGES = new Set(['home', 'mission', 'involved', 'informed', 'tech']);
+  const navEl = document.querySelector('nav');
+
+  function updateNavScrollState() {
+    if (!navEl.classList.contains('nav-over-hero')) {
+      navEl.classList.remove('nav-scrolled');
+      return;
+    }
+    const activePage = document.querySelector('.page.active');
+    const heroEl = activePage && activePage.querySelector('.hero, .mission-hero');
+    const solid = heroEl ? heroEl.getBoundingClientRect().bottom <= 64 : window.scrollY > 10;
+    navEl.classList.toggle('nav-scrolled', solid);
+  }
+  window.addEventListener('scroll', updateNavScrollState, { passive: true });
+  window.addEventListener('resize', updateNavScrollState);
+
+  function updateNavForPage(id) {
+    navEl.classList.toggle('nav-over-hero', DAWN_HERO_PAGES.has(id));
+    updateNavScrollState();
+  }
+
   function showPage(id, opts) {
     opts = opts || {};
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-' + id).classList.add('active');
+    updateNavForPage(id);
     setTimeout(initReveal, 80);
     if (opts.updateHistory !== false) {
       const path = '/' + (ID_TO_SLUG.hasOwnProperty(id) ? ID_TO_SLUG[id] : '');
@@ -2578,8 +2618,9 @@
     const id = idFromPath(location.pathname);
     if (id && id !== 'home') {
       showPage(id, { updateHistory: false });
-    } else if (location.pathname !== '/') {
-      history.replaceState({ id: 'home' }, '', '/');
+    } else {
+      if (location.pathname !== '/') history.replaceState({ id: 'home' }, '', '/');
+      updateNavForPage('home');
     }
   })();
 
