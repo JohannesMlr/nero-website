@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet" />
   <style>
     /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,7 +54,7 @@
       background: transparent;
       border-bottom-color: transparent;
     }
-    nav.nav-over-hero:not(.nav-scrolled) .nav-logo { color: #fff; }
+    nav.nav-over-hero:not(.nav-scrolled) .nav-logo-img { filter: brightness(0) invert(1); }
     nav.nav-over-hero:not(.nav-scrolled) .nav-link,
     nav.nav-over-hero:not(.nav-scrolled) .btn-pill {
       color: #fff;
@@ -70,12 +70,15 @@
       justify-content: space-between;
     }
     .nav-logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: #5A5869;
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      transition: color 0.25s ease;
+    }
+    .nav-logo-img {
+      height: 34px;
+      width: auto;
+      display: block;
+      transition: filter 0.25s ease;
     }
     .nav-right {
       display: flex;
@@ -169,7 +172,7 @@
       padding: 0 2rem;
     }
     .hero-h1 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
       font-size: clamp(2rem, 5vw, 3.25rem);
       font-weight: 500;
       color: #fff;
@@ -1461,7 +1464,9 @@
 <!-- ── NAV ── -->
 <nav>
   <div class="nav-inner">
-    <a class="nav-logo" onclick="showPage('home'); return false;" href="/">NERO</a>
+    <a class="nav-logo" onclick="showPage('home'); return false;" href="/">
+      <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" class="nav-logo-img" />
+    </a>
     <div class="nav-right">
       <span class="nav-link" onclick="showPage('mission')">Our Mission</span>
       <span class="nav-link" onclick="showPage('perspectives')">Perspectives</span>
