@@ -236,7 +236,10 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .masthead-inner { padding-top: 164px; padding-bottom: 56px; display: flex; flex-direction: column; gap: 56px; }
 .masthead-title { display: flex; justify-content: space-between; align-items: center; gap: 24px 48px; flex-wrap: wrap; }
 .masthead h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(64px, 10vw, 152px); line-height: .9; letter-spacing: -0.03em; color: var(--white); }
-.masthead-sub { font-size: clamp(17px, 1.6vw, 21px); line-height: 1.45; color: var(--input-border); margin-left: auto; max-width: 400px; text-align: right; text-wrap: pretty; }
+.masthead-sub { font-size: clamp(17px, 1.6vw, 21px); line-height: 1.45; color: var(--input-border); margin-left: auto; flex: 0 1 400px; min-width: 150px; text-align: right; text-wrap: pretty; }
+/* Side by side (and centred on the headline) whenever there is room; only phones stack. */
+@media (min-width: 700px) { .masthead-title { flex-wrap: nowrap; } .masthead h1 { flex: none; } }
+@media (max-width: 699px) { .masthead-sub { margin-left: 0; text-align: left; flex-basis: auto; } }
 .stories { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 16px; }
 .story-lead { position: relative; display: flex; align-items: flex-end; min-height: clamp(420px, 46vw, 600px); overflow: hidden; background: var(--dark-3); color: var(--white); }
 .story-lead:hover { color: var(--white); }
@@ -419,7 +422,6 @@ body[data-view="imprint"] .europa { display: block; }
   .mission-band { margin-bottom: 80px; }
   .join-card-copy, .news-card { padding: 28px; }
   .masthead-inner { padding-top: 132px; }
-  .masthead-sub { margin-left: 0; text-align: left; }
 }
 @media (max-width: 700px) { .filterbar { position: static; } }
 @media (max-width: 560px) {
