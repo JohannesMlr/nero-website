@@ -426,17 +426,17 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .article-body { max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; }
 .toc { order: -1; max-width: 792px; width: 100%; margin: 40px auto 0; padding: 0 var(--gutter); box-sizing: border-box; }
 .toc > * { background: var(--surface); }
-.toc-title { display: block; padding: 16px 14px 8px; font-size: 12px; font-weight: 700; color: var(--mauve-accent); letter-spacing: .05em; text-transform: uppercase; }
+.toc-title { display: block; padding: 16px 12px 8px; font-size: 12px; font-weight: 700; color: var(--mauve-accent); letter-spacing: .05em; text-transform: uppercase; }
 .toc ol { list-style: none; margin: 0; padding: 0 0 14px; display: flex; flex-direction: column; }
-.toc li a { display: block; padding: 6px 14px; font-size: 12px; line-height: 1.35; letter-spacing: -0.01em; color: var(--ink-muted); box-shadow: inset 2px 0 0 transparent; transition: color .15s ease, box-shadow .15s ease; }
-.toc li.sub a { padding-left: 22px; font-size: 11.5px; }
+.toc li a { display: block; padding: 6px 12px; font-size: 13.2px; line-height: 1.35; letter-spacing: -0.01em; color: var(--ink-muted); box-shadow: inset 2px 0 0 transparent; transition: color .15s ease, box-shadow .15s ease; }
+.toc li.sub a { padding-left: 18px; font-size: 12.6px; }
 .toc li a:hover { color: var(--ink); }
 .toc li a.is-active { color: var(--ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--rose); }
 /* Wide screens: the agenda sits to the right of the text, below the image, and follows while reading. */
 @media (min-width: 1240px) {
-  .article-body { display: grid; grid-template-columns: minmax(0, .55fr) minmax(0, 792px) minmax(0, 1.45fr); align-items: start; }
+  .article-body { display: grid; grid-template-columns: minmax(0, .5fr) minmax(0, 792px) minmax(0, 1.5fr); align-items: start; }
   .article-body .prose { grid-column: 2; grid-row: 1; }
-  .toc { order: 0; grid-column: 3; grid-row: 1; justify-self: end; width: 276px; margin: 64px 40px 0 0; padding: 0; position: sticky; top: 108px; max-height: calc(100vh - 140px); overflow-y: auto; }
+  .toc { order: 0; grid-column: 3; grid-row: 1; justify-self: end; width: 292px; margin: 64px 40px 0 0; padding: 0; position: sticky; top: 108px; max-height: calc(100vh - 140px); overflow-y: auto; }
 }
 .prose { max-width: 792px; margin: 0 auto; padding: 64px var(--gutter) 0; font-size: 19px; line-height: 1.72; color: #34314A; }
 .prose > * + * { margin-top: 1.35em; }
