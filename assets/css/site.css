@@ -433,10 +433,10 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .toc li a:hover { color: var(--ink); }
 .toc li a.is-active { color: var(--ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--rose); }
 /* Wide screens: the agenda sits to the right of the text, below the image, and follows while reading. */
-@media (min-width: 1240px) {
+@media (min-width: 1280px) {
   .article-body { display: grid; grid-template-columns: minmax(0, .5fr) minmax(0, 792px) minmax(0, 1.5fr); align-items: start; }
   .article-body .prose { grid-column: 2; grid-row: 1; }
-  .toc { order: 0; grid-column: 3; grid-row: 1; justify-self: end; width: 292px; margin: 64px 40px 0 0; padding: 0; position: sticky; top: 108px; max-height: calc(100vh - 140px); overflow-y: auto; }
+  .toc { order: 0; grid-column: 3; grid-row: 1; justify-self: end; width: 316px; margin: 64px 40px 0 0; padding: 0; position: sticky; top: 108px; max-height: calc(100vh - 140px); overflow-y: auto; }
 }
 .prose { max-width: 792px; margin: 0 auto; padding: 64px var(--gutter) 0; font-size: 19px; line-height: 1.72; color: #34314A; }
 .prose > * + * { margin-top: 1.35em; }
