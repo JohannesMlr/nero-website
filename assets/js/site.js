@@ -250,18 +250,6 @@
     io.observe(host);
   }
 
-  // NOTE: not connected to a mailing-list provider yet — see the privacy policy (double opt-in, consent).
-  function initForms() {
-    $$('form[data-newsletter]').forEach((form) => {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        if (!form.reportValidity()) return;
-        const btn = $('button', form);
-        btn.textContent = 'Subscribed';
-      });
-    });
-  }
-
   /* ───────────── Perspectives ───────────── */
   let ARTICLES = [], AUTHORS = {};
   const feed = { field: null, type: 'All', q: '', limit: FIRST_PAGE };
@@ -475,7 +463,14 @@
   // Join flow — 1 involvement, 2 spaces, 3 contact (+ optional newsletter), then thank-you.
   const ROLES = ['Investor', 'Contributor', 'Initiative Owner', 'Other'];
   const join = { step: 1, roles: new Set(), spaces: new Set() };
-  const joinEndpoint = () => (document.querySelector('meta[name="nero-join-endpoint"]') || {}).content || '';
+  const leadEndpoint = () => (document.querySelector('meta[name="nero-join-endpoint"]') || {}).content || '';
+  // Apps Script has no CORS headers, hence no-cors: the response is opaque but network errors still reject.
+  function postLead(data) {
+    const endpoint = leadEndpoint();
+    if (!endpoint) return Promise.reject(new Error('no-endpoint'));
+    return fetch(endpoint, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) });
+  }
+  const NOT_CONNECTED = 'Sign-up is not connected yet. Please write to johannes@anewrenaissance.com.';
   const joinNext = $('#joinNext'), joinBack = $('#joinBack'), joinError = $('#joinError');
 
   function renderOpts(host, values, set) {
@@ -515,17 +510,14 @@
     joinError.hidden = true;
     if (!email || !f.email.checkValidity()) { joinFail('Please enter a valid email address.'); f.email.focus(); return; }
     if (f.website.value) { joinDone(name); return; } // honeypot: bots fill the hidden field
-    const endpoint = joinEndpoint();
-    if (!endpoint) { joinFail('Sign-up is not connected yet. Please write to johannes@anewrenaissance.com.'); return; }
     const data = {
       type: 'join', roles: Array.from(join.roles).join(', '), spaces: Array.from(join.spaces).join(', '),
       name, email, message: f.message.value.trim(), updates: f.updates.checked ? 'yes' : 'no', page: location.href,
     };
     joinNext.disabled = true; joinNext.textContent = 'Sending…';
-    // Apps Script has no CORS headers, hence no-cors: the response is opaque but network errors still reject.
-    fetch(endpoint, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
+    postLead(data)
       .then(() => joinDone(name))
-      .catch(() => joinFail('That did not work. Please try again later.'))
+      .catch((err) => joinFail(err.message === 'no-endpoint' ? NOT_CONNECTED : 'That did not work. Please try again later.'))
       .then(() => { joinNext.disabled = false; joinNext.textContent = 'Send'; });
   }
   function joinAdvance() { if (join.step < 3) showStep(join.step + 1); else joinSubmit(); }
@@ -543,11 +535,51 @@
   joinForm.addEventListener('submit', (e) => { e.preventDefault(); if (!joinNext.disabled) joinAdvance(); });
   document.addEventListener('click', (e) => { if (e.target.closest('[data-open-join]')) openJoin(); });
 
+  // Newsletter: the boxes validate the email, then this dialog collects name + explicit consent.
+  const newsDlg = $('#news-modal'), newsForm = $('#newsForm'), newsError = $('#newsError'), newsSubmit = $('#newsSubmit');
+  let newsSource = null;
+  function openNewsletter(email, sourceForm) {
+    newsSource = sourceForm;
+    newsForm.reset();
+    newsForm.elements.email.value = email;
+    newsError.hidden = true;
+    $('#newsFlow').hidden = false; $('#newsDone').hidden = true;
+    newsSubmit.disabled = false; newsSubmit.textContent = 'Subscribe';
+    openDialog(newsDlg);
+    newsForm.elements.name.focus();
+  }
+  function newsFail(msg) { newsError.textContent = msg; newsError.hidden = false; }
+  newsForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const f = newsForm.elements, name = f.name.value.trim(), email = f.email.value.trim();
+    newsError.hidden = true;
+    if (!email || !f.email.checkValidity()) { newsFail('Please enter a valid email address.'); f.email.focus(); return; }
+    if (!f.consent.checked) { newsFail('Please tick the box to confirm your consent.'); f.consent.focus(); return; }
+    const done = () => {
+      $('#newsDoneTitle').textContent = name ? `Thank you, ${name.split(/\s+/)[0]}!` : 'Thank you!';
+      $('#newsFlow').hidden = true; $('#newsDone').hidden = false;
+      $('#newsDone .btn').focus();
+      if (newsSource) newsSource.reset();
+    };
+    if (f.website.value) { done(); return; } // honeypot
+    newsSubmit.disabled = true; newsSubmit.textContent = 'Sending…';
+    postLead({ type: 'newsletter', name, email, consent: 'yes', page: location.href })
+      .then(done)
+      .catch((err) => newsFail(err.message === 'no-endpoint' ? NOT_CONNECTED : 'That did not work. Please try again later.'))
+      .then(() => { newsSubmit.disabled = false; newsSubmit.textContent = 'Subscribe'; });
+  });
+  $$('form[data-newsletter]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      openNewsletter($('input', form).value.trim(), form);
+    });
+  });
+
   /* ───────────── Boot ───────────── */
   initRings();
   initFields();
   initFlag();
-  initForms();
   initPerspectives();
   renderFilters();
 

@@ -388,6 +388,36 @@
   </div>
 </dialog>
 
+<!-- Newsletter sign-up (opened from the two newsletter boxes) -->
+<dialog class="modal" id="news-modal" aria-labelledby="newsTitle">
+  <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+  <div class="modal-body">
+    <form id="newsForm" novalidate>
+      <div class="join-flow" id="newsFlow">
+        <span class="modal-kicker">Newsletter</span>
+        <h2 id="newsTitle">Sign up for the New Renaissance Newsletter</h2>
+        <p class="modal-text">We will inform you about our work, upcoming events and more.</p>
+        <div class="hp" aria-hidden="true"><label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+        <label class="field"><span>Name <span class="opt-note">(optional)</span></span><input name="name" type="text" autocomplete="name"></label>
+        <label class="field"><span>Email address</span><input name="email" type="email" autocomplete="email" inputmode="email" required></label>
+        <label class="check"><input name="consent" type="checkbox" value="yes"><span>I agree to receive the NERO newsletter by email and to the processing of my data for this purpose. I can unsubscribe at any time.</span></label>
+        <p class="modal-legal">More in the <a href="/privacy" target="_blank" rel="noopener">privacy policy</a>.</p>
+        <p class="modal-error" id="newsError" role="alert" hidden></p>
+        <div class="modal-actions">
+          <button class="btn btn-ink" type="submit" id="newsSubmit">Subscribe</button>
+          <button class="btn-text" type="button" data-close>Cancel</button>
+        </div>
+      </div>
+      <div class="join-done" id="newsDone" aria-live="polite" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>
+        <h2 id="newsDoneTitle">Thank you!</h2>
+        <p class="modal-text">You are signed up for the New Renaissance Newsletter.</p>
+        <button class="btn btn-ink" type="button" data-close>Close</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
 <script src="/assets/js/site.js"></script>
 <script src="/assets/js/hero-sparkles.js"></script>
 </body>
