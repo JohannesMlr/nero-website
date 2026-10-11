@@ -1,4 +1,4 @@
-/* NERO — A New Renaissance. Client-side routing, home interactions and the Perspectives hub.
+/* NERO — A New Renaissance. Client-side routing, home interactions and the Perspectives hub.
    No build step. The hero sparkle lives in hero-sparkles.js and is intentionally untouched. */
 (function () {
   'use strict';
@@ -45,7 +45,9 @@
 
   const fieldBySlug = (slug) => FIELDS.find((f) => f.slug === slug);
   const pad2 = (n) => String(n + 1).padStart(2, '0');
-  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const esc = (s) => noBreakText(String(s == null ? '' : s)).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  // Never break "New Renaissance" across lines.
+  const noBreakText = (s) => s.replace(/\b(new) +(renaissance)\b/gi, '$1\u00a0$2');
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -211,7 +213,7 @@
         </button>
         ${on ? `<div class="field-acc">
           <div class="field-photo"><img src="${fieldImgURL(f)}" alt="" loading="lazy" style="object-position:${f.pos || 'center'}" /></div>
-          <div class="field-text"><span class="eyebrow-card">New Renaissance · ${pad2(i)}</span><h3>${esc(f.title)}</h3>
+          <div class="field-text"><span class="eyebrow-card">New Renaissance · ${pad2(i)}</span><h3>${esc(f.title)}</h3>
             <p class="field-statement">${esc(f.statement)}</p><p class="field-question">${esc(f.question)}</p></div>
         </div>` : ''}
       </div>`;
