@@ -8,13 +8,13 @@ Each article is one Markdown file in this folder, named `<slug>.md`. Use `_TEMPL
 |----------|--------------------------------------|-------|
 | `slug`   | kebab-case, unique                  | Must match the filename (without `.md`) and the entry in `manifest.json`. |
 | `groups` | comma-separated list, or empty      | See below — controls color, tag pill and filtering. |
-| `author` | an author slug (optional)           | Must match a file in `authors/`. See `authors/README.md`. Omit if unattributed — no byline is shown. |
-| `image`  | path to an image (optional)         | e.g. `/assets/images/articles/<slug>.jpg`. The article's title image — used as the hero on the article page and as the thumbnail on cards. If omitted, the group's colour or hero image is used, exactly as before. |
+| `author` | an author slug (optional)           | Must match a file in `authors/`. See `authors/README.md`. Omit if unattributed — the byline then reads "Editorial Team". |
+| `image`  | path to an image (optional)         | e.g. `/assets/images/articles/<slug>.jpg`. The article's title image — used on the Perspectives page (lead story, top stories, feed cards). If omitted, the action field's photo is used (single-group articles); articles without a field simply show no image. |
 | `type`   | short label                         | e.g. `Essay`, `Report`, `Commentary`, `Interview`, `Commonplace` — any label works, shown as "TYPE · DATE" on cards. |
-| `date`   | `YYYY-MM-DD`                        | Controls sort order (newest first) and the "3 latest" homepage preview. |
+| `date`   | `YYYY-MM-DD`                        | Controls sort order (newest first): the three newest are the lead + top stories on the Perspectives page. |
 | `title`  | plain text                          | Full headline. |
 | `teaser` | 1 sentence, ~20–25 words            | Shown on article cards. |
-| `lede`   | 1–2 sentences                       | Shown larger at the top of the article page. |
+| `lede`   | 1–2 sentences                       | Reserved for the article page (not shown while articles are members-only); still required. |
 | `pull`   | 1 sentence (optional)               | Pull-quote shown inside the body — often the group's "How can we...?" question. |
 
 Body content goes after the closing `---` as plain Markdown (paragraphs, **bold**, _italic_, links, lists).
@@ -24,8 +24,8 @@ Body content goes after the closing `---` as plain Markdown (paragraphs, **bold*
 `groups` takes any combination of the ten action-field slugs below, comma-separated:
 
 - **Exactly one** group (e.g. `groups: tech`) — the article gets that group's color, tag pill, hero image, and shows up when filtering by that group.
-- **Zero groups** (`groups:` left empty, or the line omitted) — an unaffiliated piece not tied to any action field (e.g. a `Commonplace` piece). Shown neutrally: no tag pill, no group color, doesn't appear under any specific group filter — only under "All" and in the homepage/latest listings.
-- **More than one** group (e.g. `groups: tech, energy`) — also shown neutrally, same as zero groups. The site intentionally does not display which fields a multi-tagged piece belongs to, so it renders exactly like an unaffiliated article and won't appear under any single group's filter.
+- **Zero groups** (`groups:` left empty, or the line omitted) — an unaffiliated piece not tied to any action field (e.g. a `Commonplace` piece). Shown with the neutral label "Commonplace Monthly"; doesn't appear under any specific group filter — only under "All" and under the "Commonplace Monthly" filter.
+- **More than one** group (e.g. `groups: tech, energy`) — also shown as "Commonplace Monthly", same as zero groups. The site intentionally does not display which fields a multi-tagged piece belongs to, so it won't appear under any single group's filter.
 
 Only the single-group case gets the colored tag/filter treatment — this is deliberate, not a bug.
 
@@ -33,18 +33,16 @@ Only the single-group case gets the colored tag/filter treatment — this is del
 
 `narrative`, `tech`, `state-governance`, `capital-market`, `citizenship`, `local-ecosystems`, `infrastructure`, `defense`, `education`, `energy`
 
-(These correspond to NERO's ten action fields; the color, name, and hero image per group are defined in `index.html`, not per-article.)
+(These correspond to NERO's ten action fields; the name and photo per group are defined in `assets/js/site.js` (`FIELDS`), not per-article.)
 
 ## Title images
 
 Put the file in `assets/images/articles/` named after the article's slug, and reference it from
 frontmatter as `image: /assets/images/articles/<slug>.jpg`. It is rendered full-bleed behind the
-headline on the article page (a dark overlay sits on top, so the headline stays legible over a busy
-image) and as the card thumbnail in every listing.
+headline of the lead story and as the card thumbnail in every listing.
 
 Landscape works best — roughly 3:2 or wider, at least 1600px on the long edge. The field is optional:
-without it an article falls back to its group's hero image or colour, which is how every article
-behaved before this field existed.
+without it an article falls back to its action field's photo.
 
 ## Authors
 

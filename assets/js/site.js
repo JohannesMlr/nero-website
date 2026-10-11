@@ -1,0 +1,500 @@
+/* NERO — A New Renaissance. Client-side routing, home interactions and the Perspectives hub.
+   No build step. The hero sparkle lives in hero-sparkles.js and is intentionally untouched. */
+(function () {
+  'use strict';
+
+  /* ───────────── Data ───────────── */
+  // slug = value used in content/perspectives/*.md `groups:`; img = file name in assets/images/fields/
+  const FIELDS = [
+    { slug: 'narrative', img: 'narrative', title: 'New European Narrative and Identification', short: 'Narrative',
+      statement: 'Our civilisatory achievements and cultural richness still inspire hope and desire.',
+      question: 'How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?' },
+    { slug: 'tech', img: 'technology', pos: 'center 15%', title: 'New Technology Leadership', short: 'Technology',
+      statement: "Technological innovation and its adoption define a society's prosperity and power.",
+      question: 'How can we unleash European pioneering spirit, inventiveness and craftmanship to become global technology leader again?' },
+    { slug: 'state-governance', img: 'state-governance', title: 'New State and Governance Models', short: 'State & Governance',
+      statement: 'A robust and competitive democracy needs to deliver superior outcomes for its citizens.',
+      question: 'How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?' },
+    { slug: 'capital-market', img: 'capital-markets', pos: 'center 100%', title: 'New Private Capital Union', short: 'Capital Markets',
+      statement: 'Entrepreneurial drive, financial security and personal freedom are built on ownership.',
+      question: 'How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?' },
+    { slug: 'citizenship', img: 'citizenship', pos: 'center 80%', title: 'New Role of Citizenship in Europe', short: 'Citizenship',
+      statement: 'A strong continent in a complex world needs independent and engaged individuals.',
+      question: 'How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?' },
+    { slug: 'local-ecosystems', img: 'local-ecosystems', pos: 'center 15%', title: 'New Local Ecosystems and Healthy Communities', short: 'Local Ecosystems',
+      statement: 'Safe, healthy, connected and fulfilling lives are primarily enabled by local communities.',
+      question: 'How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?' },
+    { slug: 'infrastructure', img: 'infrastructure', title: 'New Infrastructure and Public Good Philosophy', short: 'Infrastructure',
+      statement: 'Superior public infrastructure for everyone is a cornerstone of the European identity.',
+      question: 'How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?' },
+    { slug: 'defense', img: 'defense', title: 'New Defense and Resilience', short: 'Defense',
+      statement: 'A peaceful and war-weary Europe has now become a target, unable to defend itself.',
+      question: 'How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?' },
+    { slug: 'education', img: 'education', title: 'New Education', short: 'Education',
+      statement: 'Strong independent public education and research are now needed more than ever.',
+      question: 'How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today’s world?' },
+    { slug: 'energy', img: 'energy', pos: 'center 65%', title: 'New Energy', short: 'Energy',
+      statement: 'Energy is the most important enabler for a thriving society and its economy.',
+      question: 'How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?' },
+  ];
+  // Pseudo-category for articles that are not tied to exactly one action field (none, or several).
+  const COMMONPLACE = { slug: 'commonplace', short: 'Commonplace Monthly' };
+  const TYPE_LABELS = { Essay: 'Essays', Report: 'Reports', Interview: 'Interviews', Commentary: 'Commentary' };
+  const MEMBERS_ONLY = true; // article links open the gate until member login exists
+  const FIRST_PAGE = 7, PAGE_STEP = 6;
+
+  const fieldBySlug = (slug) => FIELDS.find((f) => f.slug === slug);
+  const pad2 = (n) => String(n + 1).padStart(2, '0');
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function formatDate(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
+    return m ? `${parseInt(m[3], 10)} ${MONTHS[parseInt(m[2], 10) - 1]} ${m[1]}` : '';
+  }
+
+  /* ───────────── Star rings (SVG generated, no image file) ───────────── */
+  const STAR_PTS = Array.from({ length: 10 }, (_, k) => {
+    const r = k % 2 ? 3.9 : 9.5, a = -Math.PI / 2 + (k * Math.PI) / 5;
+    return (r * Math.cos(a)).toFixed(2) + ',' + (r * Math.sin(a)).toFixed(2);
+  }).join(' ');
+  function ringAt(i, radius) {
+    const a = -Math.PI / 2 + (i * Math.PI) / 6;
+    return [(radius * Math.cos(a)).toFixed(2), (radius * Math.sin(a)).toFixed(2)];
+  }
+  function bigRingSVG() {
+    const stars = Array.from({ length: 12 }, (_, i) => {
+      const [x, y] = ringAt(i, 78);
+      return `<g transform="translate(${x} ${y})"><polygon class="ring-star" style="--i:${i}" points="${STAR_PTS}" fill="#D9C6D6"/></g>`;
+    }).join('');
+    return `<svg class="ring-big" viewBox="-100 -100 200 200" aria-hidden="true"><g class="ring-spin">${stars}</g></svg>`;
+  }
+  function miniRingSVG() {
+    const stars = Array.from({ length: 12 }, (_, i) => {
+      const [x, y] = ringAt(i, 76);
+      return `<polygon points="${STAR_PTS}" fill="#C4717A" transform="translate(${x} ${y}) scale(1.55)"/>`;
+    }).join('');
+    return `<svg class="ring-mini" viewBox="-100 -100 200 200" aria-hidden="true">${stars}</svg>`;
+  }
+
+  /* ───────────── Routing ───────────── */
+  const body = document.body;
+  const header = $('#siteHeader');
+  const VIEW_PATHS = { home: '/', perspectives: '/perspectives', imprint: '/imprint', privacy: '/privacy' };
+  let currentView = 'home';
+
+  // Old site routes → new homes (keeps bookmarks and shared links working).
+  function resolveLocation(loc) {
+    const path = loc.pathname.replace(/\/+$/, '').toLowerCase() || '/';
+    const out = { view: 'home', hash: loc.hash.replace('#', ''), search: loc.search, gate: false, canonical: null };
+    if (path === '/') return out;
+    if (path === '/perspectives') { out.view = 'perspectives'; return out; }
+    if (path === '/imprint') { out.view = 'imprint'; return out; }
+    if (path === '/privacy') { out.view = 'privacy'; return out; }
+    if (path === '/mission') { out.hash = 'mission'; out.canonical = '/#mission'; return out; }
+    if (path === '/get-involved' || path === '/stay-informed') { out.hash = 'join'; out.canonical = '/#join'; return out; }
+    if (path.indexOf('/perspectives/') === 0) {
+      out.view = 'perspectives';
+      out.gate = path.indexOf('/perspectives/author/') !== 0; // article deep link → members-only dialog
+      out.canonical = '/perspectives';
+      return out;
+    }
+    out.canonical = '/';
+    return out;
+  }
+
+  function scrollToId(id, smooth) {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    const offset = id === 'join' ? 100 : 84;
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: smooth ? 'smooth' : 'instant' });
+    return true;
+  }
+
+  function updateHeader() {
+    let solid;
+    if (currentView === 'imprint' || currentView === 'privacy') solid = true;
+    else if (currentView === 'home') solid = window.scrollY > window.innerHeight * 0.8;
+    else solid = window.scrollY > 120;
+    header.classList.toggle('is-solid', solid);
+  }
+
+  function showView(view, opts) {
+    opts = opts || {};
+    const changed = view !== currentView;
+    currentView = view;
+    body.dataset.view = view;
+    $$('.view').forEach((v) => { v.classList.toggle('is-active', v.id === 'view-' + view); });
+    const active = $('#view-' + view);
+    document.title = active.dataset.title;
+    $('#metaRobots').setAttribute('content', active.hasAttribute('data-noindex') ? 'noindex, nofollow' : 'index, follow');
+    $$('[data-nav]').forEach((a) => {
+      if (a.dataset.nav === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    if (opts.hash) {
+      scrollToId(opts.hash, !changed && opts.smooth);
+      // Layout can still shift while images/fonts settle — correct once more.
+      setTimeout(() => scrollToId(opts.hash, false), 400);
+    } else if (changed || opts.top) {
+      window.scrollTo({ top: 0, left: 0, behavior: changed ? 'instant' : 'smooth' });
+    }
+    updateHeader();
+  }
+
+  function applyFeedParams(search) {
+    const p = new URLSearchParams(search || '');
+    const f = p.get('field');
+    if (f && (f === COMMONPLACE.slug || fieldBySlug(f))) { feed.field = f; feed.limit = FIRST_PAGE; renderFeed(); return true; }
+    return false;
+  }
+
+  function go(url, opts) {
+    opts = opts || {};
+    const u = new URL(url, location.origin);
+    const r = resolveLocation(u);
+    closeGate();
+    const samePage = r.view === currentView && location.pathname === u.pathname;
+    const next = r.canonical || (r.view === 'perspectives' ? '/perspectives' : u.pathname + u.search + u.hash);
+    if (opts.replace) history.replaceState({}, '', next); else if (location.pathname + location.search + location.hash !== next) history.pushState({}, '', next);
+    if (r.view === 'perspectives' && applyFeedParams(r.search)) r.hash = r.hash || 'latest';
+    showView(r.view, { hash: r.hash, smooth: samePage, top: samePage && !r.hash });
+    if (r.gate) openGate();
+  }
+
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest && e.target.closest('a');
+    if (!a) return;
+    if (a.matches('a[data-article]')) { e.preventDefault(); if (MEMBERS_ONLY) openGate(); return; }
+    if (!a.hasAttribute('data-route') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+    e.preventDefault();
+    go(a.getAttribute('href'));
+  });
+  window.addEventListener('popstate', () => {
+    const r = resolveLocation(location);
+    closeGate();
+    if (r.view === 'perspectives') applyFeedParams(r.search);
+    showView(r.view, { hash: r.hash });
+    if (r.gate) openGate();
+  });
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', updateHeader);
+
+  /* ───────────── Home: action fields ───────────── */
+  let activeField = 1;
+  const fieldsList = $('#fieldsList'), fieldsMobile = $('#fieldsMobile');
+  function fieldImgURL(f, thumb) { return `/assets/images/fields/${thumb ? 'thumbs/' : ''}${f.img}.avif`; }
+
+  function renderFieldRows() {
+    fieldsList.innerHTML = FIELDS.map((f, i) => `
+      <button class="field-row" data-i="${i}" aria-pressed="${i === activeField}">
+        <span class="field-num">${pad2(i)}</span><span class="field-title">${esc(f.title)}</span><span class="field-arrow" aria-hidden="true">→</span>
+      </button>`).join('');
+  }
+  function renderFieldPanel() {
+    const f = FIELDS[activeField];
+    $$('.field-row', fieldsList).forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === activeField)));
+    $('#fieldTitle').textContent = f.title;
+    $('#fieldStatement').textContent = f.statement;
+    $('#fieldQuestion').textContent = f.question;
+    const img = $('#fieldImg'), url = fieldImgURL(f);
+    const pre = new Image();
+    pre.onload = () => { img.src = url; img.style.objectPosition = f.pos || 'center'; };
+    pre.src = url;
+  }
+  function renderFieldAccordion() {
+    fieldsMobile.innerHTML = FIELDS.map((f, i) => {
+      const on = i === activeField;
+      return `<div>
+        <button class="field-row" data-i="${i}" aria-expanded="${on}" aria-pressed="${on}" style="width:100%">
+          <span class="field-num">${pad2(i)}</span><span class="field-title">${esc(f.title)}</span><span class="field-arrow" aria-hidden="true">${on ? '−' : '+'}</span>
+        </button>
+        ${on ? `<div class="field-acc">
+          <div class="field-photo"><img src="${fieldImgURL(f)}" alt="" loading="lazy" style="object-position:${f.pos || 'center'}" /></div>
+          <div class="field-text"><span class="eyebrow-card">New Renaissance · ${pad2(i)}</span><h3>${esc(f.title)}</h3>
+            <p class="field-statement">${esc(f.statement)}</p><p class="field-question">${esc(f.question)}</p></div>
+        </div>` : ''}
+      </div>`;
+    }).join('');
+  }
+  function setField(i) { activeField = i; renderFieldPanel(); renderFieldAccordion(); }
+  function initFields() {
+    renderFieldRows(); renderFieldPanel(); renderFieldAccordion();
+    const onClick = (e) => { const b = e.target.closest('.field-row'); if (b) setField(+b.dataset.i); };
+    fieldsList.addEventListener('click', onClick);
+    fieldsMobile.addEventListener('click', onClick);
+  }
+
+  /* ───────────── Home: rings, chips, flag, forms ───────────── */
+  function initRings() {
+    $('#ringBig').outerHTML = bigRingSVG();
+    $$('#boxes .box-top').forEach((t) => t.insertAdjacentHTML('beforeend', miniRingSVG()));
+    $('#teaserChips').innerHTML = FIELDS.map((f) =>
+      `<a class="chip" href="/perspectives?field=${f.slug}" data-route>${esc(f.short)}</a>`).join('');
+  }
+
+  // three.js + the waving flag are ~600 KB: only fetch them when the newsletter box nears the viewport.
+  function initFlag() {
+    const host = $('#newsletter');
+    if (!host || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      const load = (src) => new Promise((ok, fail) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = fail; document.head.appendChild(s); });
+      load('/assets/js/vendor/three.min.js').then(() => load('/assets/js/nero-flag.js')).then(() => {
+        const flag = document.createElement('nero-flag');
+        flag.setAttribute('lift', '0.7'); flag.setAttribute('zoom', '1.3');
+        host.insertBefore(flag, host.firstChild);
+      }).catch(() => { /* the box simply stays plain surface-coloured */ });
+    }, { rootMargin: '400px' });
+    io.observe(host);
+  }
+
+  // NOTE: not connected to a mailing-list provider yet — see the privacy policy (double opt-in, consent).
+  function initForms() {
+    $$('form[data-newsletter]').forEach((form) => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        const btn = $('button', form);
+        btn.textContent = 'Subscribed';
+      });
+    });
+  }
+
+  /* ───────────── Perspectives ───────────── */
+  let ARTICLES = [], AUTHORS = {};
+  const feed = { field: null, type: 'All', q: '', limit: FIRST_PAGE };
+
+  function parseFrontmatter(raw) {
+    const m = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+    if (!m) return { data: {}, body: raw };
+    const data = {};
+    m[1].split('\n').forEach((line) => {
+      const idx = line.indexOf(':');
+      if (idx === -1) return;
+      const key = line.slice(0, idx).trim();
+      let value = line.slice(idx + 1).trim();
+      if (value.length > 1 && ((value[0] === '"' && value[value.length - 1] === '"') || (value[0] === "'" && value[value.length - 1] === "'"))) value = value.slice(1, -1);
+      data[key] = value;
+    });
+    return { data, body: m[2].trim() };
+  }
+  const fetchText = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.text(); });
+
+  async function loadContent() {
+    try {
+      const [slugs, authorSlugs] = await Promise.all([
+        fetch('/content/perspectives/manifest.json').then((r) => r.json()),
+        fetch('/content/perspectives/authors/manifest.json').then((r) => r.json()).catch(() => []),
+      ]);
+      const [articles, authors] = await Promise.all([
+        Promise.all(slugs.map(async (slug) => {
+          const { data, body } = parseFrontmatter(await fetchText(`/content/perspectives/${slug}.md`));
+          const words = body.split(/\s+/).filter(Boolean).length;
+          return {
+            slug: data.slug || slug,
+            groups: (data.groups || '').split(',').map((s) => s.trim()).filter(Boolean),
+            author: data.author || 'editorial-team',
+            type: data.type || 'Essay',
+            date: data.date || '',
+            title: data.title || slug,
+            teaser: data.teaser || data.lede || '',
+            image: data.image || '',
+            read: Math.max(1, Math.ceil(words / 200)),
+          };
+        })),
+        Promise.all(authorSlugs.map(async (slug) => {
+          const { data } = parseFrontmatter(await fetchText(`/content/perspectives/authors/${slug}.md`));
+          return { slug: data.slug || slug, name: data.name || slug };
+        })),
+      ]);
+      ARTICLES = articles.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+      authors.forEach((a) => { AUTHORS[a.slug] = a.name; });
+    } catch (err) {
+      console.error('Failed to load Perspectives content', err);
+      ARTICLES = [];
+    }
+  }
+
+  // An article carries a field tag only if it names exactly one known action field.
+  function singleField(a) {
+    const g = a.groups.map(fieldBySlug).filter(Boolean);
+    return g.length === 1 ? g[0] : null;
+  }
+  const fieldLabel = (a) => (singleField(a) || COMMONPLACE).short;
+  const authorName = (a) => AUTHORS[a.author] || 'Editorial Team';
+  function articleImage(a, thumb) {
+    if (a.image) return { src: a.image, pos: 'center' };
+    const f = singleField(a);
+    return f ? { src: fieldImgURL(f, thumb), pos: f.pos || 'center' } : null;
+  }
+  const imgTag = (a, thumb, lazy) => {
+    const im = articleImage(a, thumb);
+    return im ? `<img src="${esc(im.src)}" alt="" ${lazy ? 'loading="lazy"' : ''} style="object-position:${im.pos}" />` : '';
+  };
+  const articleHref = (a) => `/perspectives/${a.slug}`;
+
+  function renderMasthead() {
+    const [lead, ...rest] = ARTICLES;
+    const tops = rest.slice(0, 2);
+    if (!lead) { $('#stories').innerHTML = ''; return; }
+    $('#stories').innerHTML = `
+      <a class="story-lead" href="${articleHref(lead)}" data-article>
+        ${imgTag(lead, false, false)}
+        <div class="story-lead-copy">
+          <div class="badges"><span class="badge-type">${esc(lead.type)}</span><span class="badge-field">${esc(fieldLabel(lead))}</span></div>
+          <h2>${esc(lead.title)}</h2>
+          <p>${esc(lead.teaser)}</p>
+          <span class="byline">${esc(authorName(lead))} · ${formatDate(lead.date)} · ${lead.read} min read</span>
+        </div>
+      </a>
+      <div class="stories-side">${tops.map((a) => `
+        <a class="story-top" href="${articleHref(a)}" data-article>
+          <div class="story-top-media">${imgTag(a, true, false)}</div>
+          <div class="story-top-copy">
+            <span class="kicker">${esc(a.type)} · ${esc(fieldLabel(a))}</span>
+            <h3>${esc(a.title)}</h3>
+            <span class="meta">${formatDate(a.date)} · ${a.read} min read</span>
+          </div>
+        </a>`).join('')}</div>`;
+  }
+
+  function renderTiles() {
+    $('#tiles').innerHTML = FIELDS.map((f, i) => `
+      <button class="tile" data-field="${f.slug}">
+        <img src="${fieldImgURL(f, true)}" alt="" loading="lazy" style="object-position:${f.pos || 'center'}" />
+        <span class="tile-shade"></span>
+        <span class="tile-num">${pad2(i)}</span><span class="tile-name">${esc(f.short)}</span>
+      </button>`).join('');
+  }
+
+  function renderMostRead() {
+    // No analytics yet, so this is "more to read" (the next five after the masthead stories), not a ranking.
+    $('#mostRead').innerHTML = ARTICLES.slice(3, 8).map((a, i) => `
+      <a class="mr-item" href="${articleHref(a)}" data-article>
+        <span class="mr-rank">${pad2(i)}</span>
+        <div class="mr-copy"><span class="mr-title">${esc(a.title)}</span><span class="mr-meta">${esc(a.type)} · ${a.read} min read</span></div>
+      </a>`).join('');
+  }
+
+  const isFiltered = () => !!(feed.field || feed.type !== 'All' || feed.q.trim());
+  function feedMatches() {
+    const q = feed.q.trim().toLowerCase();
+    // Unfiltered, the lead + two top stories already sit in the masthead; any filter searches everything.
+    const base = isFiltered() ? ARTICLES : ARTICLES.slice(3);
+    return base.filter((a) => {
+      if (feed.field === COMMONPLACE.slug && singleField(a)) return false;
+      if (feed.field && feed.field !== COMMONPLACE.slug && !(singleField(a) && singleField(a).slug === feed.field)) return false;
+      if (feed.type !== 'All' && a.type !== feed.type) return false;
+      return !q || (a.title + ' ' + a.teaser + ' ' + authorName(a)).toLowerCase().includes(q);
+    });
+  }
+  function renderFilters() {
+    const set = feed.field !== null;
+    const label = !feed.field ? 'Action field' : feed.field === COMMONPLACE.slug ? COMMONPLACE.short : fieldBySlug(feed.field).short;
+    $('#ddLabel').textContent = label;
+    $('#ddBtn').classList.toggle('is-set', set);
+    const items = [{ slug: null, label: 'All action fields', num: '' }]
+      .concat(FIELDS.map((f, i) => ({ slug: f.slug, label: f.short, num: pad2(i) })))
+      .concat([{ slug: COMMONPLACE.slug, label: COMMONPLACE.short, num: '' }]);
+    $('#ddMenu').innerHTML = items.map((it) => `
+      <button class="dd-item" data-field="${it.slug || ''}" aria-pressed="${(feed.field || null) === it.slug}">
+        <span class="dd-num">${it.num}</span><span>${esc(it.label)}</span>
+      </button>`).join('');
+    const present = Array.from(new Set(ARTICLES.map((a) => a.type)));
+    const types = ['All'].concat(Object.keys(TYPE_LABELS).filter((t) => present.includes(t)), present.filter((t) => !TYPE_LABELS[t]));
+    $('#types').innerHTML = types.map((t) => `<button class="type-btn" data-type="${esc(t)}" aria-pressed="${feed.type === t}">${esc(TYPE_LABELS[t] || t)}</button>`).join('');
+    $('#feedClear').hidden = !isFiltered();
+  }
+  function renderFeed() {
+    const list = feedMatches(), shown = list.slice(0, feed.limit), unfiltered = !isFiltered();
+    $('#feedGrid').innerHTML = shown.map((a, i) => `
+      <a class="acard${unfiltered && i === 0 ? ' is-big' : ''}" href="${articleHref(a)}" data-article>
+        <div class="acard-media">${imgTag(a, true, true)}<span class="acard-type">${esc(a.type)}</span></div>
+        <div class="acard-copy">
+          <span class="acard-field">${esc(fieldLabel(a))}</span>
+          <h3>${esc(a.title)}</h3>
+          <p>${esc(a.teaser)}</p>
+          <span class="acard-by">${esc(authorName(a))} · ${formatDate(a.date)}</span>
+        </div>
+      </a>`).join('');
+    $('#feedCount').textContent = list.length === 1 ? '1 article' : list.length + ' articles';
+    $('#feedEmpty').hidden = list.length > 0;
+    $('#feedMore').hidden = list.length <= feed.limit;
+    renderFilters();
+  }
+  function setFeed(patch) { Object.assign(feed, patch, { limit: FIRST_PAGE }); closeDropdown(); renderFeed(); }
+
+  function closeDropdown() { $('#ddMenu').hidden = true; $('#ddBtn').setAttribute('aria-expanded', 'false'); }
+  function initPerspectives() {
+    renderTiles();
+    $('#tiles').addEventListener('click', (e) => {
+      const t = e.target.closest('.tile'); if (!t) return;
+      setFeed({ field: t.dataset.field });
+      scrollToId('latest', true);
+    });
+    $('#ddBtn').addEventListener('click', () => {
+      const open = $('#ddMenu').hidden;
+      $('#ddMenu').hidden = !open; $('#ddBtn').setAttribute('aria-expanded', String(open));
+    });
+    $('#ddMenu').addEventListener('click', (e) => { const b = e.target.closest('.dd-item'); if (b) setFeed({ field: b.dataset.field || null }); });
+    $('#types').addEventListener('click', (e) => { const b = e.target.closest('.type-btn'); if (b) setFeed({ type: b.dataset.type }); });
+    $('#feedQuery').addEventListener('input', (e) => setFeed({ q: e.target.value }));
+    const reset = () => { $('#feedQuery').value = ''; setFeed({ field: null, type: 'All', q: '' }); };
+    $('#feedClear').addEventListener('click', reset);
+    $('#feedReset').addEventListener('click', reset);
+    $('#feedMore').addEventListener('click', () => { feed.limit += PAGE_STEP; renderFeed(); });
+    document.addEventListener('click', (e) => { if (!e.target.closest('.dropdown')) closeDropdown(); });
+  }
+
+  /* ───────────── Members-only gate ───────────── */
+  const gate = $('#gate');
+  let gateReturnFocus = null;
+  function openGate() {
+    if (!gate.hidden) return;
+    gateReturnFocus = document.activeElement;
+    gate.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    $('#gateClose').focus();
+  }
+  function closeGate() {
+    if (gate.hidden) return;
+    gate.hidden = true;
+    document.documentElement.style.overflow = '';
+    if (gateReturnFocus && gateReturnFocus.focus) gateReturnFocus.focus();
+  }
+  gate.addEventListener('click', (e) => { if (e.target === gate) closeGate(); });
+  $('#gateClose').addEventListener('click', closeGate);
+  $('#gateDismiss').addEventListener('click', closeGate);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeGate(); closeDropdown(); }
+    if (e.key === 'Tab' && !gate.hidden) { // keep focus inside the dialog
+      const f = $$('button, a[href]', gate);
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+
+  /* ───────────── Boot ───────────── */
+  initRings();
+  initFields();
+  initFlag();
+  initForms();
+  initPerspectives();
+  renderFilters();
+
+  const initial = resolveLocation(location);
+  if (initial.canonical) history.replaceState({}, '', initial.canonical);
+  else if (initial.view === 'perspectives' && location.search) history.replaceState({}, '', '/perspectives');
+  showView(initial.view, { hash: initial.hash });
+  if (initial.gate) openGate();
+
+  loadContent().then(() => {
+    renderMasthead();
+    renderMostRead();
+    if (initial.view === 'perspectives') applyFeedParams(initial.search);
+    renderFeed();
+  });
+})();

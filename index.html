@@ -1,2999 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NERO — A New Renaissance</title>
   <meta name="description" content="We work with Europe's most ambitious minds to build a better future for our continent." />
+  <meta name="robots" content="index, follow" id="metaRobots" />
+  <meta property="og:title" content="NERO — A New Renaissance" />
+  <meta property="og:description" content="We work with Europe's most ambitious minds to build a better future for our continent." />
+  <meta property="og:type" content="website" />
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Lexend:wght@500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet" />
-  <style>
-    /* ── RESET ── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #fff;
-      color: #1a1a2e;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ── TOKENS ── */
-    :root {
-      --ink: #1a1a2e;
-      --ink-soft: #4a4a6a;
-      --gray-text: #6b7280;
-      --gray-bg: #f3f4f6;
-      --mauve: #b89ab5;
-      --mauve-btn: #c4a8c0;
-      --white: #ffffff;
-      --border: #e5e7eb;
-      --max: 1200px;
-      --pad: clamp(1.5rem, 5vw, 4rem);
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 200;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      height: 88px;
-      display: flex;
-      align-items: center;
-      padding: 0 var(--pad);
-      transition: background 0.25s ease, border-color 0.25s ease;
-    }
-    nav.nav-over-hero:not(.nav-scrolled) {
-      background: transparent;
-      border-bottom-color: transparent;
-    }
-    nav.nav-over-hero:not(.nav-scrolled) .nav-logo-img { filter: brightness(0) invert(1); }
-    nav.nav-over-hero:not(.nav-scrolled) .nav-link,
-    nav.nav-over-hero:not(.nav-scrolled) .btn-pill {
-      color: #fff;
-      font-weight: 600;
-    }
-    nav.nav-over-hero:not(.nav-scrolled) .btn-pill { background: transparent; }
-    .nav-inner {
-      width: 100%;
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      text-decoration: none;
-    }
-    .nav-logo-img {
-      height: 31px;
-      width: auto;
-      display: block;
-      transition: filter 0.25s ease;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-    }
-    .nav-link {
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: var(--ink);
-      text-decoration: none;
-      cursor: pointer;
-      transition: color 0.25s ease;
-    }
-    .nav-link:hover { text-decoration: none; }
-    .btn-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.55rem 1.4rem;
-      background: var(--ink);
-      color: #fff;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s, opacity 0.15s, color 0.15s;
-    }
-    .btn-pill:hover { opacity: 0.85; }
-
-    /* ── PAGES ── */
-    .page { display: none; }
-    .page.active {
-      display: block;
-      animation: pageFadeIn 0.2s ease-out;
-    }
-    @keyframes pageFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    /* ── HERO ── */
-    .hero {
-      position: relative;
-      width: 100%;
-      height: 480px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url("/assets/images/hero-background.png");
-      background-size: cover;
-      background-position: center 50%;
-    }
-    .hero-photo {
-      position: absolute;
-      inset: 0;
-    }
-    .hero-stars {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 35% 12%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 55% 8%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 72% 18%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 88% 10%, rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 25% 30%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 65% 25%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 45% 15%, rgba(255,255,255,0.8) 0%, transparent 100%),
-        radial-gradient(1px 1px at 80% 30%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 10% 40%, rgba(255,255,255,0.3) 0%, transparent 100%);
-    }
-    .hero-mountains {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 45%;
-    }
-    .hero-mountains svg { width: 100%; height: 100%; display: block; }
-    .hero-sparkle-canvas {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-    }
-    .hero-text {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 0 2rem;
-    }
-    .hero-text-block {
-      display: inline-block;
-      text-align: center;
-      max-width: 90vw;
-    }
-    .hero-h1 {
-      font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
-      font-size: clamp(2.8125rem, 7.25vw, 4.6875rem);
-      font-weight: 500;
-      color: #fff;
-      line-height: 1.02;
-      letter-spacing: -0.02em;
-      margin: 0 0 1rem;
-    }
-    .hero-sub {
-      font-size: clamp(0.95rem, 1.5vw, 1.1rem);
-      color: rgba(255,255,255,0.85);
-      font-weight: 400;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    /* ── MISSION HERO ── */
-    .mission-hero {
-      position: relative;
-      width: 100%;
-      height: 480px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url("/assets/images/hero-background.png");
-      background-size: cover;
-      background-position: center 50%;
-    }
-    .mission-bg {
-      display: none;
-    }
-    .mission-stars {
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 20% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 40% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 60% 8%, rgba(255,255,255,0.7) 0%, transparent 100%),
-        radial-gradient(1px 1px at 78% 20%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1.5px 1.5px at 50% 14%, rgba(255,255,255,0.8) 0%, transparent 100%),
-        radial-gradient(1px 1px at 30% 25%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 85% 12%, rgba(255,255,255,0.5) 0%, transparent 100%);
-    }
-    .mission-mountains {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 45%;
-    }
-    .mission-mountains svg { width: 100%; height: 100%; display: block; }
-    .mission-text {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-    }
-    .mission-label {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,0.75);
-      font-weight: 400;
-      margin-bottom: 0.75rem;
-    }
-    .mission-h1 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(2.2rem, 5vw, 3.75rem);
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.02em;
-    }
-    /* Mission page hero only: thinner weight, matching the home hero */
-    #missionHero .mission-h1 { font-weight: 500; }
-
-    /* ── SECTION WRAPPER ── */
-    .section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(3rem, 6vw, 5rem) var(--pad);
-    }
-
-    /* ── MISSION STATEMENT ── */
-    .mission-statement {
-      text-align: center;
-      padding: clamp(3rem, 6vw, 5rem) var(--pad);
-    }
-    .mission-statement h2 {
-      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
-      font-weight: 800;
-      color: var(--ink);
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      max-width: 22ch;
-      margin: 0 auto 1.25rem;
-    }
-    .mission-statement p {
-      font-size: clamp(0.95rem, 1.5vw, 1.05rem);
-      color: var(--gray-text);
-      max-width: 62ch;
-      margin: 0 auto;
-      line-height: 1.7;
-    }
-    .mission-statement p a {
-      font-weight: 700;
-      color: var(--ink);
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .mission-statement p a:hover { text-decoration: underline; }
-
-    /* ── GOAL CARDS ── */
-    .goal-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.75rem;
-      margin-top: 2.5rem;
-    }
-    .goal-card {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.85rem 1rem;
-      background: #fff;
-      transition: box-shadow 0.15s, transform 0.15s;
-      cursor: pointer;
-    }
-    .goal-card:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-    .goal-thumb {
-      width: 56px;
-      height: 56px;
-      border-radius: 8px;
-      object-fit: cover;
-      flex-shrink: 0;
-      background: var(--gray-bg);
-    }
-    .thumb-1 { background: linear-gradient(135deg, #c8a882 0%, #8a6a4a 100%); }
-    .thumb-2 { background: linear-gradient(135deg, #7a9ab5 0%, #4a6a8a 100%); }
-    .thumb-3 { background: linear-gradient(135deg, #a0a0b0 0%, #707090 100%); }
-    .thumb-4 { background: linear-gradient(135deg, #6a8a7a 0%, #4a6a5a 100%); }
-    .thumb-5 { background: linear-gradient(135deg, #4a6a9a 0%, #2a4a7a 100%); }
-    .thumb-6 { background: linear-gradient(135deg, #c0a060 0%, #907040 100%); }
-    .thumb-7 { background: linear-gradient(135deg, #3a5a8a 0%, #1a3a6a 100%); }
-    .thumb-8 { background: linear-gradient(135deg, #5a8a6a 0%, #3a6a4a 100%); }
-    .thumb-9 { background: linear-gradient(135deg, #6a9aca 0%, #4a7aaa 100%); }
-    .thumb-10 { background: linear-gradient(135deg, #8aaa7a 0%, #6a8a5a 100%); }
-    .goal-card-label {
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      line-height: 1.4;
-    }
-    .goal-card.last-solo { grid-column: 2; }
-
-
-    /* ── TECH PAGE ── */
-    .page-intro {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(3rem, 6vw, 5rem) var(--pad) 2rem;
-    }
-    .page-intro-tag {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--mauve);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.75rem;
-    }
-    .page-intro h2 {
-      font-size: clamp(1.5rem, 3vw, 2.25rem);
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      max-width: 28ch;
-      margin-bottom: 1.25rem;
-    }
-    .page-intro p {
-      font-size: 1rem;
-      color: var(--gray-text);
-      line-height: 1.75;
-      max-width: 64ch;
-    }
-    .page-intro .intro-question {
-      margin-top: 1rem;
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      border-left: 3px solid var(--mauve);
-      padding-left: 1rem;
-      font-style: italic;
-      line-height: 1.7;
-    }
-
-    /* ── PEOPLE SECTION ── */
-    .people-section {
-      background: var(--gray-bg);
-      padding: clamp(3rem, 6vw, 5rem) var(--pad);
-    }
-    .people-section-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-    }
-    .section-header {
-      margin-bottom: 2.5rem;
-    }
-    .section-header h2 {
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
-    }
-    .section-header p {
-      font-size: 0.95rem;
-      color: var(--gray-text);
-    }
-    .people-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.25rem;
-    }
-    .person-card {
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      transition: box-shadow 0.15s, transform 0.15s;
-    }
-    .person-card:hover {
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
-    }
-    .person-photo {
-      width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      display: block;
-    }
-    .person-photo-placeholder {
-      width: 100%;
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      color: rgba(255,255,255,0.6);
-    }
-    .person-info {
-      padding: 1rem 1.1rem 1.25rem;
-    }
-    .person-name {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 0.2rem;
-    }
-    .person-role {
-      font-size: 0.8rem;
-      color: var(--mauve);
-      font-weight: 600;
-      margin-bottom: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .person-bio {
-      font-size: 0.825rem;
-      color: var(--gray-text);
-      line-height: 1.6;
-    }
-
-    /* ── ARTICLES SECTION ── */
-    .articles-section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(3rem, 6vw, 5rem) var(--pad);
-    }
-    .articles-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-      margin-top: 2rem;
-    }
-    .article-card {
-      overflow: hidden;
-      background: transparent;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-      text-decoration: none;
-      color: inherit;
-    }
-    .article-card:hover { transform: translateY(-4px); opacity: 0.92; }
-    .article-img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      display: block;
-    }
-    .article-img-placeholder {
-      width: 100%;
-      height: 200px;
-      display: block;
-    }
-    .article-body {
-      padding: 1.1rem 0 0;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .article-source {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--mauve);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 0.5rem;
-    }
-    .article-title {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.35;
-      letter-spacing: -0.01em;
-      margin-bottom: 0.6rem;
-      flex: 1;
-    }
-    .article-teaser {
-      font-size: 0.875rem;
-      color: var(--gray-text);
-      line-height: 1.65;
-    }
-    .article-link {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--ink);
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      text-decoration: none;
-    }
-    .article-link:hover { text-decoration: underline; }
-    .article-link::after { content: "→"; }
-
-    @media (max-width: 1000px) { .people-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) {
-      .people-grid { grid-template-columns: 1fr 1fr; }
-      .articles-grid { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 420px) { .people-grid { grid-template-columns: 1fr; } }
-
-    /* ── MODALS ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 500;
-      background: rgba(10, 12, 28, 0.65);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #fff;
-      border-radius: 20px;
-      max-width: 540px;
-      width: 100%;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.35);
-      position: relative;
-      animation: modalIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes modalIn {
-      from { opacity: 0; transform: translateY(20px) scale(0.96); }
-      to   { opacity: 1; transform: translateY(0)   scale(1);    }
-    }
-    .modal-hero {
-      width: 100%;
-      height: 200px;
-      position: relative;
-      overflow: hidden;
-    }
-    .modal-hero-bg {
-      position: absolute;
-      inset: 0;
-    }
-    .modal-hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, transparent 40%, rgba(10,12,28,0.5) 100%);
-    }
-    .modal-close {
-      position: absolute;
-      top: 0.875rem;
-      right: 0.875rem;
-      width: 30px;
-      height: 30px;
-      background: rgba(255,255,255,0.92);
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1rem;
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ink);
-      z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: background 0.15s;
-    }
-    .modal-close:hover { background: #fff; }
-    .modal-body {
-      padding: 1.75rem 2rem 2rem;
-    }
-    .modal-tag {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--mauve);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 0.6rem;
-    }
-    .modal-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-    .modal-desc {
-      font-size: 0.925rem;
-      color: var(--gray-text);
-      line-height: 1.75;
-      margin-bottom: 1.1rem;
-    }
-    .modal-question {
-      font-size: 0.925rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      line-height: 1.7;
-      border-left: 3px solid var(--mauve);
-      padding-left: 1rem;
-      font-style: italic;
-    }
-
-    /* ── FIELDS WHEEL ── */
-    .wheel-section h2 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 0.35rem;
-      letter-spacing: -0.02em;
-      text-align: center;
-    }
-    .wheel-section p.sub {
-      font-size: 0.95rem;
-      color: var(--gray-text);
-      margin-bottom: 2.5rem;
-      text-align: center;
-      max-width: 46em;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .wheel-holder { display: flex; justify-content: center; }
-    svg.mission-wheel { width: 100%; max-width: 560px; height: auto; overflow: visible; }
-    .wheel-seg {
-      cursor: pointer;
-      stroke: var(--white);
-      stroke-width: 2;
-      transition: opacity 0.15s ease;
-    }
-    .wheel-seg:hover { opacity: 0.85; }
-    .wheel-seg.dim { opacity: 0.28; }
-    .wheel-seg-num { font-size: 20px; font-weight: 700; pointer-events: none; }
-    .wheel-leader { stroke: var(--border); stroke-width: 1; fill: none; }
-    .wheel-leader-dot { r: 2.5; }
-    .wheel-label { font-size: 13.5px; fill: var(--ink-soft); pointer-events: none; }
-    .wheel-label.selected { fill: var(--ink); font-weight: 700; }
-    .wheel-center-num { font-size: 15px; fill: var(--gray-text); }
-    .wheel-center-title {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 21px;
-      font-weight: 700;
-      fill: var(--ink);
-    }
-    .wheel-center-sub { font-size: 12.5px; fill: var(--gray-text); }
-
-    .wheel-detail {
-      margin: 2.5rem auto 0;
-      max-width: 640px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--gray-bg);
-      padding: 1.75rem 2rem;
-    }
-    .wheel-detail.empty {
-      color: var(--gray-text);
-      text-align: center;
-      padding: 2rem 1.5rem;
-      font-size: 0.95rem;
-    }
-    .wheel-detail-head { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 0.35rem; }
-    .wheel-detail-num {
-      width: 38px;
-      height: 38px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-    .wheel-detail-name {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 1.4rem;
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-      margin: 0;
-    }
-    .wheel-detail-blurb {
-      color: var(--ink-soft);
-      font-size: 0.95rem;
-      margin: 0.25rem 0 1rem 3.05rem;
-    }
-    .wheel-detail-question {
-      font-size: 0.925rem;
-      font-weight: 500;
-      color: var(--ink-soft);
-      line-height: 1.7;
-      border-left: 3px solid var(--mauve);
-      padding-left: 1rem;
-      font-style: italic;
-      margin-left: 3.05rem;
-    }
-    @media (max-width: 640px) {
-      .wheel-detail-blurb, .wheel-detail-question { margin-left: 0; }
-    }
-
-    /* ── PILLARS ── */
-    .pillars-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-      margin-top: 1rem;
-    }
-    .pillar-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-    .pillar-img {
-      width: 100%;
-      aspect-ratio: 4/3;
-      border-radius: 12px;
-      object-fit: cover;
-      margin-bottom: 1rem;
-      background: var(--gray-bg);
-    }
-    .pillar-img-1 { background: linear-gradient(160deg, #d4b896 0%, #c89060 30%, #7a5030 100%); }
-    .pillar-img-2 { background: linear-gradient(160deg, #c8c8c0 0%, #8a8a80 50%, #5a5a50 100%); }
-    .pillar-img-3 { background: linear-gradient(160deg, #c8c0a0 0%, #a09060 40%, #6a5030 100%); }
-    .pillar-img-4 { background: linear-gradient(160deg, #b0b8c8 0%, #8090a8 50%, #506070 100%); }
-    .pillar-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 0.6rem;
-    }
-    .pillar-body {
-      font-size: 0.875rem;
-      color: var(--gray-text);
-      line-height: 1.65;
-    }
-
-    /* ── NEWSLETTER BAND ── */
-    .newsletter-band {
-      position: relative;
-      overflow: hidden;
-      padding: 2.25rem var(--pad);
-    }
-    .newsletter-band-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 100% 200% at 50% 120%, #8a4a1a 0%, transparent 60%),
-        #1a1a2e;
-    }
-    .newsletter-band-bg::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse 80% 80% at 30% 60%, rgba(60,40,80,0.5) 0%, transparent 70%);
-    }
-    .newsletter-inner {
-      position: relative;
-      z-index: 1;
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-    .newsletter-inner p {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
-    }
-    .btn-newsletter {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.6rem 1.5rem;
-      background: transparent;
-      color: #fff;
-      border: 1.5px solid #fff;
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      white-space: nowrap;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-    }
-    .btn-newsletter:hover { background: #fff; color: var(--ink); }
-
-    /* ── MARQUEE NEWSLETTER ── */
-    .marquee-newsletter {
-      position: relative;
-      overflow: hidden;
-      background: #0d0e1a;
-      padding: 3.5rem 0 3.25rem;
-    }
-    .marquee-newsletter-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 22% 15%, rgba(184,154,181,0.22) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 55% at 82% 85%, rgba(74,106,154,0.28) 0%, transparent 60%);
-    }
-    .marquee-row { position: relative; z-index: 1; overflow: hidden; width: 100%; }
-    .marquee-row + .marquee-row { margin-top: 0.25rem; }
-    .marquee-track {
-      display: flex;
-      align-items: center;
-      width: max-content;
-      will-change: transform;
-    }
-    .marquee-item { display: flex; align-items: center; flex-shrink: 0; }
-    .marquee-text {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.7rem, 5vw, 3.25rem);
-      font-weight: 600;
-      color: #fff;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-      padding: 0 1.25rem;
-    }
-    .marquee-sep {
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      color: rgba(255,255,255,0.3);
-      flex-shrink: 0;
-    }
-    .marquee-cta { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 2.5rem; }
-    .marquee-signup {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.85rem;
-      text-decoration: none;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #fff;
-      background: none;
-      border: none;
-      font-family: inherit;
-    }
-    .marquee-arrow {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: #fff;
-      transition: background 0.15s, color 0.15s, transform 0.15s;
-    }
-    .marquee-signup:hover .marquee-arrow { background: #fff; color: #0d0e1a; transform: translateX(2px); }
-    @media (max-width: 640px) {
-      .marquee-text { font-size: clamp(1.25rem, 7vw, 2rem); padding: 0 0.85rem; }
-    }
-
-    /* ── CTA CARDS ── */
-    .cta-section {
-      background: var(--gray-bg);
-      padding: clamp(3rem, 6vw, 5rem) var(--pad);
-    }
-    .cta-grid {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.25rem;
-    }
-    .cta-card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 3rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 0.75rem;
-    }
-    .cta-card h3 {
-      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
-      font-weight: 800;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-    }
-    .cta-card p {
-      font-size: 0.95rem;
-      color: var(--gray-text);
-      max-width: 28ch;
-      line-height: 1.65;
-    }
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.6rem 1.75rem;
-      background: transparent;
-      color: var(--mauve);
-      border: 1.5px solid var(--mauve);
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      margin-top: 0.5rem;
-      transition: background 0.15s, color 0.15s;
-    }
-    .btn-outline:hover { background: var(--mauve); color: #fff; }
-    .btn-mauve {
-      display: inline-flex;
-      align-items: center;
-      padding: 0.6rem 1.75rem;
-      background: var(--mauve-btn);
-      color: #fff;
-      border: 1.5px solid var(--mauve-btn);
-      border-radius: 8px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      margin-top: 0.5rem;
-      transition: opacity 0.15s;
-    }
-    .btn-mauve:hover { opacity: 0.85; }
-
-    /* ── FOOTER ── */
-    footer {
-      border-top: 1px solid var(--border);
-      background: #fff;
-      padding: 2.5rem var(--pad);
-    }
-    .footer-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 2rem;
-      flex-wrap: wrap;
-    }
-    .footer-logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .nero-mark {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      border: 1.5px solid var(--ink);
-      padding: 2px 5px;
-      line-height: 1;
-    }
-    .nero-mark span {
-      font-size: 0.55rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      color: var(--ink);
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      transform: rotate(180deg);
-    }
-    .footer-org-name {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.4;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-    .footer-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-    .footer-links a {
-      font-size: 0.875rem;
-      color: var(--ink);
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .footer-links a:hover { text-decoration: underline; }
-    .footer-links .active-link { text-decoration: underline; }
-
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* ── ARTICLE CARDS (shared: home preview + perspectives grid) ── */
-    .article-img-wrap { position: relative; }
-    .article-tag-pill {
-      position: absolute;
-      left: 0.75rem;
-      bottom: 0.75rem;
-      background: rgba(255,255,255,0.94);
-      color: var(--ink);
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      padding: 0.3rem 0.65rem;
-      border-radius: 999px;
-    }
-
-    /* ── PERSPECTIVES PREVIEW (home) ── */
-    .mag-preview { background: var(--gray-bg); padding: clamp(3rem, 6vw, 5rem) var(--pad); }
-    .mag-preview-inner { max-width: var(--max); margin: 0 auto; }
-    .mag-preview-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
-    .mag-preview-header h2 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-    }
-    .mag-preview-header p { font-size: 0.95rem; color: var(--gray-text); margin-top: 0.35rem; }
-    .mag-view-all {
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--ink);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-    .mag-view-all::after { content: "→"; transition: transform 0.15s; }
-    .mag-view-all:hover::after { transform: translateX(3px); }
-
-    /* ── PERSPECTIVES PAGE ── */
-    .mag-hero {
-      position: relative;
-      width: 100%;
-      min-height: 420px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 7rem 1.5rem 5rem;
-    }
-    .mag-hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 60% 55% at 18% 20%, rgba(184,154,181,0.28) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 50% at 88% 80%, rgba(74,106,154,0.32) 0%, transparent 60%),
-        #12131f;
-    }
-    .mag-hero-tag {
-      position: relative; z-index: 1;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--mauve);
-      margin-bottom: 1rem;
-    }
-    .mag-hero h1 {
-      position: relative; z-index: 1;
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(2.75rem, 7vw, 4.75rem);
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: -0.02em;
-      margin-bottom: 1rem;
-    }
-    .mag-hero p {
-      position: relative; z-index: 1;
-      font-size: clamp(1rem, 1.6vw, 1.15rem);
-      color: rgba(255,255,255,0.75);
-      max-width: 46ch;
-    }
-
-    .mag-featured { max-width: var(--max); margin: -3rem auto 0; padding: 0 var(--pad); position: relative; z-index: 2; }
-    .mag-featured-card {
-      display: grid;
-      grid-template-columns: 1.15fr 1fr;
-      overflow: hidden;
-      background: transparent;
-      text-decoration: none;
-      color: inherit;
-      cursor: pointer;
-      transition: opacity 0.2s ease;
-    }
-    .mag-featured-card:hover { opacity: 0.92; }
-    .mag-featured-img { position: relative; min-height: 340px; background-size: cover; background-position: center; }
-    .mag-featured-img .article-tag-pill { position: absolute; left: 1.25rem; bottom: 1.25rem; }
-    .mag-featured-body { padding: 2.25rem 2.5rem; display: flex; flex-direction: column; justify-content: center; gap: 0.85rem; }
-    .mag-featured-meta { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--mauve); }
-    .mag-featured-body h2 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.1rem);
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.2;
-      letter-spacing: -0.01em;
-    }
-    .mag-featured-body p { color: var(--gray-text); font-size: 0.95rem; line-height: 1.7; }
-
-    .mag-toolbar {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 3.5rem var(--pad) 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .mag-toolbar h2 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.3rem, 2.6vw, 1.75rem);
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: -0.01em;
-    }
-    .mag-browse-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.55rem;
-      padding: 0.65rem 1.15rem;
-      border-radius: 999px;
-      border: 1.5px solid var(--ink);
-      background: transparent;
-      color: var(--ink);
-      font-family: inherit;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-    }
-    .mag-browse-btn:hover { background: var(--ink); color: #fff; }
-
-    .mag-filter-row {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 1.5rem var(--pad) 0;
-      display: flex;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-    }
-    .mag-filter-chip {
-      font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.45rem 1rem;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--ink-soft);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      white-space: nowrap;
-    }
-    .mag-filter-chip:hover { border-color: var(--mauve); color: var(--ink); }
-    .mag-filter-chip.active { background: var(--ink); border-color: var(--ink); color: #fff; }
-
-    .mag-grid-wrap { max-width: var(--max); margin: 0 auto; padding: 2rem var(--pad) 5rem; }
-    .mag-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 0.5rem; }
-    .mag-empty { color: var(--gray-text); font-size: 0.9rem; padding: 3rem 0; text-align: center; }
-
-    /* ── GROUP SELECTOR OVERLAY ── */
-    .mag-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 600;
-      background: #0d0e1a;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-    .mag-overlay.open { display: flex; animation: magOverlayIn 0.25s ease-out; }
-    @keyframes magOverlayIn { from { opacity: 0; } to { opacity: 1; } }
-    .mag-overlay-glow { position: absolute; inset: 0; transition: background 0.4s ease; }
-    .mag-overlay-close {
-      position: absolute;
-      top: 1.75rem;
-      right: var(--pad);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255,255,255,0.3);
-      background: transparent;
-      color: #fff;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-      transition: background 0.15s;
-    }
-    .mag-overlay-close:hover { background: rgba(255,255,255,0.12); }
-    .mag-overlay-label {
-      position: absolute;
-      top: 1.9rem;
-      left: var(--pad);
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.5);
-      z-index: 2;
-    }
-    .mag-overlay-list {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.35rem;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 5rem 1.5rem;
-    }
-    .mag-overlay-item {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.4rem, 4.2vw, 2.5rem);
-      font-weight: 600;
-      color: rgba(255,255,255,0.35);
-      cursor: pointer;
-      transition: color 0.3s;
-      padding: 0.3rem 0;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-    .mag-overlay-item .mag-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--mauve);
-      opacity: 0;
-      transition: opacity 0.25s;
-      flex-shrink: 0;
-    }
-    .mag-overlay-item.active-hover { color: #fff; }
-    .mag-overlay-item.active-hover .mag-dot { opacity: 1; }
-    .mag-overlay-list.has-hover .mag-overlay-item:not(.active-hover) { color: rgba(255,255,255,0.22); }
-    .mag-overlay-all {
-      margin-top: 1.5rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.55);
-      cursor: pointer;
-      border: 1px solid rgba(255,255,255,0.25);
-      padding: 0.55rem 1.4rem;
-      border-radius: 999px;
-      transition: color 0.2s, border-color 0.2s;
-      background: transparent;
-      font-family: inherit;
-    }
-    .mag-overlay-all:hover { color: #fff; border-color: #fff; }
-
-    /* ── ARTICLE DETAIL PAGE ── */
-    .article-hero {
-      position: relative;
-      width: 100%;
-      min-height: 380px;
-      display: flex;
-      align-items: flex-end;
-      background-size: cover;
-      background-position: center;
-      overflow: hidden;
-    }
-    .article-hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to bottom, rgba(10,12,28,0.15) 0%, rgba(10,12,28,0.8) 100%);
-    }
-    .article-hero-inner { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; padding: 5rem var(--pad) 2.5rem; width: 100%; }
-    .article-hero-tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #fff;
-      background: rgba(255,255,255,0.16);
-      padding: 0.35rem 0.8rem;
-      border-radius: 999px;
-      margin-bottom: 1rem;
-      cursor: pointer;
-    }
-    .article-hero h1 {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.9rem, 4.5vw, 3rem);
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.85rem;
-    }
-    .article-hero-meta { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
-    .article-byline {
-      display: inline-block;
-      font-size: 0.85rem;
-      color: rgba(255,255,255,0.9);
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .article-byline:hover { text-decoration: underline; }
-    .article-body-wrap { max-width: 700px; margin: 0 auto; padding: 3rem var(--pad) 1rem; }
-    .article-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--ink-soft);
-      text-decoration: none;
-      cursor: pointer;
-      margin-bottom: 1.5rem;
-    }
-    .article-back::before { content: "←"; }
-    .article-lede { font-size: 1.1rem; color: var(--ink-soft); font-weight: 500; line-height: 1.7; margin-bottom: 1.75rem; }
-    #articleBody p { font-size: 1rem; color: #2b2b3d; line-height: 1.85; margin-bottom: 1.4rem; }
-    #articleBody a { color: var(--ink); }
-    #articleBody ul, #articleBody ol { margin: 0 0 1.4rem 1.25rem; color: #2b2b3d; line-height: 1.85; }
-    .article-pull {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.2rem, 2.4vw, 1.5rem);
-      font-weight: 600;
-      color: var(--ink);
-      line-height: 1.4;
-      border-left: 3px solid var(--mauve);
-      padding-left: 1.25rem;
-      margin: 2rem 0;
-    }
-    .article-related { background: var(--gray-bg); padding: clamp(3rem, 6vw, 5rem) var(--pad); margin-top: 2rem; }
-    .article-related-inner { max-width: var(--max); margin: 0 auto; }
-
-    /* ── AUTHOR PAGE ── */
-    .author-hero {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: clamp(6rem, 10vw, 8rem) var(--pad) clamp(3rem, 6vw, 4rem);
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      gap: clamp(2rem, 5vw, 3.5rem);
-      align-items: start;
-    }
-    .author-photo {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      display: block;
-      background: var(--gray-bg);
-    }
-    .author-photo-placeholder {
-      width: 100%;
-      aspect-ratio: 3/4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 3rem;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(160deg, #9a95a8 0%, #5f5a6e 100%);
-    }
-    .author-name {
-      font-family: 'Lexend', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 700;
-      color: var(--ink);
-      letter-spacing: -0.02em;
-      margin-bottom: 0.4rem;
-    }
-    .author-role {
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--mauve);
-      margin-bottom: 1.25rem;
-    }
-    .author-bio p { font-size: 0.975rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 1.1rem; }
-    .author-articles { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) clamp(3rem, 6vw, 5rem); }
-    @media (max-width: 640px) {
-      .author-hero { grid-template-columns: 1fr; }
-      .author-photo, .author-photo-placeholder { max-width: 160px; }
-    }
-
-    @media (max-width: 800px) {
-      .mag-featured-card { grid-template-columns: 1fr; }
-      .mag-featured-img { min-height: 220px; }
-    }
-    @media (max-width: 900px) { .mag-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 640px) {
-      .mag-grid { grid-template-columns: 1fr; }
-      .mag-overlay-item { font-size: 1.4rem; }
-    }
-
-    /* ── MOBILE ── */
-    @media (max-width: 900px) {
-      .goal-cards { grid-template-columns: 1fr 1fr; }
-      .goal-card.last-solo { grid-column: auto; }
-      .pillars-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 640px) {
-      .goal-cards { grid-template-columns: 1fr; }
-      .cta-grid { grid-template-columns: 1fr; }
-      .pillars-grid { grid-template-columns: 1fr; }
-      .footer-inner { flex-direction: column; align-items: flex-start; }
-      .modal-body { padding: 1.25rem 1.25rem 1.5rem; }
-      .nav-logo-img { height: 22px; }
-      .nav-right { gap: 0.9rem; }
-      .nav-link { font-size: 0.8rem; }
-      .btn-pill { padding: 0.5rem 1rem; font-size: 0.8rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { transition: none; opacity: 1; transform: none; }
-      .modal { animation: none; }
-      .page.active { animation: none; }
-    }
-  </style>
+  <link rel="preload" href="/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/assets/css/site.css" />
 </head>
-<body>
+<body data-view="home">
+<div class="app" id="app">
 
-<!-- ── NAV ── -->
-<nav>
-  <div class="nav-inner">
-    <a class="nav-logo" onclick="showPage('home'); return false;" href="/">
-      <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" class="nav-logo-img" />
-    </a>
-    <div class="nav-right">
-      <span class="nav-link" onclick="showPage('mission')">Our Mission</span>
-      <span class="nav-link" onclick="showPage('perspectives')">Perspectives</span>
-      <span class="btn-pill" onclick="showPage('involved')">Get involved</span>
-    </div>
-  </div>
-</nav>
-
-<!-- ════════════════════════════
-     HOME
-════════════════════════════ -->
-<div id="page-home" class="page active">
-
-  <!-- HERO -->
-  <div class="hero" id="hero">
-    <canvas class="hero-sparkle-canvas" id="heroSparkleCanvas"></canvas>
-    <div class="hero-text">
-      <div class="hero-text-block">
-        <h1 class="hero-h1">The European story<br>of the 21st century<br>has yet to be written</h1>
-        <p class="hero-sub">We work with Europe's most ambitious minds to build a better future for our continent.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- PERSPECTIVES PREVIEW -->
-  <div class="mag-preview">
-    <div class="mag-preview-inner">
-      <div class="mag-preview-header reveal">
-        <div>
-          <h2>Perspectives</h2>
-          <p>Stories, facts and ideas that define Europe's future.</p>
-        </div>
-        <a class="mag-view-all" onclick="showPage('perspectives')">Visit Perspectives</a>
-      </div>
-      <div class="articles-grid" id="homeMagPreview"></div>
-    </div>
-  </div>
-
-  <!-- MISSION STATEMENT -->
-  <div class="mission-statement">
-    <h2 class="reveal">We strive to ignite the ideas and strengthen the foundations for a bright future of Europe.</h2>
-    <p class="reveal">Our groups gather the most resourceful people to create awareness, develop solutions, and activate the required means to start new initiatives and organizations. <a onclick="showPage('mission')">Learn more about our mission.</a></p>
-  </div>
-
-  <!-- GOAL CARDS -->
-  <div class="section" style="padding-top:0;">
-    <div class="goal-cards">
-      <div class="goal-card reveal" onclick="openModal('modal-5')"><div class="goal-thumb thumb-5"></div><span class="goal-card-label">New European Narrative and Consciousness</span></div>
-      <div class="goal-card reveal" onclick="showPage('tech')"><img src="/assets/images/tech.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New Technology Leadership</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-2')"><img src="/assets/images/new-state-models.png" style="width:56px;height:56px;border-radius:8px;object-fit:cover;flex-shrink:0;" alt="" /><span class="goal-card-label">New State and Governance Models</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-3')"><div class="goal-thumb thumb-3"></div><span class="goal-card-label">New Private Capital Market Union</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-1')"><div class="goal-thumb thumb-1"></div><span class="goal-card-label">New Role of Citizenship in Europe</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-6')"><div class="goal-thumb thumb-6"></div><span class="goal-card-label">New Local Ecosystems and Healthy Communities</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-7')"><div class="goal-thumb thumb-7"></div><span class="goal-card-label">New Infrastructure and Public Good Philosophy</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-8')"><div class="goal-thumb thumb-8"></div><span class="goal-card-label">New Defense and Resilience</span></div>
-      <div class="goal-card reveal" onclick="openModal('modal-9')"><div class="goal-thumb thumb-9"></div><span class="goal-card-label">New Education</span></div>
-      <div class="goal-card last-solo reveal" onclick="openModal('modal-10')"><div class="goal-thumb thumb-10"></div><span class="goal-card-label">New Energy</span></div>
-    </div>
-  </div>
-
-  <!-- NEWSLETTER BAND -->
-  <div class="newsletter-band">
-    <div class="newsletter-band-bg"></div>
-    <div class="newsletter-inner">
-      <p>Sign up for the New Renaissance Newsletter</p>
-      <a class="btn-newsletter" onclick="showPage('informed')">Stay informed</a>
-    </div>
-  </div>
-
-  <!-- CTA CARDS -->
-  <div class="cta-section">
-    <div class="cta-grid">
-      <div class="cta-card reveal">
-        <h3>Stay in touch</h3>
-        <p>We will inform you about our work, upcoming events and more.</p>
-        <a class="btn-outline" onclick="showPage('informed')">Stay informed</a>
-      </div>
-      <div class="cta-card reveal">
-        <h3>Join the Renaissance</h3>
-        <p>Let us know your ideas and how you would like to contribute.</p>
-        <a class="btn-mauve" onclick="showPage('involved')">Get involved</a>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     MISSION
-════════════════════════════ -->
-<div id="page-mission" class="page">
-
-  <div class="mission-hero" id="missionHero">
-    <canvas class="hero-sparkle-canvas" id="missionSparkleCanvas"></canvas>
-    <div class="mission-text">
-      <p class="mission-label">Our Mission</p>
-      <h1 class="mission-h1">European unity and growth</h1>
-    </div>
-  </div>
-
-  <div class="section wheel-section">
-    <h2 class="reveal">Our ambitions for this decade</h2>
-    <p class="sub reveal">The ten action fields we pursue with our partners, expert groups and local clubs — click a segment to see its focus.</p>
-    <div class="wheel-holder reveal">
-      <svg class="mission-wheel" id="missionWheelSvg" viewBox="0 0 640 640"></svg>
-    </div>
-    <div class="wheel-detail empty" id="missionWheelDetail">Select a field to see its focus.</div>
-  </div>
-
-  <div class="section" style="padding-top:0;">
-    <div class="pillars-grid">
-      <div class="pillar-card reveal">
-        <div class="pillar-img pillar-img-1"></div>
-        <div class="pillar-title">Proud Citizenship</div>
-        <p class="pillar-body">Activate Europeans to participate and contribute to society as informed, resilient and confident citizens.</p>
-      </div>
-      <div class="pillar-card reveal">
-        <div class="pillar-img pillar-img-2"></div>
-        <div class="pillar-title">Bold Entrepreneurship</div>
-        <p class="pillar-body">Empower more people and companies to develop world changing solutions, creating jobs and prosperity in Europe.</p>
-      </div>
-      <div class="pillar-card reveal">
-        <div class="pillar-img pillar-img-3"></div>
-        <div class="pillar-title">Progressive Education</div>
-        <p class="pillar-body">Support educators to keep up with the pace of change, enabling Europeans to master the challenges of tomorrow.</p>
-      </div>
-      <div class="pillar-card reveal">
-        <div class="pillar-img pillar-img-4"></div>
-        <div class="pillar-title">New Technology and Media</div>
-        <p class="pillar-body">Create awareness, urgency and desire through impactful stories. Build prototypes and solutions in our focus areas.</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="marquee-newsletter">
-    <div class="marquee-newsletter-bg"></div>
-    <div class="marquee-row">
-      <div class="marquee-track" id="missionMarqueeRow1"></div>
-    </div>
-    <div class="marquee-row">
-      <div class="marquee-track marquee-reverse" id="missionMarqueeRow2"></div>
-    </div>
-    <div class="marquee-cta">
-      <a class="marquee-signup" onclick="showPage('informed')">
-        Sign up
-        <span class="marquee-arrow">→</span>
+  <header class="site-header" id="siteHeader">
+    <div class="header-inner">
+      <a class="logo" href="/" data-route>
+        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" />
       </a>
+      <nav class="nav" aria-label="Main">
+        <a href="/#mission" data-route>Our Mission</a>
+        <a href="/perspectives" data-route data-nav="perspectives">Perspectives</a>
+        <a href="/#join" data-route class="nav-cta">Get involved</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="cta-section">
-    <div class="cta-grid">
-      <div class="cta-card">
-        <h3>Stay in touch</h3>
-        <p>We will inform you about our work, upcoming events and more.</p>
-        <a class="btn-outline" onclick="showPage('informed')">Stay informed</a>
-      </div>
-      <div class="cta-card">
-        <h3>Join the Renaissance</h3>
-        <p>Let us know your ideas and how you would like to contribute.</p>
-        <a class="btn-mauve" onclick="showPage('involved')">Get involved</a>
-      </div>
-    </div>
-  </div>
+  <!-- ═══════════ HOME ═══════════ -->
+  <main class="view is-active" id="view-home" data-title="NERO — A New Renaissance">
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     GET INVOLVED
-════════════════════════════ -->
-<div id="page-involved" class="page">
-  <div class="mission-hero">
-    <div class="mission-stars"></div>
-    <div class="mission-mountains">
-      <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,220 L0,150 L100,100 L200,80 L300,105 L400,60 L500,90 L600,45 L700,75 L800,50 L900,80 L1000,60 L1100,90 L1200,70 L1300,100 L1440,80 L1440,220 Z" fill="#0a0c1c"/>
-        <path d="M0,220 L0,175 L120,150 L250,162 L380,138 L500,155 L620,132 L740,148 L860,128 L980,145 L1100,125 L1220,140 L1360,128 L1440,138 L1440,220 Z" fill="#0d0f22" opacity="0.9"/>
-      </svg>
-    </div>
-    <div class="mission-text">
-      <h1 class="mission-h1">Join the Renaissance</h1>
-    </div>
-  </div>
-  <div class="cta-section" style="background:#fff; padding-top: 4rem; padding-bottom: 4rem;">
-    <div class="cta-grid" style="max-width:var(--max); margin: 0 auto;">
-      <div class="cta-card" style="border: 1px solid var(--border);">
-        <h3>Stay in touch</h3>
-        <p>We will inform you about our work, upcoming events and more.</p>
-        <a class="btn-outline" onclick="showPage('informed')">Stay informed</a>
-      </div>
-      <div class="cta-card" style="border: 1px solid var(--border);">
-        <h3>Join the Renaissance</h3>
-        <p>Let us know your ideas and how you would like to contribute.</p>
-        <a class="btn-mauve">Get involved</a>
-      </div>
-    </div>
-  </div>
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     STAY INFORMED
-════════════════════════════ -->
-<div id="page-informed" class="page">
-  <div class="mission-hero" style="height: 300px;">
-    <div class="mission-stars"></div>
-    <div class="mission-mountains">
-      <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,220 L0,150 L100,100 L200,80 L300,105 L400,60 L500,90 L600,45 L700,75 L800,50 L900,80 L1000,60 L1100,90 L1200,70 L1300,100 L1440,80 L1440,220 Z" fill="#0a0c1c"/>
-      </svg>
-    </div>
-    <div class="mission-text">
-      <h1 class="mission-h1">Stay Informed</h1>
-    </div>
-  </div>
-  <div class="section" style="max-width: 600px;">
-    <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:0.5rem;">Sign up for the New Renaissance Newsletter</h2>
-    <p style="color:var(--gray-text); margin-bottom: 2rem;">We will inform you about our work, upcoming events and more.</p>
-    <form onsubmit="handleSub(event)" style="display:flex; gap:0;">
-      <input type="email" placeholder="Your email address" required
-        style="flex:1; padding:0.75rem 1rem; border:1px solid var(--border); border-right:none; border-radius:8px 0 0 8px; font-family:inherit; font-size:0.9rem; outline:none;" />
-      <button type="submit"
-        style="padding:0.75rem 1.5rem; background:var(--ink); color:#fff; border:none; border-radius:0 8px 8px 0; font-family:inherit; font-size:0.875rem; font-weight:600; cursor:pointer;">
-        Subscribe
-      </button>
-    </form>
-  </div>
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-
-<!-- ════════════════════════════
-     TECHNOLOGY LEADERSHIP
-════════════════════════════ -->
-<div id="page-tech" class="page">
-
-  <!-- HERO -->
-  <div class="mission-hero">
-    <img src="/assets/images/tech.png" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%;z-index:0;" />
-    <div class="mission-stars"></div>
-    <div class="mission-mountains">
-      <svg viewBox="0 0 1440 220" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,220 L0,150 L100,100 L200,80 L300,105 L400,60 L500,90 L600,45 L700,75 L800,50 L900,80 L1000,60 L1100,90 L1200,70 L1300,100 L1440,80 L1440,220 Z" fill="#0a0c1c"/>
-        <path d="M0,220 L0,175 L120,150 L250,162 L380,138 L500,155 L620,132 L740,148 L860,128 L980,145 L1100,125 L1220,140 L1360,128 L1440,138 L1440,220 Z" fill="#0d0f22" opacity="0.9"/>
-      </svg>
-    </div>
-    <div class="mission-text">
-      <p class="mission-label">Action Field</p>
-      <h1 class="mission-h1">New Technology Leadership</h1>
-    </div>
-  </div>
-
-  <!-- INTRO -->
-  <div class="page-intro">
-    <div class="page-intro-tag">Our Focus</div>
-    <h2>Technological innovation and its adoption define a society's prosperity and power.</h2>
-    <p>Europe has the talent, the culture of craftsmanship, and the industrial depth to lead the next wave of technology — from artificial intelligence and quantum computing to advanced manufacturing and clean tech. Yet too often, European breakthroughs are commercialised elsewhere.</p>
-    <p class="intro-question">How can we unleash European pioneering spirit, inventiveness and craftmanship to become a global technology leader again?</p>
-  </div>
-
-  <!-- PEOPLE -->
-  <div class="people-section">
-    <div class="people-section-inner">
-      <div class="section-header reveal">
-        <h2>The Group</h2>
-        <p>Founders, investors, researchers and policy makers driving Europe's technology agenda</p>
-      </div>
-      <div class="people-grid">
-        <div class="person-card reveal">
-          <div class="person-photo-placeholder" style="background: linear-gradient(160deg, #4a6a9a 0%, #2a4a7a 100%);">👤</div>
-          <div class="person-info">
-            <div class="person-name">Name Surname</div>
-            <div class="person-role">Group Lead</div>
-            <div class="person-bio">Brief description of this person's background and why they are part of this group.</div>
-          </div>
+    <section class="hero" id="hero" aria-label="Hero">
+      <picture>
+        <source type="image/avif" srcset="/assets/images/hero-2000.avif 2000w, /assets/images/hero-4081.avif 4081w" sizes="100vw" />
+        <img class="hero-img" src="/assets/images/hero-background.png" alt="" fetchpriority="high" />
+      </picture>
+      <canvas class="hero-sparkle-canvas" id="heroSparkleCanvas"></canvas>
+      <div class="hero-copy">
+        <div class="hero-block">
+          <h1>The European story<br class="br-wide"> of the 21st century<br class="br-wide"> has yet to be written</h1>
+          <p class="hero-sub">We work with Europe's most ambitious minds to build a better future for our continent.</p>
         </div>
-        <div class="person-card reveal">
-          <div class="person-photo-placeholder" style="background: linear-gradient(160deg, #6a4a8a 0%, #4a2a6a 100%);">👤</div>
-          <div class="person-info">
-            <div class="person-name">Name Surname</div>
-            <div class="person-role">Technology Expert</div>
-            <div class="person-bio">Brief description of this person's background and why they are part of this group.</div>
+      </div>
+    </section>
+
+    <section class="wrap initiatives" id="initiatives">
+      <div class="section-head">
+        <span class="eyebrow">Selected recent initiatives</span>
+        <h2 class="h2">What we are working on</h2>
+      </div>
+      <div class="cards">
+        <article class="card">
+          <div class="card-media"><img src="/assets/images/home/athletes.avif" alt="Two athletes celebrating, one wearing an EU flag patch on his sleeve" loading="lazy" style="object-position:60% 40%" /></div>
+          <div class="card-body">
+            <span class="eyebrow-card">New Narrative and Identification</span>
+            <h3>European athletes perform wearing the circle of stars</h3>
+            <p>European sports teams compete under the star circle and under dual flag.</p>
           </div>
-        </div>
-        <div class="person-card reveal">
-          <div class="person-photo-placeholder" style="background: linear-gradient(160deg, #3a7a6a 0%, #1a5a4a 100%);">👤</div>
-          <div class="person-info">
-            <div class="person-name">Name Surname</div>
-            <div class="person-role">Investor & Founder</div>
-            <div class="person-bio">Brief description of this person's background and why they are part of this group.</div>
+        </article>
+        <article class="card">
+          <div class="card-media"><img src="/assets/images/home/start-capital.avif" alt="Children holding a rainbow parachute in a meadow" loading="lazy" /></div>
+          <div class="card-body">
+            <span class="eyebrow-card">New Private Capital Union</span>
+            <h3>Start capital for every child</h3>
+            <p>Start capital accounts give children financial autonomy and an asset-based pension.</p>
           </div>
-        </div>
-        <div class="person-card reveal">
-          <div class="person-photo-placeholder" style="background: linear-gradient(160deg, #7a4a3a 0%, #5a2a1a 100%);">👤</div>
-          <div class="person-info">
-            <div class="person-name">Name Surname</div>
-            <div class="person-role">Policy Advisor</div>
-            <div class="person-bio">Brief description of this person's background and why they are part of this group.</div>
+        </article>
+        <article class="card">
+          <div class="card-media"><img src="/assets/images/home/intelligence.avif" alt="Person wearing a NERO badge on a red lanyard" loading="lazy" style="object-position:50% 72%" /></div>
+          <div class="card-body">
+            <span class="eyebrow-card">New Technology Leadership</span>
+            <h3>The New Intelligence Group</h3>
+            <p>A partnership to educate and enable society to benefit from the AI era.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <div class="mission-band">
+      <div id="ringBig" aria-hidden="true"></div>
+      <section class="mission" id="mission">
+        <h2 class="h2-lg">We strive to ignite the ideas for a bright future of Europe.</h2>
+        <p>Our groups gather the most resourceful people to create awareness, develop solutions, and activate the required means to start new initiatives and organizations.</p>
+      </section>
+    </div>
+
+    <section class="wrap fields" id="fields">
+      <h2 class="h2">Where we pursue change</h2>
+      <div class="fields-desktop" id="fieldsDesktop">
+        <div class="fields-list" id="fieldsList"></div>
+        <div class="field-panel-wrap">
+          <div class="field-panel" id="fieldPanel" aria-live="polite">
+            <div class="field-photo"><img id="fieldImg" src="/assets/images/fields/technology.avif" alt="" loading="lazy" decoding="async" /></div>
+            <div class="field-text">
+              <h3 id="fieldTitle"></h3>
+              <p class="field-statement" id="fieldStatement"></p>
+              <p class="field-question" id="fieldQuestion"></p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+      <div class="fields-mobile" id="fieldsMobile"></div>
+    </section>
 
-  <!-- ARTICLES -->
-  <div class="articles-section">
-    <div class="section-header reveal">
-      <h2>Articles &amp; Links</h2>
-      <p>Selected reading on European technology leadership</p>
-    </div>
-    <div class="articles-grid">
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #4a6a9a 0%, #1a3a6a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
+    <section class="ambitions" aria-labelledby="howTitle">
+      <div class="ambitions-inner">
+        <h2 id="howTitle">How we work</h2>
+        <div class="boxes" id="boxes">
+          <div class="box"><div class="box-top"><h3>Proud<br>Citizenship</h3></div><p>Activate Europeans to participate and contribute to society as informed, resilient and confident citizens.</p></div>
+          <div class="box"><div class="box-top"><h3>Bold<br>Entrepreneurship</h3></div><p>Empower more people and companies to develop world changing solutions, for jobs and prosperity in Europe.</p></div>
+          <div class="box"><div class="box-top"><h3>Progressive<br>Education</h3></div><p>Support educators to keep up with the pace of change, enabling Europeans to master today and tomorrow.</p></div>
+          <div class="box"><div class="box-top"><h3>New Technology<br>and Media</h3></div><p>Create awareness, urgency and desire through impactful stories. Build prototypes and solutions in our focus areas.</p></div>
         </div>
-      </a>
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #3a7a6a 0%, #1a5a4a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
-        </div>
-      </a>
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #7a5a3a 0%, #5a3a1a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
-        </div>
-      </a>
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #5a4a7a 0%, #3a2a5a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
-        </div>
-      </a>
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #4a7a5a 0%, #2a5a3a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
-        </div>
-      </a>
-      <a class="article-card reveal" href="#" target="_blank">
-        <div class="article-img-placeholder" style="background: linear-gradient(160deg, #6a3a4a 0%, #4a1a2a 100%);"></div>
-        <div class="article-body">
-          <div class="article-source">Source · Year</div>
-          <div class="article-title">Article title goes here — replace with real headline</div>
-          <div class="article-teaser">Short teaser text describing what this article is about and why it is relevant to European technology leadership.</div>
-          <span class="article-link">Read article</span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-  <!-- NEWSLETTER BAND -->
-  <div class="newsletter-band">
-    <div class="newsletter-band-bg"></div>
-    <div class="newsletter-inner">
-      <p>Sign up for the New Renaissance Newsletter</p>
-      <a class="btn-newsletter" onclick="showPage('informed')">Stay informed</a>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-section">
-    <div class="cta-grid">
-      <div class="cta-card">
-        <h3>Stay in touch</h3>
-        <p>We will inform you about our work, upcoming events and more.</p>
-        <a class="btn-outline" onclick="showPage('informed')">Stay informed</a>
       </div>
-      <div class="cta-card">
-        <h3>Join the Renaissance</h3>
-        <p>Let us know your ideas and how you would like to contribute.</p>
-        <a class="btn-mauve" onclick="showPage('involved')">Get involved</a>
-      </div>
-    </div>
-  </div>
+    </section>
 
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     PERSPECTIVES
-════════════════════════════ -->
-<div id="page-perspectives" class="page">
-
-  <div class="mag-hero">
-    <div class="mag-hero-bg"></div>
-    <div class="mag-hero-tag">New Renaissance</div>
-    <h1>Perspectives</h1>
-    <p>Ideas, essays and reporting from the groups building a new European Renaissance.</p>
-  </div>
-
-  <div class="mag-featured" id="magFeatured"></div>
-
-  <div class="mag-toolbar">
-    <h2>Latest from the groups</h2>
-    <button class="mag-browse-btn" onclick="openGroupOverlay()">
-      Browse by group
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-    </button>
-  </div>
-
-  <div class="mag-filter-row" id="magFilterRow"></div>
-
-  <div class="mag-grid-wrap">
-    <div class="mag-grid" id="magGrid"></div>
-  </div>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- GROUP SELECTOR OVERLAY -->
-<div class="mag-overlay" id="magOverlay" onclick="if (event.target === this) closeGroupOverlay();">
-  <div class="mag-overlay-glow" id="magOverlayGlow"></div>
-  <div class="mag-overlay-label">Groups</div>
-  <button class="mag-overlay-close" onclick="closeGroupOverlay()">✕</button>
-  <div class="mag-overlay-list" id="magOverlayList"></div>
-</div>
-
-<!-- ════════════════════════════
-     ARTICLE DETAIL
-════════════════════════════ -->
-<div id="page-article" class="page">
-  <div class="article-hero" id="articleHero">
-    <div class="article-hero-inner">
-      <span class="article-hero-tag" id="articleHeroTag" onclick="event.stopPropagation();"></span>
-      <h1 id="articleHeroTitle"></h1>
-      <div class="article-hero-meta" id="articleHeroMeta"></div>
-      <a class="article-byline" id="articleByline" style="display:none;"></a>
-    </div>
-  </div>
-
-  <div class="article-body-wrap">
-    <a class="article-back" onclick="showPage('perspectives')">Back to Perspectives</a>
-    <p class="article-lede" id="articleLede"></p>
-    <div id="articleBody"></div>
-  </div>
-
-  <div class="article-related">
-    <div class="article-related-inner">
-      <div class="section-header reveal">
-        <h2>More from this group</h2>
-        <p id="articleRelatedSub"></p>
-      </div>
-      <div class="articles-grid" id="articleRelatedGrid"></div>
-    </div>
-  </div>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     AUTHOR PROFILE
-════════════════════════════ -->
-<div id="page-author" class="page">
-  <div class="author-hero">
-    <img class="author-photo" id="authorPhoto" style="display:none;" alt="" />
-    <div class="author-photo-placeholder" id="authorPhotoPlaceholder" style="display:none;"></div>
-    <div>
-      <h1 class="author-name" id="authorName"></h1>
-      <div class="author-role" id="authorRole"></div>
-      <div class="author-bio" id="authorBio"></div>
-    </div>
-  </div>
-
-  <div class="author-articles">
-    <div class="section-header reveal">
-      <h2 id="authorArticlesHeading"></h2>
-    </div>
-    <div class="articles-grid" id="authorArticlesGrid"></div>
-  </div>
-
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo-wrap" onclick="showPage('home')">
-        <img src="/assets/images/nero-logo.png" alt="NERO — New European Renaissance Organisation" style="height:29px;width:auto;" />
-      </div>
-      <ul class="footer-links">
-        <li><a onclick="showPage('mission')">Our Mission</a></li>
-        <li><a onclick="showPage('perspectives')">Perspectives</a></li>
-        <li><a onclick="showPage('involved')">Get involved</a></li>
-        <li><a onclick="showPage('informed')">Stay informed</a></li>
-        <li><a href="#">Imprint</a></li>
-      </ul>
-    </div>
-  </footer>
-</div>
-
-<!-- ════════════════════════════
-     MODALS
-════════════════════════════ -->
-
-<!-- 1: New Role of Citizenship -->
-<div id="modal-1" class="modal-overlay" onclick="overlayClose(event, 'modal-1')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #e8c8a0 0%, #c8906a 40%, #8a5030 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-1')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Role of Citizenship in Europe</div>
-      <p class="modal-desc">A strong continent in a complex world needs independent and engaged individuals.</p>
-      <p class="modal-question">How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 2: New State and Governance -->
-<div id="modal-2" class="modal-overlay" onclick="overlayClose(event, 'modal-2')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(/assets/images/new-state-models.png);background-size:cover;background-position:center top;"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-2')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New State and Governance Models</div>
-      <p class="modal-desc">A robust and competitive democracy needs to deliver superior outcomes for its citizens.</p>
-      <p class="modal-question">How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 3: New Private Capital Market -->
-<div id="modal-3" class="modal-overlay" onclick="overlayClose(event, 'modal-3')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #c8c8c0 0%, #909090 40%, #505060 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-3')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Private Capital Market</div>
-      <p class="modal-desc">Entrepreneurial drive, financial security and personal freedom are built on ownership.</p>
-      <p class="modal-question">How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 4: New Technology Leadership -->
-<div id="modal-4" class="modal-overlay" onclick="overlayClose(event, 'modal-4')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="position:absolute;inset:0;background-image:url(/assets/images/tech.png);background-size:cover;background-position:center center;"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-4')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Technology Leadership</div>
-      <p class="modal-desc">Technological innovation and its adoption define a society's prosperity and power.</p>
-      <p class="modal-question">How can we unleash European pioneering spirit, inventiveness and craftmanship to become global technology leader again?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 5: New European Narrative -->
-<div id="modal-5" class="modal-overlay" onclick="overlayClose(event, 'modal-5')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #6080b0 0%, #304878 40%, #101828 100%); background-image: radial-gradient(ellipse 80% 60% at 50% 80%, #1a3a6a 0%, #050a18 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-5')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New European Narrative and Consciousness</div>
-      <p class="modal-desc">Our civilisatory achievements and cultural richness still inspire hope and desire.</p>
-      <p class="modal-question">How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 6: New Local Ecosystems -->
-<div id="modal-6" class="modal-overlay" onclick="overlayClose(event, 'modal-6')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #d4b870 0%, #a08040 40%, #705020 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-6')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Local Ecosystems and Healthy Communities</div>
-      <p class="modal-desc">Safe, healthy, connected and fulfilling lives are primarily enabled by local communities.</p>
-      <p class="modal-question">How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 7: New Infrastructure -->
-<div id="modal-7" class="modal-overlay" onclick="overlayClose(event, 'modal-7')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #6080b0 0%, #203860 40%, #0a1830 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-7')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Infrastructure and Public Good Philosophy</div>
-      <p class="modal-desc">Superior public infrastructure for everyone is a cornerstone of the European identity.</p>
-      <p class="modal-question">How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 8: New Defense and Resilience -->
-<div id="modal-8" class="modal-overlay" onclick="overlayClose(event, 'modal-8')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #708878 0%, #405850 40%, #203028 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-8')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Defense and Resilience</div>
-      <p class="modal-desc">A peaceful and war-weary Europe has now become a target, unable to defend itself.</p>
-      <p class="modal-question">How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 9: New Education -->
-<div id="modal-9" class="modal-overlay" onclick="overlayClose(event, 'modal-9')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #80b0d8 0%, #4878a8 40%, #184870 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-9')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Education</div>
-      <p class="modal-desc">Strong independent public education and research are now needed more than ever.</p>
-      <p class="modal-question">How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today's world?</p>
-    </div>
-  </div>
-</div>
-
-<!-- 10: New Energy -->
-<div id="modal-10" class="modal-overlay" onclick="overlayClose(event, 'modal-10')">
-  <div class="modal">
-    <div class="modal-hero">
-      <div class="modal-hero-bg" style="background: linear-gradient(160deg, #a8c888 0%, #688848 40%, #385020 100%);"></div>
-      <div class="modal-hero-overlay"></div>
-      <button class="modal-close" onclick="closeModal('modal-10')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-tag">New Renaissance</div>
-      <div class="modal-title">New Energy</div>
-      <p class="modal-desc">Energy is the most important enabler for a thriving society and its economy.</p>
-      <p class="modal-question">How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?</p>
-    </div>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
-<script>
-  /* ── PERSPECTIVES: DATA ── */
-  const GROUPS = [
-    { slug: 'narrative', name: 'New European Narrative and Consciousness', short: 'Narrative', gradient: 'linear-gradient(135deg, #4a6a9a 0%, #2a4a7a 100%)' },
-    { slug: 'tech', name: 'New Technology Leadership', short: 'Technology', gradient: 'linear-gradient(135deg, #6a8a7a 0%, #4a6a5a 100%)', image: '/assets/images/tech.png' },
-    { slug: 'state-governance', name: 'New State and Governance Models', short: 'State & Governance', gradient: 'linear-gradient(135deg, #7a9ab5 0%, #4a6a8a 100%)', image: '/assets/images/new-state-models.png' },
-    { slug: 'capital-market', name: 'New Private Capital Market', short: 'Capital Markets', gradient: 'linear-gradient(135deg, #a0a0b0 0%, #707090 100%)' },
-    { slug: 'citizenship', name: 'New Role of Citizenship in Europe', short: 'Citizenship', gradient: 'linear-gradient(135deg, #c8a882 0%, #8a6a4a 100%)' },
-    { slug: 'local-ecosystems', name: 'New Local Ecosystems and Healthy Communities', short: 'Local Ecosystems', gradient: 'linear-gradient(135deg, #c0a060 0%, #907040 100%)' },
-    { slug: 'infrastructure', name: 'New Infrastructure and Public Good Philosophy', short: 'Infrastructure', gradient: 'linear-gradient(135deg, #3a5a8a 0%, #1a3a6a 100%)' },
-    { slug: 'defense', name: 'New Defense and Resilience', short: 'Defense', gradient: 'linear-gradient(135deg, #5a8a6a 0%, #3a6a4a 100%)' },
-    { slug: 'education', name: 'New Education', short: 'Education', gradient: 'linear-gradient(135deg, #6a9aca 0%, #4a7aaa 100%)' },
-    { slug: 'energy', name: 'New Energy', short: 'Energy', gradient: 'linear-gradient(135deg, #8aaa7a 0%, #6a8a5a 100%)' },
-  ];
-
-  let ARTICLES = [];
-
-  /* ── PERSPECTIVES: CONTENT LOADING (Markdown + frontmatter) ── */
-  function parseFrontmatter(raw) {
-    const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
-    if (!match) return { data: {}, body: raw };
-    const [, fm, body] = match;
-    const data = {};
-    fm.split('\n').forEach(line => {
-      const idx = line.indexOf(':');
-      if (idx === -1) return;
-      const key = line.slice(0, idx).trim();
-      let value = line.slice(idx + 1).trim();
-      if (value.length > 1 && ((value[0] === '"' && value[value.length - 1] === '"') || (value[0] === "'" && value[value.length - 1] === "'"))) {
-        value = value.slice(1, -1);
-      }
-      data[key] = value;
-    });
-    return { data, body: body.trim() };
-  }
-
-  async function loadPerspectiveArticles() {
-    try {
-      const manifestRes = await fetch('/content/perspectives/manifest.json');
-      const slugs = await manifestRes.json();
-      const loaded = await Promise.all(slugs.map(async (slug) => {
-        const res = await fetch(`/content/perspectives/${slug}.md`);
-        const raw = await res.text();
-        const { data, body } = parseFrontmatter(raw);
-        return {
-          slug: data.slug || slug,
-          groups: (data.groups || '').split(',').map(s => s.trim()).filter(Boolean),
-          author: data.author || '',
-          type: data.type,
-          date: data.date,
-          title: data.title,
-          teaser: data.teaser,
-          lede: data.lede,
-          pull: data.pull || '',
-          image: data.image || '',
-          bodyHtml: window.marked ? marked.parse(body) : body,
-        };
-      }));
-      ARTICLES = loaded;
-    } catch (err) {
-      console.error('Failed to load Perspectives articles', err);
-      ARTICLES = [];
-    }
-  }
-
-  let AUTHORS = [];
-
-  async function loadAuthors() {
-    try {
-      const manifestRes = await fetch('/content/perspectives/authors/manifest.json');
-      const slugs = await manifestRes.json();
-      AUTHORS = await Promise.all(slugs.map(async (slug) => {
-        const res = await fetch(`/content/perspectives/authors/${slug}.md`);
-        const raw = await res.text();
-        const { data, body } = parseFrontmatter(raw);
-        return {
-          slug: data.slug || slug,
-          name: data.name,
-          role: data.role || '',
-          photo: data.photo || '',
-          bioHtml: window.marked ? marked.parse(body) : body,
-        };
-      }));
-    } catch (err) {
-      console.error('Failed to load Perspectives authors', err);
-      AUTHORS = [];
-    }
-  }
-
-  /* ── PERSPECTIVES: HELPERS ── */
-  const NEUTRAL_GRADIENT = 'linear-gradient(135deg, #9a95a8 0%, #5f5a6e 100%)';
-  // Pseudo-category for browsing articles not tied to exactly one action field (zero or multiple groups).
-  const COMMONPLACE_FILTER = { slug: 'commonplace', name: 'Commonplace Monthly', short: 'Commonplace Monthly', gradient: NEUTRAL_GRADIENT };
-
-  function groupBySlug(slug) { return GROUPS.find(g => g.slug === slug); }
-  function authorBySlug(slug) { return AUTHORS.find(a => a.slug === slug); }
-  // Every article has an effective author: its own, or "Editorial Team" when unset.
-  function articleAuthorSlug(article) { return article.author || 'editorial-team'; }
-  function articleBySlug(slug) { return ARTICLES.find(a => a.slug === slug); }
-  function sortedArticles() { return ARTICLES.slice().sort((a, b) => new Date(b.date) - new Date(a.date)); }
-  function formatDate(iso) {
-    const d = new Date(iso + 'T00:00:00');
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-  }
-  // An article shows a field tag/color/filter membership only when it names exactly one
-  // action field. Zero fields (unaffiliated) or multiple fields both render neutrally.
-  function articleSingleGroup(article) {
-    const groups = (article.groups || []).map(groupBySlug).filter(Boolean);
-    return groups.length === 1 ? groups[0] : null;
-  }
-  function articleThumbStyle(article) {
-    if (article.image) return `background-image:url('${article.image}');background-size:cover;background-position:center;`;
-    const g = articleSingleGroup(article);
-    if (!g) return `background:${NEUTRAL_GRADIENT};`;
-    return g.image ? `background-image:url('${g.image}');background-size:cover;background-position:center;` : `background:${g.gradient};`;
-  }
-  function articleCardHTML(article) {
-    const g = articleSingleGroup(article);
-    return `
-      <a class="article-card reveal" href="/perspectives/${article.slug}" onclick="event.preventDefault(); openArticle('${article.slug}');">
-        <div class="article-img-wrap">
-          <div class="article-img-placeholder" style="${articleThumbStyle(article)}"></div>
-          ${g ? `<span class="article-tag-pill">${g.short}</span>` : ''}
+    <section class="wrap teaser" id="perspectives">
+      <div class="teaser-grid">
+        <div class="teaser-photo"><img src="/assets/images/home/perspectives.avif" alt="" loading="lazy" /></div>
+        <div class="teaser-copy">
+          <span class="eyebrow">Perspectives</span>
+          <h2 class="h2-lg">Stories and ideas to shape Europe's future.</h2>
+          <p class="lead">Ideas, essays and reporting from the groups building a new European Renaissance.</p>
+          <div class="chips" id="teaserChips"></div>
+          <a class="btn btn-ink" href="/perspectives" data-route>Visit Perspectives</a>
         </div>
-        <div class="article-body">
-          <div class="article-source">${article.type} · ${formatDate(article.date)}</div>
-          <div class="article-title">${article.title}</div>
-          <div class="article-teaser">${article.teaser}</div>
-        </div>
-      </a>`;
-  }
+      </div>
+    </section>
 
-  /* ── PERSPECTIVES: RENDER ── */
-  function renderHomeMagPreview() {
-    const el = document.getElementById('homeMagPreview');
-    if (!el) return;
-    el.innerHTML = sortedArticles().slice(0, 3).map(articleCardHTML).join('');
-  }
-
-  let magActiveFilter = 'all';
-
-  function renderPerspectives(filterSlug) {
-    if (filterSlug) magActiveFilter = filterSlug;
-    const all = sortedArticles();
-    const featured = all[0];
-    const rest = all.slice(1);
-    const filtered = magActiveFilter === 'all' ? rest
-      : magActiveFilter === 'commonplace' ? all.filter(a => !articleSingleGroup(a))
-      : all.filter(a => articleSingleGroup(a) && a.groups[0] === magActiveFilter);
-
-    const featuredEl = document.getElementById('magFeatured');
-    if (featuredEl) {
-      const fg = articleSingleGroup(featured);
-      featuredEl.innerHTML = `
-        <a class="mag-featured-card" href="/perspectives/${featured.slug}" onclick="event.preventDefault(); openArticle('${featured.slug}');">
-          <div class="mag-featured-img" style="${articleThumbStyle(featured)}">
-            ${fg ? `<span class="article-tag-pill">${fg.short}</span>` : ''}
+    <section class="wrap join" id="join">
+      <div class="join-grid">
+        <div class="join-card">
+          <img src="/assets/images/home/join.avif" alt="" loading="lazy" />
+          <div class="join-card-copy">
+            <h2>Join the new renaissance</h2>
+            <p>Let us know your ideas and how you would like to contribute.</p>
+            <a class="btn btn-white" href="/#join" data-route>Get involved</a>
           </div>
-          <div class="mag-featured-body">
-            <div class="mag-featured-meta">${featured.type} · ${formatDate(featured.date)}</div>
-            <h2>${featured.title}</h2>
-            <p>${featured.teaser}</p>
-          </div>
-        </a>`;
-    }
-
-    const filterEl = document.getElementById('magFilterRow');
-    if (filterEl) {
-      const chips = [{ slug: 'all', short: 'All' }].concat(GROUPS).concat([COMMONPLACE_FILTER]);
-      filterEl.innerHTML = chips.map(c => `<button class="mag-filter-chip${magActiveFilter === c.slug ? ' active' : ''}" onclick="renderPerspectives('${c.slug}')">${c.short}</button>`).join('');
-    }
-
-    const gridEl = document.getElementById('magGrid');
-    if (gridEl) {
-      gridEl.innerHTML = filtered.length
-        ? filtered.map(articleCardHTML).join('')
-        : '<div class="mag-empty">No articles in this group yet — check back soon.</div>';
-    }
-    setTimeout(initReveal, 80);
-  }
-
-  function openGroupOverlay() {
-    const overlay = document.getElementById('magOverlay');
-    const list = document.getElementById('magOverlayList');
-    list.innerHTML = GROUPS.concat([COMMONPLACE_FILTER]).map(g => `
-        <div class="mag-overlay-item" data-slug="${g.slug}"
-             onmouseenter="magOverlayHover('${g.slug}')" onmouseleave="magOverlayHover(null)"
-             onclick="selectGroupFromOverlay('${g.slug}')">
-          <span class="mag-dot"></span>${g.name}
-        </div>`).join('') + `<div class="mag-overlay-all" onclick="selectGroupFromOverlay('all')">View all articles</div>`;
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeGroupOverlay() {
-    document.getElementById('magOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function magOverlayHover(slug) {
-    const list = document.getElementById('magOverlayList');
-    const glow = document.getElementById('magOverlayGlow');
-    list.querySelectorAll('.mag-overlay-item').forEach(item => item.classList.toggle('active-hover', item.dataset.slug === slug));
-    if (slug) {
-      list.classList.add('has-hover');
-      const g = groupBySlug(slug) || COMMONPLACE_FILTER;
-      const hex = g.gradient.match(/#[0-9a-fA-F]{3,6}/);
-      glow.style.background = `radial-gradient(ellipse 60% 55% at 50% 50%, ${hex ? hex[0] : '#b89ab5'}55 0%, transparent 65%)`;
-    } else {
-      list.classList.remove('has-hover');
-      glow.style.background = 'transparent';
-    }
-  }
-  function selectGroupFromOverlay(slug) {
-    closeGroupOverlay();
-    if (!document.getElementById('page-perspectives').classList.contains('active')) {
-      showPage('perspectives');
-    }
-    renderPerspectives(slug);
-  }
-
-  function renderArticle(slug, opts) {
-    opts = opts || {};
-    const article = articleBySlug(slug);
-    if (!article) { showPage('perspectives'); return; }
-    const g = articleSingleGroup(article);
-
-    const heroEl = document.getElementById('articleHero');
-    heroEl.style.background = article.image ? `url('${article.image}') center/cover`
-      : g ? (g.image ? `url('${g.image}') center/cover` : g.gradient) : NEUTRAL_GRADIENT;
-
-    const tagEl = document.getElementById('articleHeroTag');
-    if (g) {
-      tagEl.style.display = '';
-      tagEl.textContent = g.short;
-      tagEl.onclick = () => { showPage('perspectives'); renderPerspectives(g.slug); };
-    } else {
-      tagEl.style.display = 'none';
-      tagEl.onclick = null;
-    }
-
-    document.getElementById('articleHeroTitle').textContent = article.title;
-    document.getElementById('articleHeroMeta').textContent = `${article.type} · ${formatDate(article.date)}`;
-    document.getElementById('articleLede').textContent = article.lede;
-
-    const bylineEl = document.getElementById('articleByline');
-    const author = authorBySlug(articleAuthorSlug(article));
-    if (author) {
-      bylineEl.style.display = '';
-      bylineEl.textContent = `By ${author.name}`;
-      bylineEl.onclick = () => renderAuthorPage(author.slug);
-    } else {
-      bylineEl.style.display = '';
-      bylineEl.textContent = 'By Editorial Team';
-      bylineEl.onclick = null;
-    }
-
-    let bodyHTML = article.bodyHtml || '';
-    if (article.pull) {
-      const insertAt = bodyHTML.indexOf('</p>');
-      const pullHTML = `<div class="article-pull">${article.pull}</div>`;
-      bodyHTML = insertAt === -1 ? pullHTML + bodyHTML : bodyHTML.slice(0, insertAt + 4) + pullHTML + bodyHTML.slice(insertAt + 4);
-    }
-    document.getElementById('articleBody').innerHTML = bodyHTML;
-
-    let related = [];
-    if (g) {
-      document.getElementById('articleRelatedSub').textContent = `Continue exploring ${g.name}`;
-      related = sortedArticles().filter(a => articleSingleGroup(a) === g && a.slug !== article.slug).slice(0, 3);
-    } else {
-      document.getElementById('articleRelatedSub').textContent = `Continue exploring Perspectives`;
-    }
-    if (!related.length) related = sortedArticles().filter(a => a.slug !== article.slug).slice(0, 3);
-    document.getElementById('articleRelatedGrid').innerHTML = related.map(articleCardHTML).join('');
-
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-article').classList.add('active');
-    updateNavForPage('article');
-    setTimeout(initReveal, 80);
-
-    if (opts.updateHistory !== false) {
-      const path = '/perspectives/' + article.slug;
-      if (location.pathname !== path) history.pushState({ article: article.slug }, '', path);
-    }
-  }
-  function openArticle(slug) { renderArticle(slug); }
-
-  function renderAuthorPage(slug, opts) {
-    opts = opts || {};
-    const author = authorBySlug(slug);
-    if (!author) { showPage('perspectives'); return; }
-
-    const photoEl = document.getElementById('authorPhoto');
-    const placeholderEl = document.getElementById('authorPhotoPlaceholder');
-    if (author.photo) {
-      photoEl.src = author.photo;
-      photoEl.alt = author.name;
-      photoEl.style.display = '';
-      placeholderEl.style.display = 'none';
-    } else {
-      photoEl.style.display = 'none';
-      placeholderEl.style.display = '';
-      placeholderEl.textContent = (author.name || '?').charAt(0).toUpperCase();
-    }
-
-    document.getElementById('authorName').textContent = author.name;
-    document.getElementById('authorRole').textContent = author.role;
-    document.getElementById('authorBio').innerHTML = author.bioHtml || '';
-
-    const theirArticles = sortedArticles().filter(a => articleAuthorSlug(a) === author.slug);
-    document.getElementById('authorArticlesHeading').textContent = `Perspectives by ${author.name} (${theirArticles.length})`;
-    document.getElementById('authorArticlesGrid').innerHTML = theirArticles.length
-      ? theirArticles.map(articleCardHTML).join('')
-      : '<div class="mag-empty">No articles yet.</div>';
-
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-author').classList.add('active');
-    updateNavForPage('author');
-    setTimeout(initReveal, 80);
-
-    if (opts.updateHistory !== false) {
-      const path = '/perspectives/author/' + author.slug;
-      if (location.pathname !== path) history.pushState({ author: author.slug }, '', path);
-    }
-  }
-
-  const SLUG_TO_ID = { '': 'home', 'mission': 'mission', 'get-involved': 'involved', 'stay-informed': 'informed', 'tech': 'tech', 'perspectives': 'perspectives' };
-  const ID_TO_SLUG = { home: '', mission: 'mission', involved: 'get-involved', informed: 'stay-informed', tech: 'tech', perspectives: 'perspectives' };
-
-  function idFromPath(pathname) {
-    const slug = pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
-    return SLUG_TO_ID.hasOwnProperty(slug) ? SLUG_TO_ID[slug] : null;
-  }
-
-  // Pages whose first section is the dawn-photo hero — these get the
-  // transparent, overlaid nav that solidifies once scrolled past it.
-  const DAWN_HERO_PAGES = new Set(['home', 'mission', 'involved', 'informed', 'tech']);
-  const navEl = document.querySelector('nav');
-
-  function updateNavScrollState() {
-    if (!navEl.classList.contains('nav-over-hero')) {
-      navEl.classList.remove('nav-scrolled');
-      return;
-    }
-    const activePage = document.querySelector('.page.active');
-    const heroEl = activePage && activePage.querySelector('.hero, .mission-hero');
-    const solid = heroEl ? heroEl.getBoundingClientRect().bottom <= 88 : window.scrollY > 10;
-    navEl.classList.toggle('nav-scrolled', solid);
-  }
-  window.addEventListener('scroll', updateNavScrollState, { passive: true });
-  window.addEventListener('resize', updateNavScrollState);
-
-  function updateNavForPage(id) {
-    navEl.classList.toggle('nav-over-hero', DAWN_HERO_PAGES.has(id));
-    updateNavScrollState();
-  }
-
-  function showPage(id, opts) {
-    opts = opts || {};
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-    updateNavForPage(id);
-    setTimeout(initReveal, 80);
-    if (opts.updateHistory !== false) {
-      const path = '/' + (ID_TO_SLUG.hasOwnProperty(id) ? ID_TO_SLUG[id] : '');
-      if (location.pathname !== path) history.pushState({ id }, '', path);
-    }
-  }
-
-  window.addEventListener('popstate', (e) => {
-    if (e.state && e.state.article) { renderArticle(e.state.article, { updateHistory: false }); return; }
-    if (e.state && e.state.author) { renderAuthorPage(e.state.author, { updateHistory: false }); return; }
-    const id = (e.state && e.state.id) || idFromPath(location.pathname) || 'home';
-    showPage(id, { updateHistory: false });
-  });
-
-  (function initRouteFromURL() {
-    const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
-    if (path.indexOf('perspectives/') === 0) {
-      // Article deep links are resolved once Perspectives content has loaded — see bootstrapPerspectives() below.
-      return;
-    }
-    const id = idFromPath(location.pathname);
-    if (id && id !== 'home') {
-      showPage(id, { updateHistory: false });
-    } else {
-      if (location.pathname !== '/') history.replaceState({ id: 'home' }, '', '/');
-      updateNavForPage('home');
-    }
-  })();
-
-  (async function bootstrapPerspectives() {
-    await Promise.all([loadPerspectiveArticles(), loadAuthors()]);
-    renderHomeMagPreview();
-    renderPerspectives('all');
-
-    const path = location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
-    if (path.indexOf('perspectives/') === 0) {
-      const rest = path.slice('perspectives/'.length);
-      if (rest.indexOf('author/') === 0) {
-        const authorSlug = rest.slice('author/'.length);
-        if (authorBySlug(authorSlug)) {
-          renderAuthorPage(authorSlug, { updateHistory: false });
-        } else {
-          showPage('perspectives', { updateHistory: false });
-        }
-      } else if (articleBySlug(rest)) {
-        renderArticle(rest, { updateHistory: false });
-      } else {
-        showPage('perspectives', { updateHistory: false });
-      }
-    }
-  })();
-
-  function initHeroSparkles(heroId, canvasId) {
-    const hero = document.getElementById(heroId);
-    const canvas = document.getElementById(canvasId);
-    if (!hero || !canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let rafId = null;
-    let lastSpawn = 0;
-    let lastX = null, lastY = null;
-    let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-    function resize() {
-      const rect = hero.getBoundingClientRect();
-      if (!rect.width || !rect.height) return; // hero's page is hidden (display:none) right now
-      canvas.width = Math.round(rect.width * dpr);
-      canvas.height = Math.round(rect.height * dpr);
-      canvas.style.width = rect.width + 'px';
-      canvas.style.height = rect.height + 'px';
-    }
-    resize();
-    // A plain window 'resize' listener misses the hero going from display:none (0x0)
-    // to visible when its page becomes active via showPage() — ResizeObserver catches that too.
-    if (window.ResizeObserver) {
-      new ResizeObserver(resize).observe(hero);
-    } else {
-      window.addEventListener('resize', resize);
-    }
-
-    function spawn(x, y, dirX, dirY) {
-      const baseAngle = Math.atan2(dirY, dirX);
-      const angle = baseAngle + (Math.random() - 0.5) * 0.9;
-      const speed = (0.12 + Math.random() * 0.22) * dpr;
-      particles.push({
-        x: (x + (Math.random() - 0.5) * 8) * dpr,
-        y: (y + (Math.random() - 0.5) * 8) * dpr,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        size: (0.42 + Math.random() * 0.54) * dpr,
-        baseAlpha: 0.65 + Math.random() * 0.35,
-        phase: Math.random() * Math.PI * 2,
-        age: 0,
-        maxLife: 500 + Math.random() * 500,
-      });
-    }
-
-    function tick(now) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles = particles.filter(p => p.age < p.maxLife);
-      for (const p of particles) {
-        p.age += 16.7;
-        p.x += p.vx;
-        p.y += p.vy;
-        const lifeRatio = p.age / p.maxLife;
-        const fade = lifeRatio < 0.15 ? lifeRatio / 0.15 : 1 - Math.pow((lifeRatio - 0.15) / 0.85, 2);
-        const twinkle = 0.7 + 0.3 * Math.sin(p.age * 0.025 + p.phase);
-        const alpha = Math.max(0, p.baseAlpha * fade * twinkle);
-        const r = p.size * 1.15;
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
-        grad.addColorStop(0, `rgba(255,255,255,${alpha})`);
-        grad.addColorStop(0.55, `rgba(255,255,255,${alpha * 0.85})`);
-        grad.addColorStop(1, 'rgba(255,255,255,0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      if (particles.length > 0) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        rafId = null;
-      }
-    }
-
-    function ensureLoop() {
-      if (rafId === null) rafId = requestAnimationFrame(tick);
-    }
-
-    hero.addEventListener('mousemove', (e) => {
-      const rect = hero.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      let dirX = 1, dirY = 0;
-      if (lastX !== null) {
-        const dx = x - lastX, dy = y - lastY;
-        const dist = Math.hypot(dx, dy);
-        if (dist > 0.5) { dirX = dx / dist; dirY = dy / dist; }
-      }
-      lastX = x;
-      lastY = y;
-
-      const now = performance.now();
-      if (now - lastSpawn < 170) return;
-      lastSpawn = now;
-      if (Math.random() > 0.55) return;
-      spawn(x, y, dirX, dirY);
-      ensureLoop();
-    });
-  }
-  initHeroSparkles('hero', 'heroSparkleCanvas');
-  initHeroSparkles('missionHero', 'missionSparkleCanvas');
-
-  function initReveal() {
-    const els = document.querySelectorAll('.page.active .reveal:not(.visible)');
-    if (!els.length) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 55);
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    els.forEach(el => io.observe(el));
-  }
-
-  /* ── FIELDS WHEEL (Mission page) ── */
-  const MISSION_FIELDS = [
-    { num: 1, shortName: 'Citizenship', fullName: 'New Role of Citizenship in Europe', color: '#c8a882',
-      blurb: 'A strong continent in a complex world needs independent and engaged individuals.',
-      question: 'How can we empower citizens to take action in order to build healthy communities, a thriving economy and an effective state?' },
-    { num: 2, shortName: 'State & Governance', fullName: 'New State and Governance Models', color: '#7a9ab5',
-      blurb: 'A robust and competitive democracy needs to deliver superior outcomes for its citizens.',
-      question: 'How can we rebuild our state and our governance as reliable systems, defined by speed, efficiency, accountability and trust?' },
-    { num: 3, shortName: 'Capital Markets', fullName: 'New Private Capital Market', color: '#a0a0b0',
-      blurb: 'Entrepreneurial drive, financial security and personal freedom are built on ownership.',
-      question: 'How can we turn Europeans into owners and leverage private capital to fuel growth and public goods within a unified market?' },
-    { num: 4, shortName: 'Technology', fullName: 'New Technology Leadership', color: '#6a8a7a',
-      blurb: "Technological innovation and its adoption define a society's prosperity and power.",
-      question: 'How can we unleash European pioneering spirit, inventiveness and craftmanship to become a global technology leader again?' },
-    { num: 5, shortName: 'Narrative', fullName: 'New European Narrative and Consciousness', color: '#4a6a9a',
-      blurb: 'Our civilisatory achievements and cultural richness still inspire hope and desire.',
-      question: 'How can we promote European unity, dynamism and way of life through a strong and aspirational story of our continent?' },
-    { num: 6, shortName: 'Local Ecosystems', fullName: 'New Local Ecosystems and Healthy Communities', color: '#c0a060',
-      blurb: 'Safe, healthy, connected and fulfilling lives are primarily enabled by local communities.',
-      question: 'How can we strengthen local ecosystems, businesses, clubs and authorities to create the best possible living environments?' },
-    { num: 7, shortName: 'Infrastructure', fullName: 'New Infrastructure and Public Good Philosophy', color: '#3a5a8a',
-      blurb: 'Superior public infrastructure for everyone is a cornerstone of the European identity.',
-      question: 'How can we make public good policy work again to enable excellent life quality, social mobility and trust in our model of society?' },
-    { num: 8, shortName: 'Defense', fullName: 'New Defense and Resilience', color: '#5a8a6a',
-      blurb: 'A peaceful and war-weary Europe has now become a target, unable to defend itself.',
-      question: 'How can we quickly rebuild the military force and resilience to prevent attacks and defend Europe as an independent power?' },
-    { num: 9, shortName: 'Education', fullName: 'New Education', color: '#6a9aca',
-      blurb: 'Strong independent public education and research are now needed more than ever.',
-      question: 'How can we update our education systems and institutions to enable humans, citizens and builders that thrive in today\'s world?' },
-    { num: 10, shortName: 'Energy', fullName: 'New Energy', color: '#8aaa7a',
-      blurb: 'Energy is the most important enabler for a thriving society and its economy.',
-      question: 'How can we become the leader in clean and affordable energy, building on technology, smart markets and a vision of abundance?' },
-  ];
-
-  let missionSelectedNum = null;
-
-  function wheelTextColor(hex) {
-    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
-    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return lum > 0.6 ? '#14141f' : '#ffffff';
-  }
-
-  function wheelPolar(cx, cy, r, angDeg) {
-    const a = (angDeg - 90) * Math.PI / 180;
-    return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-  }
-
-  function wheelDonutPath(cx, cy, rOut, rIn, a0, a1) {
-    const p0 = wheelPolar(cx, cy, rOut, a1), p1 = wheelPolar(cx, cy, rOut, a0);
-    const p2 = wheelPolar(cx, cy, rIn, a0), p3 = wheelPolar(cx, cy, rIn, a1);
-    const large = (a1 - a0) > 180 ? 1 : 0;
-    return `M ${p0.x} ${p0.y} A ${rOut} ${rOut} 0 ${large} 0 ${p1.x} ${p1.y} L ${p2.x} ${p2.y} A ${rIn} ${rIn} 0 ${large} 1 ${p3.x} ${p3.y} Z`;
-  }
-
-  function renderMissionWheel() {
-    const svg = document.getElementById('missionWheelSvg');
-    if (!svg) return;
-    const CX = 320, CY = 320, R_OUT = 250, R_IN = 128, LABEL_R = 300;
-    const step = 360 / MISSION_FIELDS.length;
-    let html = '';
-    MISSION_FIELDS.forEach((f, i) => {
-      const a0 = i * step + 1.2, a1 = (i + 1) * step - 1.2;
-      const mid = (a0 + a1) / 2;
-      const d = wheelDonutPath(CX, CY, R_OUT, R_IN, a0, a1);
-      const isSel = missionSelectedNum === f.num;
-      const dimCls = (missionSelectedNum && !isSel) ? ' dim' : '';
-      const midPt = wheelPolar(CX, CY, (R_OUT + R_IN) / 2, mid);
-      html += `<path class="wheel-seg${dimCls}" d="${d}" fill="${f.color}" data-num="${f.num}"></path>`;
-      html += `<text class="wheel-seg-num" x="${midPt.x}" y="${midPt.y + 7}" text-anchor="middle" fill="${wheelTextColor(f.color)}" pointer-events="none">${String(f.num).padStart(2, '0')}</text>`;
-
-      const edgePt = wheelPolar(CX, CY, R_OUT + 2, mid);
-      const labelPt = wheelPolar(CX, CY, LABEL_R, mid);
-      const anchor = labelPt.x > CX + 6 ? 'start' : (labelPt.x < CX - 6 ? 'end' : 'middle');
-      const dx = anchor === 'start' ? 8 : (anchor === 'end' ? -8 : 0);
-      html += `<line class="wheel-leader" x1="${edgePt.x}" y1="${edgePt.y}" x2="${labelPt.x}" y2="${labelPt.y}"></line>`;
-      html += `<circle class="wheel-leader-dot" cx="${labelPt.x}" cy="${labelPt.y}" fill="${f.color}"></circle>`;
-      html += `<text class="wheel-label${isSel ? ' selected' : ''}" x="${labelPt.x + dx}" y="${labelPt.y + 4}" text-anchor="${anchor}">${f.shortName}</text>`;
-    });
-
-    const centerField = missionSelectedNum ? MISSION_FIELDS.find(f => f.num === missionSelectedNum) : null;
-    if (centerField) {
-      html += `<text class="wheel-center-sub" x="${CX}" y="${CY - 14}" text-anchor="middle">FIELD ${String(centerField.num).padStart(2, '0')}</text>`;
-      html += `<text class="wheel-center-title" x="${CX}" y="${CY + 12}" text-anchor="middle">${centerField.shortName}</text>`;
-      html += `<text class="wheel-center-sub" x="${CX}" y="${CY + 34}" text-anchor="middle">focus below ↓</text>`;
-    } else {
-      html += `<text class="wheel-center-title" x="${CX}" y="${CY - 6}" text-anchor="middle">NERO</text>`;
-      html += `<text class="wheel-center-num" x="${CX}" y="${CY + 18}" text-anchor="middle">10 action fields</text>`;
-    }
-
-    svg.innerHTML = html;
-    svg.querySelectorAll('.wheel-seg').forEach(el => {
-      el.addEventListener('click', () => selectMissionField(Number(el.getAttribute('data-num'))));
-    });
-  }
-
-  function renderMissionWheelDetail() {
-    const panel = document.getElementById('missionWheelDetail');
-    if (!panel) return;
-    if (!missionSelectedNum) {
-      panel.className = 'wheel-detail empty';
-      panel.innerHTML = 'Select a field to see its focus.';
-      return;
-    }
-    const f = MISSION_FIELDS.find(x => x.num === missionSelectedNum);
-    panel.className = 'wheel-detail';
-    panel.innerHTML = `
-      <div class="wheel-detail-head">
-        <span class="wheel-detail-num" style="background:${f.color};color:${wheelTextColor(f.color)}">${String(f.num).padStart(2, '0')}</span>
-        <h3 class="wheel-detail-name">${f.fullName}</h3>
+        </div>
+        <div class="news-card" id="newsletter" data-flag-host>
+          <div class="news-scrim" aria-hidden="true"></div>
+          <span class="eyebrow">Stay in touch</span>
+          <h2>Sign up for the New Renaissance Newsletter</h2>
+          <p>We will inform you about our work, upcoming events and more.</p>
+          <form class="news-form" data-newsletter novalidate>
+            <input type="email" required placeholder="Your email" aria-label="Your email" autocomplete="email" />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
       </div>
-      <p class="wheel-detail-blurb">${f.blurb}</p>
-      <p class="wheel-detail-question">${f.question}</p>
-    `;
-  }
+    </section>
+  </main>
 
-  function selectMissionField(num) {
-    missionSelectedNum = (missionSelectedNum === num) ? null : num;
-    renderMissionWheel();
-    renderMissionWheelDetail();
-  }
+  <!-- ═══════════ PERSPECTIVES ═══════════ -->
+  <main class="view" id="view-perspectives" data-title="Perspectives — NERO">
+    <section class="masthead">
+      <div class="wrap masthead-inner">
+        <div class="masthead-title">
+          <h1>Perspectives</h1>
+          <p class="masthead-sub">Stories and ideas to shape Europe's future.</p>
+        </div>
+        <div class="stories" id="stories"></div>
+      </div>
+    </section>
 
-  renderMissionWheel();
-  renderMissionWheelDetail();
+    <section class="explore" aria-labelledby="exploreTitle">
+      <div class="wrap explore-inner">
+        <div class="explore-head">
+          <h2 id="exploreTitle">Explore by action field</h2>
+          <span>10 fields</span>
+        </div>
+        <div class="tiles" id="tiles"></div>
+      </div>
+    </section>
 
-  /* ── MARQUEE NEWSLETTER (Mission page) ── */
-  (function initMissionMarquee() {
-    const row1 = document.getElementById('missionMarqueeRow1');
-    const row2 = document.getElementById('missionMarqueeRow2');
-    if (!row1 || !row2) return;
+    <section class="wrap feed" id="latest">
+      <div class="feed-head">
+        <h2>All perspectives</h2>
+        <span class="feed-count" id="feedCount" aria-live="polite"></span>
+      </div>
+      <div class="filterbar">
+        <label class="search"><span aria-hidden="true">⌕</span><input type="search" id="feedQuery" placeholder="Search perspectives" aria-label="Search perspectives" /></label>
+        <div class="dropdown">
+          <button class="dd-btn" id="ddBtn" aria-haspopup="true" aria-expanded="false" aria-controls="ddMenu"><span id="ddLabel">Action field</span><span class="dd-caret" aria-hidden="true">▼</span></button>
+          <div class="dd-menu" id="ddMenu" hidden></div>
+        </div>
+        <div class="types" id="types"></div>
+        <button class="clear" id="feedClear" hidden>Clear ×</button>
+      </div>
+      <div class="grid" id="feedGrid"></div>
+      <div class="empty" id="feedEmpty" hidden>
+        <strong>No perspectives match this selection yet.</strong>
+        <button id="feedReset">Show all perspectives →</button>
+      </div>
+      <button class="more" id="feedMore" hidden>Load more perspectives</button>
+    </section>
 
-    const ROW_1_PHRASES = ['Proud Citizenship', 'Progressive Education', 'New Renaissance'];
-    const ROW_2_PHRASES = ['Bold Entrepreneurship', 'New Technology and Media', 'European Unity'];
+    <section class="wrap mostread-wrap">
+      <div class="mostread-grid">
+        <div class="mostread">
+          <h2>More to read</h2>
+          <div id="mostRead"></div>
+        </div>
+        <div class="news-dark" id="newsletterP">
+          <span class="kicker">Newsletter</span>
+          <h2>New perspectives in your inbox</h2>
+          <p>Sign up for the New Renaissance Newsletter. We will inform you about our work, upcoming events and more.</p>
+          <form class="news-form" data-newsletter novalidate>
+            <input type="email" required placeholder="Your email" aria-label="Your email" autocomplete="email" />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    function buildTrack(phrases, repeats) {
-      let sequence = '';
-      for (let r = 0; r < repeats; r++) {
-        phrases.forEach(phrase => {
-          sequence += `<span class="marquee-item"><span class="marquee-text">${phrase}</span><span class="marquee-sep">✦</span></span>`;
-        });
-      }
-      return sequence + sequence;
-    }
+  <!-- ═══════════ IMPRINT ═══════════ -->
+  <main class="view" id="view-imprint" data-title="Imprint — NERO" data-noindex>
+    <div class="legal">
+      <h1>Imprint</h1>
+      <section>
+        <h2>Information pursuant to § 5 DDG</h2>
+        <p>Johannes Etzelmüller<br>Riedlerstraße 38<br>80337 Munich<br>Germany</p>
+      </section>
+      <section>
+        <h2>Contact</h2>
+        <p>Email: <a href="mailto:johannes@anewrenaissance.com">johannes@anewrenaissance.com</a></p>
+      </section>
+      <section>
+        <h2>Responsible for content</h2>
+        <p>Responsible for content pursuant to § 18 (2) MStV (German Interstate Media Treaty): Johannes Etzelmüller, address as above.</p>
+      </section>
+    </div>
+  </main>
 
-    row1.innerHTML = buildTrack(ROW_1_PHRASES, 4);
-    row2.innerHTML = buildTrack(ROW_2_PHRASES, 4);
+  <!-- ═══════════ PRIVACY ═══════════ -->
+  <main class="view" id="view-privacy" data-title="Privacy Policy — NERO" data-noindex>
+    <div class="legal is-long">
+      <h1>Privacy Policy</h1>
+      <section>
+        <h2>1. Controller</h2>
+        <p>The controller responsible for data processing on this website within the meaning of the General Data Protection Regulation (GDPR) is:</p>
+        <p>Johannes Etzelmüller<br>Riedlerstraße 38<br>80337 Munich, Germany<br>Email: <a href="mailto:johannes@anewrenaissance.com">johannes@anewrenaissance.com</a></p>
+        <p>A New Renaissance (NERO) is a private citizens' initiative and not a legal entity. No data protection officer has been appointed, as there is no legal obligation to do so.</p>
+      </section>
+      <section>
+        <h2>2. Overview</h2>
+        <p>We only process personal data to the extent necessary to operate this website and to pursue the aims of the initiative. This website does not use cookies, analytics or tracking tools, or social media plugins. We do not sell data and do not pass it on for advertising purposes.</p>
+      </section>
+      <section>
+        <h2>3. Hosting and server log files</h2>
+        <p>This website is hosted by Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA. When you visit the website, the host automatically processes information transmitted by your browser: IP address, date and time of access, page requested, referrer URL, browser type and operating system.</p>
+        <p>This data is technically necessary to deliver the website and to ensure its security and stability. The legal basis is our legitimate interest pursuant to Art. 6 (1) (f) GDPR. A data processing agreement pursuant to Art. 28 GDPR is in place with the host. The log files are stored by the host only for a limited period; we do not analyse them ourselves.</p>
+        <p>Data may also be processed in the USA. Vercel Inc. is certified under the EU-US Data Privacy Framework, for which an adequacy decision of the European Commission exists (Art. 45 GDPR). Further information: <a href="https://vercel.com/legal/privacy-policy">vercel.com/legal/privacy-policy</a>.</p>
+      </section>
+      <section>
+        <h2>4. Signing up for updates</h2>
+        <p>If you sign up using our form, we process your name and email address in order to inform you by email about news, activities and progress of A New Renaissance. Only the email address is mandatory; your name is used to address you personally.</p>
+        <p>Since signing up may indicate your support for a political cause, we process this data exclusively on the basis of your explicit consent (Art. 6 (1) (a) and Art. 9 (2) (a) GDPR). You give this consent by ticking the corresponding checkbox in the form; it covers the processing described in this privacy policy.</p>
+        <p><strong>Double opt-in:</strong> After you sign up, we will send you a personal email asking you to confirm your registration. We will only send you updates after you have confirmed. We record the time of sign-up and confirmation in order to be able to prove your consent (Art. 6 (1) (f) GDPR in conjunction with Art. 7 (1) GDPR). Sign-ups that are not confirmed within 30 days will be deleted.</p>
+        <p><strong>Withdrawal:</strong> You can withdraw your consent at any time with effect for the future, by replying to one of our emails or by sending a message to <a href="mailto:johannes@anewrenaissance.com">johannes@anewrenaissance.com</a>. The lawfulness of processing carried out before the withdrawal remains unaffected.</p>
+      </section>
+      <section>
+        <h2>5. Contacting us</h2>
+        <p>If you send us a message via the form or by email, we process your name, email address and message in order to respond to your request. The legal basis is your consent (Art. 6 (1) (a), Art. 9 (2) (a) GDPR) or our legitimate interest in responding to enquiries (Art. 6 (1) (f) GDPR). Contacting us does not add you to the update mailing list.</p>
+      </section>
+      <section>
+        <h2>6. Form and storage via Google</h2>
+        <p>The form on this website transmits your details to Google Apps Script; the entries are stored in a spreadsheet in Google Sheets. The provider is Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland. A data processing agreement pursuant to Art. 28 GDPR is in place with Google. Your details are only transmitted to Google when you submit the form; merely opening the form does not trigger any transmission.</p>
+        <p>It cannot be ruled out that data will be transferred to Google LLC in the USA. Google LLC is certified under the EU-US Data Privacy Framework, for which an adequacy decision of the European Commission exists (Art. 45 GDPR). Further information: <a href="https://policies.google.com/privacy">policies.google.com/privacy</a>.</p>
+        <p>The mailing list is managed in the Google Sheets spreadsheet mentioned above.</p>
+      </section>
+      <section>
+        <h2>7. Sending emails via STRATO</h2>
+        <p>We send our emails, such as replies to enquiries, confirmation emails and updates, from the mailbox <a href="mailto:johannes@anewrenaissance.com">johannes@anewrenaissance.com</a> hosted by STRATO GmbH, Otto-Ostrowski-Straße 7, 10249 Berlin, Germany. Emails addressed to us are also received and stored there. Processing takes place on servers in Germany. A data processing agreement pursuant to Art. 28 GDPR is in place with STRATO.</p>
+        <p>Your data is not passed on to any other third parties.</p>
+      </section>
+      <section>
+        <h2>8. Storage period</h2>
+        <p>We store your data for updates until you unsubscribe or the initiative is discontinued; we then delete it. We keep proof of your consent (times of sign-up, confirmation and unsubscription) for up to three years after withdrawal in order to defend against legal claims. We delete contact enquiries as soon as your request has been dealt with.</p>
+      </section>
+      <section>
+        <h2>9. Your rights</h2>
+        <p>You have the right at any time to:</p>
+        <ul>
+          <li>access the data stored about you (Art. 15 GDPR)</li>
+          <li>rectification of inaccurate data (Art. 16 GDPR)</li>
+          <li>erasure (Art. 17 GDPR)</li>
+          <li>restriction of processing (Art. 18 GDPR)</li>
+          <li>data portability (Art. 20 GDPR)</li>
+          <li>withdraw consent given, with effect for the future (Art. 7 (3) GDPR)</li>
+        </ul>
+        <p><strong>Right to object (Art. 21 GDPR):</strong> Where we process data on the basis of our legitimate interest, you may object at any time on grounds relating to your particular situation.</p>
+        <p>An informal message to <a href="mailto:johannes@anewrenaissance.com">johannes@anewrenaissance.com</a> is sufficient for all of the above.</p>
+      </section>
+      <section>
+        <h2>10. Right to lodge a complaint</h2>
+        <p>You have the right to lodge a complaint with a data protection supervisory authority. The authority responsible for us is the Bavarian State Office for Data Protection Supervision (BayLDA), Promenade 18, 91522 Ansbach, Germany, <a href="https://www.lda.bayern.de">www.lda.bayern.de</a>.</p>
+      </section>
+      <section>
+        <h2>11. No automated decision-making</h2>
+        <p>No automated decision-making, including profiling (Art. 22 GDPR), takes place. Providing your data is voluntary; however, without an email address we cannot send you updates.</p>
+      </section>
+      <p class="updated">Last updated: October 2026</p>
+    </div>
+  </main>
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  <!-- Imprint easter egg: sits behind the footer, only visible on /imprint (see CSS). -->
+  <div class="europa" aria-hidden="true"><div class="europa-inner"><div class="europa-crop"><img src="/assets/images/europa-mark.png" alt="" /></div></div></div>
 
-    let half1 = row1.scrollWidth / 2;
-    let half2 = row2.scrollWidth / 2;
-    let posA = 0, posB = 0;
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-    const SPEED = 1.1;
+  <footer class="site-footer">
+    <span class="footer-org">New European Renaissance Organisation</span>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="/#mission" data-route>Our Mission</a>
+      <a href="/perspectives" data-route data-nav="perspectives">Perspectives</a>
+      <a href="/#join" data-route>Get involved</a>
+      <a href="/imprint" data-route data-nav="imprint">Imprint</a>
+      <a href="/privacy" data-route data-nav="privacy">Privacy</a>
+    </nav>
+  </footer>
+</div>
 
-    function wrapMod(v, half) {
-      if (!half) return 0;
-      let m = v % half;
-      if (m < 0) m += half;
-      return m;
-    }
+<!-- Members-only gate for article links -->
+<div class="gate" id="gate" hidden>
+  <div class="gate-dialog" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <button class="gate-close" id="gateClose" aria-label="Close">×</button>
+    <span class="kicker">Members only</span>
+    <h2 id="gateTitle">Currently, articles can only be read by members</h2>
+    <p>Join the renaissance to get access to all perspectives from our groups.</p>
+    <div class="gate-actions">
+      <a class="btn btn-ink" href="/#join" data-route id="gateJoin">Join the renaissance</a>
+      <button class="gate-secondary" id="gateDismiss">Not now</button>
+    </div>
+  </div>
+</div>
 
-    function onScroll() {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const sy = window.scrollY;
-        const delta = sy - lastScrollY;
-        lastScrollY = sy;
-        posA = wrapMod(posA + delta * SPEED, half1);
-        posB = wrapMod(posB - delta * SPEED, half2);
-        row1.style.transform = `translateX(${-posA}px)`;
-        row2.style.transform = `translateX(${-posB}px)`;
-        ticking = false;
-      });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-      half1 = row1.scrollWidth / 2 || half1;
-      half2 = row2.scrollWidth / 2 || half2;
-    });
-  })();
-
-  function openModal(id) {
-    document.getElementById(id).classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal(id) {
-    document.getElementById(id).classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function overlayClose(e, id) {
-    if (e.target === e.currentTarget) closeModal(id);
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.open').forEach(m => {
-        m.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-      if (document.getElementById('magOverlay').classList.contains('open')) closeGroupOverlay();
-    }
-  });
-
-  function handleSub(e) {
-    e.preventDefault();
-    const btn = e.target.querySelector('button');
-    btn.textContent = 'Subscribed ✓';
-    btn.style.background = '#3a7a3a';
-    setTimeout(() => { btn.textContent = 'Subscribe'; btn.style.background = ''; e.target.reset(); }, 3000);
-  }
-
-  document.addEventListener('DOMContentLoaded', initReveal);
-</script>
+<script src="/assets/js/site.js"></script>
+<script src="/assets/js/hero-sparkles.js"></script>
 </body>
 </html>
