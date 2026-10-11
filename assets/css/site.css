@@ -119,15 +119,16 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .site-footer { position: relative; z-index: 1; width: 100%; }
 .footer-inner { max-width: 1280px; margin: 0 auto; padding: 40px var(--gutter) 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; }
 .footer-org, .footer-made { font-size: 14px; line-height: 1; color: var(--ink-faint); white-space: nowrap; }
-.footer-made { transform: translateY(6px); } /* sits slightly lower than the name and the menu */
+.footer-made { order: 3; } /* its own line below the name and the menu */
 .footer-nav { display: flex; align-items: baseline; gap: 12px 28px; flex-wrap: wrap; font-size: 14px; line-height: 1; color: var(--ink-muted); white-space: nowrap; }
 .footer-nav a { color: var(--ink-muted); }
 .footer-nav a:hover { color: var(--mauve-accent); }
 .footer-nav a[aria-current="page"] { color: var(--mauve-accent); }
-/* Wide screens: "Made in Europe" sits exactly in the middle between name and menu. */
+/* "Made in Europe" is centred on its own line below name and menu. */
 @media (min-width: 960px) {
-  .footer-inner { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .footer-inner { display: grid; grid-template-columns: 1fr auto; row-gap: 28px; }
   .footer-nav { justify-self: end; }
+  .footer-made { grid-column: 1 / -1; grid-row: 2; justify-self: center; }
 }
 /* Fine solid rose strip along the bottom edge. */
 .footer-strip { height: 6px; background: var(--rose); }
