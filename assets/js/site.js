@@ -219,25 +219,51 @@
         <span class="field-num">${pad2(i)}</span><span class="field-title">${esc(f.title)}</span><span class="field-arrow" aria-hidden="true">→</span>
       </button>`).join('');
   }
-  function renderFieldPanel() {
-    const f = FIELDS[activeField];
+  let fieldSwapToken = 0;
+  function renderFieldPanel(animate) {
+    const f = FIELDS[activeField], token = ++fieldSwapToken;
     $$('.field-row', fieldsList).forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === activeField)));
-    $('#fieldTitle').textContent = f.title;
-    $('#fieldStatement').textContent = f.statement;
-    $('#fieldQuestion').textContent = f.question;
-    const img = $('#fieldImg'), url = fieldImgURL(f);
+    const photo = $('#fieldPanel .field-photo'), text = $('#fieldPanel .field-text'), url = fieldImgURL(f);
+    const setText = () => {
+      $('#fieldTitle').textContent = f.title;
+      $('#fieldStatement').textContent = f.statement;
+      $('#fieldQuestion').textContent = f.question;
+    };
+    if (!animate || REDUCED_MOTION) {
+      setText();
+      const img = $('#fieldImg'); img.style.objectPosition = f.pos || 'center';
+      const pre = new Image(); pre.onload = () => { if (token === fieldSwapToken) img.src = url; }; pre.src = url;
+      return;
+    }
+    // Text: fade out, swap, fade back in (children stagger in via CSS).
+    text.classList.add('is-out');
+    setTimeout(() => { if (token !== fieldSwapToken) return; setText(); text.classList.remove('is-out'); }, 180);
+    // Photo: the new image fades in (with a hint of settling zoom) on top of the old one, which is then removed.
     const pre = new Image();
-    pre.onload = () => { img.src = url; img.style.objectPosition = f.pos || 'center'; };
+    pre.onload = () => {
+      if (token !== fieldSwapToken) return;
+      const next = document.createElement('img');
+      next.alt = ''; next.src = url; next.className = 'field-img-next';
+      next.style.objectPosition = f.pos || 'center';
+      photo.appendChild(next);
+      next.getBoundingClientRect(); // commit the start state
+      next.classList.add('is-in');
+      setTimeout(() => {
+        if (token !== fieldSwapToken) return; // a newer swap cleans up everything itself
+        $$('img', photo).forEach((im) => { if (im !== next) im.remove(); });
+        next.id = 'fieldImg'; next.className = ''; // becomes the base image
+      }, 700);
+    };
     pre.src = url;
   }
-  function renderFieldAccordion() {
+  function renderFieldAccordion(animate) {
     fieldsMobile.innerHTML = FIELDS.map((f, i) => {
       const on = i === activeField;
       return `<div>
         <button class="field-row" data-i="${i}" aria-expanded="${on}" aria-pressed="${on}" style="width:100%">
           <span class="field-num">${pad2(i)}</span><span class="field-title">${esc(f.title)}</span><span class="field-arrow" aria-hidden="true">${on ? '−' : '+'}</span>
         </button>
-        ${on ? `<div class="field-acc">
+        ${on ? `<div class="field-acc${animate ? ' is-new' : ''}">
           <div class="field-photo"><img src="${fieldImgURL(f)}" alt="" loading="lazy" style="object-position:${f.pos || 'center'}" /></div>
           <div class="field-text"><span class="eyebrow-card">New Renaissance · ${pad2(i)}</span><h3>${esc(f.title)}</h3>
             <p class="field-statement">${esc(f.statement)}</p><p class="field-question">${esc(f.question)}</p></div>
@@ -245,7 +271,7 @@
       </div>`;
     }).join('');
   }
-  function setField(i) { activeField = i; renderFieldPanel(); renderFieldAccordion(); }
+  function setField(i) { if (i === activeField) return; activeField = i; renderFieldPanel(true); renderFieldAccordion(true); }
   function initFields() {
     renderFieldRows(); renderFieldPanel(); renderFieldAccordion();
     const onClick = (e) => { const b = e.target.closest('.field-row'); if (b) setField(+b.dataset.i); };
