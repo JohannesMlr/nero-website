@@ -479,7 +479,6 @@
   function showStep(n) {
     join.step = n;
     $$('.join-step', joinDlg).forEach((st) => { st.hidden = +st.dataset.step !== n; });
-    $$('.progress i', joinDlg).forEach((bar, i) => bar.classList.toggle('on', i < n));
     $('#joinKicker').textContent = `Join the renaissance · Step ${n} of 3`;
     joinBack.hidden = n === 1;
     joinNext.textContent = n < 3 ? 'Continue' : 'Send';

@@ -364,9 +364,6 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .join-flow, #joinForm { display: flex; flex-direction: column; gap: 18px; }
 .join-flow[hidden] { display: none; }
 .join-step { display: flex; flex-direction: column; gap: 16px; }
-.progress { display: flex; gap: 6px; padding-right: 40px; }
-.progress i { flex: 1; height: 2px; background: var(--line); transition: background .2s ease; }
-.progress i.on { background: var(--ink); }
 .opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 8px; margin-top: 4px; }
 .opt { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 12px 16px; border: 1px solid var(--input-border); border-radius: 4px; font-size: 15px; font-weight: 500; line-height: 1.25; background: var(--white); transition: border-color .15s ease, background .15s ease; }
 .opt::before { content: ''; flex: none; width: 18px; height: 18px; border: 1px solid var(--input-border); border-radius: 2px; background: var(--white) center / 12px no-repeat; transition: background-color .15s ease, border-color .15s ease; }
