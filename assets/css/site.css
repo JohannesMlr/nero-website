@@ -332,8 +332,8 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .mostread-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; }
 .mostread { background: var(--surface); padding: clamp(28px, 3.4vw, 44px); display: flex; flex-direction: column; gap: 8px; }
 .mostread h2 { font-weight: 600; font-size: clamp(26px, 2.6vw, 36px); letter-spacing: -0.035em; margin-bottom: 12px; }
-.mr-item { display: flex; gap: 20px; align-items: baseline; padding: 16px 0; border-top: 1px solid #E3DEE5; color: var(--ink); }
-.mr-rank { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: var(--mauve); width: 40px; flex: none; }
+.mr-item { display: flex; gap: 20px; align-items: center; padding: 16px 0; border-top: 1px solid #E3DEE5; color: var(--ink); }
+.mr-rank { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; color: var(--mauve); line-height: 1; width: 40px; flex: none; }
 .mr-copy { display: flex; flex-direction: column; gap: 6px; }
 .mr-title { font-size: 18px; font-weight: 600; line-height: 1.25; letter-spacing: -0.015em; text-wrap: balance; }
 .mr-meta { font-size: 13px; color: var(--ink-muted); }
