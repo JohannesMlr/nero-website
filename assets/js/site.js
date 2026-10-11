@@ -194,7 +194,7 @@
   window.addEventListener('resize', updateHeader);
 
   /* ───────────── Home: action fields ───────────── */
-  let activeField = 1;
+  let activeField = 0;
   const fieldsList = $('#fieldsList'), fieldsMobile = $('#fieldsMobile');
   function fieldImgURL(f, thumb) { return `/assets/images/fields/${thumb ? 'thumbs/' : ''}${f.img}.avif`; }
 
