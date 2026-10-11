@@ -119,6 +119,7 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .site-footer { position: relative; z-index: 1; width: 100%; }
 .footer-inner { max-width: 1280px; margin: 0 auto; padding: 40px var(--gutter) 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; }
 .footer-org, .footer-made { font-size: 14px; line-height: 1; color: var(--ink-faint); white-space: nowrap; }
+.footer-made { transform: translateY(6px); } /* sits slightly lower than the name and the menu */
 .footer-nav { display: flex; align-items: baseline; gap: 12px 28px; flex-wrap: wrap; font-size: 14px; line-height: 1; color: var(--ink-muted); white-space: nowrap; }
 .footer-nav a { color: var(--ink-muted); }
 .footer-nav a:hover { color: var(--mauve-accent); }
