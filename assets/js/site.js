@@ -47,8 +47,8 @@
   const fieldBySlug = (slug) => FIELDS.find((f) => f.slug === slug);
   const pad2 = (n) => String(n + 1).padStart(2, '0');
   const esc = (s) => noBreakText(String(s == null ? '' : s)).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-  // Never break "New Renaissance" across lines.
-  const noBreakText = (s) => s.replace(/\b(new) +(renaissance)\b/gi, '$1\u00a0$2');
+  // Never break "New Renaissance" or "21st century" across lines.
+  const noBreakText = (s) => s.replace(/\b(new) +(renaissance)\b/gi, '$1\u00a0$2').replace(/\b(21st) +(century)\b/gi, '$1\u00a0$2');
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
