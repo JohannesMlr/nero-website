@@ -110,12 +110,19 @@ body[data-view="imprint"] .nav .nav-cta:hover,
 body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent); color: var(--white); }
 
 /* ── Footer ── */
-.site-footer { position: relative; z-index: 1; width: 100%; max-width: 1280px; margin: 0 auto; padding: 40px var(--gutter) 56px; display: flex; justify-content: space-between; align-items: center; gap: 16px 24px; flex-wrap: wrap; }
-.footer-org { font-size: 14px; line-height: 1; color: var(--ink-faint); white-space: nowrap; }
-.footer-nav { display: flex; align-items: baseline; gap: 12px 28px; flex-wrap: wrap; font-size: 14px; line-height: 1; color: var(--ink-muted); white-space: nowrap; }
-.footer-nav a { color: var(--ink-muted); }
+.site-footer { position: relative; z-index: 1; width: 100%; border-top: 1px solid var(--line); }
+.footer-inner { max-width: 1280px; margin: 0 auto; padding: 80px var(--gutter) 72px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 48px; align-items: start; }
+.footer-name { font-family: var(--font-display); font-weight: 400; font-size: clamp(34px, 4vw, 58px); line-height: 1.02; letter-spacing: -0.025em; }
+.footer-mission { margin-top: 24px; max-width: 360px; font-size: 16px; line-height: 1.55; color: var(--ink-muted); text-wrap: balance; }
+.footer-nav { display: flex; justify-content: flex-end; gap: 12px 72px; flex-wrap: wrap; font-size: 15px; line-height: 1; padding-top: 10px; }
+.footer-col { display: flex; flex-direction: column; gap: 16px; }
+.footer-nav a { color: var(--ink); white-space: nowrap; }
 .footer-nav a:hover { color: var(--mauve-accent); }
 .footer-nav a[aria-current="page"] { color: var(--mauve-accent); }
+/* Fine colour strip along the very bottom edge, in the mauve and rose of the star rings. */
+.footer-strip { height: 6px; background: linear-gradient(90deg,
+  var(--mauve-soft) 0 9%, var(--mauve) 9% 21%, var(--mauve-accent) 21% 28%, var(--rose) 28% 40%, var(--mauve-soft) 40% 47%, var(--mauve) 47% 60%,
+  var(--rose) 60% 66%, var(--mauve-accent) 66% 78%, var(--mauve) 78% 86%, var(--rose) 86% 94%, var(--mauve-soft) 94% 100%); }
 
 /* ═══════════ HOME ═══════════ */
 /* Hero */
@@ -439,6 +446,10 @@ body[data-view="imprint"] .europa { display: block; }
   .masthead-inner { padding-top: 132px; }
 }
 @media (max-width: 700px) { .filterbar { position: static; } }
+@media (max-width: 760px) {
+  .footer-inner { grid-template-columns: 1fr; padding-top: 56px; padding-bottom: 48px; gap: 36px; }
+  .footer-nav { justify-content: flex-start; padding-top: 0; }
+}
 @media (max-width: 560px) {
   :root { --gutter: 20px; }
   .header-inner { gap: 10px; }
