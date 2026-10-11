@@ -522,10 +522,7 @@
     const more = ARTICLES.filter((x) => x.slug !== a.slug).slice(0, 3);
     root.innerHTML = `
       <header class="article-head reveal">
-        <div class="article-top">
-          <a class="back" href="/perspectives" data-route>← Perspectives</a>
-          <div class="article-badges"><span class="article-type">${esc(a.type)}</span><span class="article-field">${esc(fieldLabel(a))}</span></div>
-        </div>
+        <a class="back" href="/perspectives" data-route>← Perspectives</a>
         <h1>${esc(a.title)}</h1>
         ${a.lede ? `<p class="article-lede">${esc(a.lede)}</p>` : ''}
         <div class="article-by">
