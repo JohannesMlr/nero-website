@@ -264,7 +264,7 @@
         </button>
         ${on ? `<div class="field-acc${animate ? ' is-new' : ''}">
           <div class="field-photo"><img src="${fieldImgURL(f)}" alt="" loading="lazy" style="object-position:${f.pos || 'center'}" /></div>
-          <div class="field-text"><span class="eyebrow-card">New Renaissance · ${pad2(i)}</span><h3>${esc(f.title)}</h3>
+          <div class="field-text"><h3>${esc(f.title)}</h3>
             <p class="field-statement">${esc(f.statement)}</p><p class="field-question">${esc(f.question)}</p></div>
         </div>` : ''}
       </div>`;

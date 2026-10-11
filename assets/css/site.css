@@ -530,6 +530,7 @@ body[data-view="imprint"] .europa { display: block; }
   .masthead-inner { padding-top: 132px; }
 }
 @media (max-width: 700px) { .filterbar { position: static; } }
+@media (max-width: 700px) { .hero { height: 66vh; min-height: 440px; } } /* shorter hero image on phones */
 @media (max-width: 560px) {
   :root { --gutter: 20px; }
   .header-inner { gap: 10px; }
