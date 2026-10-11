@@ -223,7 +223,7 @@
   function renderFieldPanel(animate) {
     const f = FIELDS[activeField], token = ++fieldSwapToken;
     $$('.field-row', fieldsList).forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === activeField)));
-    const photo = $('#fieldPanel .field-photo'), text = $('#fieldPanel .field-text'), url = fieldImgURL(f);
+    const photo = $('#fieldPanel .field-photo'), url = fieldImgURL(f);
     const setText = () => {
       $('#fieldTitle').textContent = f.title;
       $('#fieldStatement').textContent = f.statement;
@@ -235,9 +235,7 @@
       const pre = new Image(); pre.onload = () => { if (token === fieldSwapToken) img.src = url; }; pre.src = url;
       return;
     }
-    // Text: fade out, swap, fade back in (children stagger in via CSS).
-    text.classList.add('is-out');
-    setTimeout(() => { if (token !== fieldSwapToken) return; setText(); text.classList.remove('is-out'); }, 180);
+    setText(); // text changes instantly; only the photo cross-fades
     // Photo: the new image fades in (with a hint of settling zoom) on top of the old one, which is then removed.
     const pre = new Image();
     pre.onload = () => {
