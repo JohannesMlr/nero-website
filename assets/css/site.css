@@ -412,6 +412,10 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .field input:focus, .field textarea:focus { border-color: var(--mauve-accent); box-shadow: 0 0 0 3px rgba(140,109,137,.15); }
 .check { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: var(--ink-muted); cursor: pointer; }
 .check input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--ink); cursor: pointer; }
+/* Newsletter consent: scales with the dialog so it always fits in two lines next to the checkbox. */
+#newsForm .check { container-type: inline-size; }
+#newsForm .check span { font-size: clamp(7.5px, calc((100cqi - 30px) * .0314), 13px); line-height: 1.4; }
+@media (max-width: 560px) { #news-modal .modal-body { padding-left: 22px; padding-right: 22px; } #newsForm .check { gap: 10px; } }
 .modal-legal { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
 .modal-legal a { color: var(--mauve-accent); }
 .modal-actions .modal-legal-end { margin-left: auto; }
