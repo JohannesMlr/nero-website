@@ -40,7 +40,8 @@
   // Pseudo-category for articles that are not tied to exactly one action field (none, or several).
   const COMMONPLACE = { slug: 'commonplace', short: 'Commonplace Monthly' };
   const TYPE_LABELS = { Essay: 'Essays', Report: 'Reports', Interview: 'Interviews', Commentary: 'Commentary' };
-  const MEMBERS_ONLY = true; // article links open the gate until member login exists
+  const MEMBERS_ONLY = true; // article links open the gate until member login exists …
+  const OPEN_ARTICLES = ['governing-with-goals']; // … except these slugs, which are publicly readable
   const FIRST_PAGE = 7, PAGE_STEP = 6;
 
   const fieldBySlug = (slug) => FIELDS.find((f) => f.slug === slug);
@@ -85,18 +86,22 @@
   const body = document.body;
   const header = $('#siteHeader');
   const VIEW_PATHS = { home: '/', perspectives: '/perspectives', imprint: '/imprint', privacy: '/privacy' };
-  let currentView = 'home';
+  let currentView = 'home', articleSlug = null;
+  const DEFAULT_DESC = $('#metaDesc').getAttribute('content');
 
   // Old site routes → new homes (keeps bookmarks and shared links working).
   function resolveLocation(loc) {
     const path = loc.pathname.replace(/\/+$/, '').toLowerCase() || '/';
-    const out = { view: 'home', hash: loc.hash.replace('#', ''), search: loc.search, gate: false, canonical: null };
+    const out = { view: 'home', hash: loc.hash.replace('#', ''), search: loc.search, gate: false, canonical: null, article: null };
     if (path === '/') return out;
     if (path === '/perspectives') { out.view = 'perspectives'; return out; }
     if (path === '/imprint') { out.view = 'imprint'; return out; }
     if (path === '/privacy') { out.view = 'privacy'; return out; }
     if (path === '/mission') { out.hash = 'mission'; out.canonical = '/#mission'; return out; }
     if (path === '/get-involved' || path === '/stay-informed') { out.hash = 'join'; out.canonical = '/#join'; return out; }
+    if (path.indexOf('/perspectives/') === 0 && OPEN_ARTICLES.includes(path.slice('/perspectives/'.length))) {
+      out.view = 'article'; out.article = path.slice('/perspectives/'.length); return out;
+    }
     if (path.indexOf('/perspectives/') === 0) {
       out.view = 'perspectives';
       out.gate = path.indexOf('/perspectives/author/') !== 0; // article deep link → members-only dialog
@@ -117,7 +122,7 @@
 
   function updateHeader() {
     let solid;
-    if (currentView === 'imprint' || currentView === 'privacy') solid = true;
+    if (currentView === 'imprint' || currentView === 'privacy' || currentView === 'article') solid = true;
     else if (currentView === 'home') solid = window.scrollY > window.innerHeight * 0.8;
     else solid = window.scrollY > 120;
     header.classList.toggle('is-solid', solid);
@@ -141,9 +146,11 @@
     $$('.view').forEach((v) => { v.classList.toggle('is-active', v.id === 'view-' + view); });
     const active = $('#view-' + view);
     document.title = active.dataset.title;
+    articleSlug = view === 'article' ? opts.article || null : null;
+    $('#metaDesc').setAttribute('content', DEFAULT_DESC);
     $('#metaRobots').setAttribute('content', active.hasAttribute('data-noindex') ? 'noindex, nofollow' : 'index, follow');
     $$('[data-nav]').forEach((a) => {
-      if (a.dataset.nav === view) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      if (a.dataset.nav === view || (view === 'article' && a.dataset.nav === 'perspectives')) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     if (opts.hash) {
       scrollToId(opts.hash, !changed && opts.smooth);
@@ -152,6 +159,7 @@
     } else if (changed || opts.top) {
       window.scrollTo({ top: 0, left: 0, behavior: changed ? 'instant' : 'smooth' });
     }
+    if (view === 'article') renderArticle();
     updateHeader();
   }
 
@@ -171,14 +179,21 @@
     const next = r.canonical || (r.view === 'perspectives' ? '/perspectives' : u.pathname + u.search + u.hash);
     if (opts.replace) history.replaceState({}, '', next); else if (location.pathname + location.search + location.hash !== next) history.pushState({}, '', next);
     if (r.view === 'perspectives' && applyFeedParams(r.search)) r.hash = r.hash || 'latest';
-    showView(r.view, { hash: r.hash, smooth: samePage, top: samePage && !r.hash });
+    showView(r.view, { hash: r.hash, smooth: samePage, top: samePage && !r.hash, article: r.article });
     if (r.gate) openGate();
   }
 
   document.addEventListener('click', (e) => {
     const a = e.target.closest && e.target.closest('a');
     if (!a) return;
-    if (a.matches('a[data-article]')) { e.preventDefault(); if (MEMBERS_ONLY) openGate(); return; }
+    if (a.matches('a[data-article]')) {
+      const slug = (a.getAttribute('href') || '').split('/').pop();
+      if (!MEMBERS_ONLY || OPEN_ARTICLES.includes(slug)) {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return; // let the browser open a new tab
+        e.preventDefault(); go(a.getAttribute('href')); return;
+      }
+      e.preventDefault(); openGate(); return;
+    }
     if (!a.hasAttribute('data-route') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
     e.preventDefault();
     go(a.getAttribute('href'));
@@ -187,7 +202,7 @@
     const r = resolveLocation(location);
     closeGate();
     if (r.view === 'perspectives') applyFeedParams(r.search);
-    showView(r.view, { hash: r.hash });
+    showView(r.view, { hash: r.hash, article: r.article });
     if (r.gate) openGate();
   });
   window.addEventListener('scroll', updateHeader, { passive: true });
@@ -264,7 +279,7 @@
   }
 
   /* ───────────── Perspectives ───────────── */
-  let ARTICLES = [], AUTHORS = {};
+  let ARTICLES = [], AUTHORS = {}, contentLoaded = false;
   const feed = { field: null, type: 'All', q: '', limit: FIRST_PAGE };
 
   function parseFrontmatter(raw) {
@@ -303,20 +318,24 @@
             title: data.title || slug,
             teaser: data.teaser || data.lede || '',
             image: data.image || '',
+            lede: data.lede || '',
+            pull: data.pull || '',
+            body,
             read: Math.max(1, Math.ceil(words / 200)),
           };
         })),
         Promise.all(authorSlugs.map(async (slug) => {
-          const { data } = parseFrontmatter(await fetchText(`/content/perspectives/authors/${slug}.md`));
-          return { slug: data.slug || slug, name: data.name || slug };
+          const { data, body } = parseFrontmatter(await fetchText(`/content/perspectives/authors/${slug}.md`));
+          return { slug: data.slug || slug, name: data.name || slug, role: data.role || '', photo: data.photo || '', bio: body };
         })),
       ]);
       ARTICLES = articles.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
-      authors.forEach((a) => { AUTHORS[a.slug] = a.name; });
+      authors.forEach((a) => { AUTHORS[a.slug] = a; });
     } catch (err) {
       console.error('Failed to load Perspectives content', err);
       ARTICLES = [];
     }
+    contentLoaded = true;
   }
 
   // An article carries a field tag only if it names exactly one known action field.
@@ -325,7 +344,7 @@
     return g.length === 1 ? g[0] : null;
   }
   const fieldLabel = (a) => (singleField(a) || COMMONPLACE).short;
-  const authorName = (a) => AUTHORS[a.author] || 'Editorial Team';
+  const authorName = (a) => (AUTHORS[a.author] || {}).name || 'Editorial Team';
   function articleImage(a, thumb) {
     if (a.image) return { src: a.image, pos: 'center' };
     const f = singleField(a);
@@ -450,6 +469,87 @@
     $('#feedReset').addEventListener('click', reset);
     $('#feedMore').addEventListener('click', () => { const prev = feed.limit; feed.limit += PAGE_STEP; renderFeed(prev); });
     document.addEventListener('click', (e) => { if (!e.target.closest('.dropdown')) closeDropdown(); });
+  }
+
+
+  /* ───────────── Article page ───────────── */
+  // Small Markdown subset (headings, paragraphs, lists, quotes, **bold**, _italic_, links) — enough for the articles.
+  function mdInline(t) {
+    return esc(t)
+      .replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[\s(>])_(.+?)_(?=[\s.,;:!?)<]|$)/g, '$1<em>$2</em>')
+      .replace(/(^|[\s(>])\*(.+?)\*(?=[\s.,;:!?)<]|$)/g, '$1<em>$2</em>');
+  }
+  function mdBlocks(md) {
+    const out = [];
+    let para = [], list = [], quote = [];
+    const flush = () => {
+      if (para.length) { out.push('<p>' + mdInline(para.join(' ')) + '</p>'); para = []; }
+      if (list.length) { out.push('<ul>' + list.map((i) => '<li>' + mdInline(i) + '</li>').join('') + '</ul>'); list = []; }
+      if (quote.length) { out.push('<blockquote>' + mdInline(quote.join(' ')) + '</blockquote>'); quote = []; }
+    };
+    md.split('\n').forEach((raw) => {
+      const line = raw.trim(), h = /^(#{1,3})\s+(.*)$/.exec(line);
+      if (!line) flush();
+      else if (h) { flush(); out.push(`<h${h[1].length === 1 ? 2 : h[1].length}>${mdInline(h[2])}</h${h[1].length === 1 ? 2 : h[1].length}>`); }
+      else if (/^[-*]\s+/.test(line)) { if (para.length || quote.length) flush(); list.push(line.replace(/^[-*]\s+/, '')); }
+      else if (/^>\s?/.test(line)) { if (para.length || list.length) flush(); quote.push(line.replace(/^>\s?/, '')); }
+      else { if (list.length || quote.length) flush(); para.push(line); }
+    });
+    flush();
+    return out;
+  }
+  function articleHTML(a) {
+    const blocks = mdBlocks(a.body);
+    if (blocks[0] && blocks[0].indexOf('<p><em><strong>TL;DR') === 0) blocks[0] = '<p class="tldr">' + blocks[0].slice(3);
+    if (a.pull) { // pull quote just before the second section heading
+      const h2 = blocks.reduce((acc, b, i) => (b.indexOf('<h2') === 0 ? acc.concat(i) : acc), []);
+      const at = h2.length > 1 ? h2[1] : blocks.length;
+      blocks.splice(at, 0, `<p class="pull">${esc(a.pull)}</p>`);
+    }
+    return blocks.join('\n');
+  }
+  function renderArticle() {
+    const root = $('#articleRoot');
+    const a = ARTICLES.find((x) => x.slug === articleSlug);
+    if (!contentLoaded) { root.innerHTML = '<p class="article-loading">Loading…</p>'; return; }
+    if (!a) { go('/perspectives', { replace: true }); return; }
+    const au = AUTHORS[a.author] || { name: 'Editorial Team', role: 'NERO Perspectives', photo: '', bio: '' };
+    const img = articleImage(a, false);
+    document.title = `${a.title} — NERO`;
+    $('#metaDesc').setAttribute('content', a.teaser);
+    const more = ARTICLES.filter((x) => x.slug !== a.slug).slice(0, 3);
+    root.innerHTML = `
+      <header class="article-head reveal">
+        <a class="back" href="/perspectives" data-route>← Perspectives</a>
+        <div class="article-badges"><span class="article-type">${esc(a.type)}</span><span class="article-field">${esc(fieldLabel(a))}</span></div>
+        <h1>${esc(a.title)}</h1>
+        ${a.lede ? `<p class="article-lede">${esc(a.lede)}</p>` : ''}
+        <div class="article-by">
+          ${au.photo ? `<img src="${esc(au.photo)}" alt="" />` : ''}
+          <div><div class="article-by-name">${esc(au.name)}</div><div class="article-by-meta">${formatDate(a.date)} · ${a.read} min read</div></div>
+        </div>
+      </header>
+      ${img ? `<figure class="article-figure reveal"><div><img src="${esc(img.src)}" alt="" style="object-position:${img.pos}" /></div></figure>` : ''}
+      <div class="prose">${articleHTML(a)}</div>
+      <aside class="author-card reveal">
+        <div class="author-card-inner">
+          ${au.photo ? `<img src="${esc(au.photo)}" alt="" />` : '<span></span>'}
+          <div><span class="kicker">About the author</span><h2>${esc(au.name)}</h2><div class="role">${esc(au.role)}</div>
+            <div class="bio">${mdBlocks(au.bio || '').join('')}</div></div>
+        </div>
+      </aside>
+      <section class="article-more">
+        <div class="article-more-head"><h2>More perspectives</h2><a href="/perspectives" data-route>All perspectives →</a></div>
+        <div class="grid">${more.map((m) => `
+          <a class="acard reveal" href="${articleHref(m)}" data-article>
+            <div class="acard-media">${imgTag(m, true, true)}<span class="acard-type">${esc(m.type)}</span></div>
+            <div class="acard-copy"><span class="acard-field">${esc(fieldLabel(m))}</span><h3>${esc(m.title)}</h3><p>${esc(m.teaser)}</p>
+              <span class="acard-by">${esc(authorName(m))} · ${formatDate(m.date)}</span></div>
+          </a>`).join('')}</div>
+      </section>`;
+    watchReveals();
   }
 
   /* ───────────── Dialogs: members-only notice + "Join the renaissance" ───────────── */
@@ -619,11 +719,12 @@
   const initial = resolveLocation(location);
   if (initial.canonical) history.replaceState({}, '', initial.canonical);
   else if (initial.view === 'perspectives' && location.search) history.replaceState({}, '', '/perspectives');
-  showView(initial.view, { hash: initial.hash, instant: true });
+  showView(initial.view, { hash: initial.hash, article: initial.article, instant: true });
   if (initial.gate) openGate();
 
   loadContent().then(() => {
     renderMasthead();
+    if (currentView === 'article') renderArticle();
     watchReveals();
     renderMostRead();
     if (initial.view === 'perspectives') applyFeedParams(initial.search);

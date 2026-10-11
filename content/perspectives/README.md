@@ -54,3 +54,11 @@ Author profiles (name, role, photo, bio) live in `authors/` as their own Markdow
 2. Add `"<slug>"` to `content/perspectives/manifest.json` (order doesn't matter — articles are sorted by `date`).
 3. If the author doesn't have a profile yet, add one under `authors/` first (see `authors/README.md`).
 4. Commit and push. The site fetches and renders these files client-side at page load — no build step required.
+
+## Which articles can be read?
+
+Articles are members-only for now: clicking one opens the "Currently, articles can only be read by members" popup.
+Articles listed in `OPEN_ARTICLES` at the top of `assets/js/site.js` are the exception — they open a full article page at
+`/perspectives/<slug>` (title, lede, image, body, pull quote, author card, more perspectives). To open another article,
+add its slug to that list; to open all of them, set `MEMBERS_ONLY = false`.
+Body Markdown supported: `##`/`###` headings, paragraphs, `-` lists, `>` quotes, `**bold**`, `_italic_`, `[links](https://…)`.
