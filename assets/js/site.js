@@ -531,7 +531,10 @@
         </div>
       </header>
       ${img ? `<figure class="article-figure reveal"><div><img src="${esc(img.src)}" alt="" style="object-position:${img.pos}" /></div></figure>` : ''}
-      <div class="prose">${articleHTML(a)}</div>
+      <div class="article-body">
+        <div class="prose">${articleHTML(a)}</div>
+        <nav class="toc" aria-label="In this article"><span class="toc-title">In this article</span><ol></ol></nav>
+      </div>
       <aside class="author-card reveal">
         <div class="author-card-inner">
           ${au.photo ? `<img src="${esc(au.photo)}" alt="" />` : '<span></span>'}
@@ -548,8 +551,36 @@
               <span class="acard-by">${esc(authorName(m))} · ${formatDate(m.date)}</span></div>
           </a>`).join('')}</div>
       </section>`;
+    buildToc(root);
     watchReveals();
   }
+
+  // Agenda box: links to the article's section titles, highlights the one being read.
+  let tocHeads = [];
+  function buildToc(root) {
+    const toc = $('.toc', root);
+    tocHeads = $$('.prose h2, .prose h3', root);
+    if (tocHeads.length < 2) { toc.remove(); tocHeads = []; return; }
+    tocHeads.forEach((h, i) => { h.id = 'sec-' + (i + 1); });
+    $('ol', toc).innerHTML = tocHeads.map((h) =>
+      `<li class="${h.tagName === 'H3' ? 'sub' : ''}"><a href="#${h.id}" data-sec="${h.id}">${esc(h.textContent)}</a></li>`).join('');
+    updateToc();
+  }
+  function updateToc() {
+    if (currentView !== 'article' || !tocHeads.length) return;
+    let cur = tocHeads[0];
+    tocHeads.forEach((h) => { if (h.getBoundingClientRect().top <= 140) cur = h; });
+    if (window.scrollY < 200) cur = null; // above the text: nothing highlighted
+    $$('.toc a').forEach((a) => a.classList.toggle('is-active', !!cur && a.dataset.sec === cur.id));
+  }
+  window.addEventListener('scroll', updateToc, { passive: true });
+  document.addEventListener('click', (e) => {
+    const l = e.target.closest && e.target.closest('.toc a');
+    if (!l) return;
+    e.preventDefault();
+    const h = document.getElementById(l.dataset.sec);
+    if (h) window.scrollTo({ top: h.getBoundingClientRect().top + window.scrollY - 108, behavior: 'smooth' });
+  });
 
   /* ───────────── Dialogs: members-only notice + "Join the renaissance" ───────────── */
   const gate = $('#gate'), joinDlg = $('#join-modal'), joinForm = $('#joinForm');
