@@ -628,7 +628,7 @@
     if (h) window.scrollTo({ top: h.getBoundingClientRect().top + window.scrollY - 108, behavior: 'smooth' });
   });
 
-  /* ───────────── Dialogs: members-only notice + "Join the renaissance" ───────────── */
+  /* ───────────── Dialogs: members-only notice + "Join the New Renaissance" ───────────── */
   const gate = $('#gate'), joinDlg = $('#join-modal'), joinForm = $('#joinForm');
   let returnFocus = null;
   function openDialog(d) {
@@ -671,7 +671,7 @@
   function showStep(n) {
     join.step = n;
     $$('.join-step', joinDlg).forEach((st) => { st.hidden = +st.dataset.step !== n; });
-    $('#joinKicker').textContent = `Join the renaissance · Step ${n} of 3`;
+    $('#joinKicker').textContent = `Join the New Renaissance · Step ${n} of 3`;
     joinBack.hidden = n === 1;
     joinNext.textContent = n < 3 ? 'Continue' : 'Send';
     joinNext.disabled = n === 1 && join.roles.size === 0;
