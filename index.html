@@ -15,6 +15,10 @@
   <link rel="preload" href="/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="/assets/css/site.css" />
+  <script>
+    /* Scroll-reveal is progressive: hidden only while JS runs; falls back to visible if site.js never loads. */
+    (function () { var d = document.documentElement; d.classList.add('js'); setTimeout(function () { if (!window.__nero) d.classList.remove('js'); }, 4000); })();
+  </script>
 </head>
 <body data-view="home">
 <div class="app" id="app">
@@ -50,12 +54,12 @@
     </section>
 
     <section class="wrap initiatives" id="initiatives">
-      <div class="section-head">
+      <div class="section-head reveal">
         <span class="eyebrow">Selected recent initiatives</span>
         <h2 class="h2">What we are working on</h2>
       </div>
       <div class="cards">
-        <article class="card">
+        <article class="card reveal">
           <div class="card-media"><img src="/assets/images/home/athletes.avif" alt="Two athletes celebrating, one wearing an EU flag patch on his sleeve" loading="lazy" style="object-position:60% 40%" /></div>
           <div class="card-body">
             <span class="eyebrow-card">New Narrative and Identification</span>
@@ -63,7 +67,7 @@
             <p>European sports teams compete under the star circle and under dual flag.</p>
           </div>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <div class="card-media"><img src="/assets/images/home/start-capital.avif" alt="Children holding a rainbow parachute in a meadow" loading="lazy" /></div>
           <div class="card-body">
             <span class="eyebrow-card">New Private Capital Union</span>
@@ -71,7 +75,7 @@
             <p>Start capital accounts give children financial autonomy and an asset-based pension.</p>
           </div>
         </article>
-        <article class="card">
+        <article class="card reveal">
           <div class="card-media"><img src="/assets/images/home/intelligence.avif" alt="Person wearing a NERO badge on a red lanyard" loading="lazy" style="object-position:50% 72%" /></div>
           <div class="card-body">
             <span class="eyebrow-card">New Technology Leadership</span>
@@ -84,15 +88,15 @@
 
     <div class="mission-band">
       <div id="ringBig" aria-hidden="true"></div>
-      <section class="mission" id="mission">
+      <section class="mission reveal" id="mission">
         <h2 class="h2-lg">We strive to ignite the ideas for a bright future of Europe.</h2>
         <p>Our groups gather the most resourceful people to create awareness, develop solutions, and activate the required means to start new initiatives and organizations.</p>
       </section>
     </div>
 
     <section class="wrap fields" id="fields">
-      <h2 class="h2">Where we pursue change</h2>
-      <div class="fields-desktop" id="fieldsDesktop">
+      <h2 class="h2 reveal">Where we pursue change</h2>
+      <div class="fields-desktop reveal" id="fieldsDesktop">
         <div class="fields-list" id="fieldsList"></div>
         <div class="field-panel-wrap">
           <div class="field-panel" id="fieldPanel" aria-live="polite">
@@ -110,20 +114,20 @@
 
     <section class="ambitions" aria-labelledby="howTitle">
       <div class="ambitions-inner">
-        <h2 id="howTitle">How we work</h2>
+        <h2 id="howTitle" class="reveal">How we work</h2>
         <div class="boxes" id="boxes">
-          <div class="box"><div class="box-top"><h3>Proud<br>Citizenship</h3></div><p>Activate Europeans to participate and contribute to society as informed, resilient and confident citizens.</p></div>
-          <div class="box"><div class="box-top"><h3>Bold<br>Entrepreneurship</h3></div><p>Empower more people and companies to develop world changing solutions, for jobs and prosperity in Europe.</p></div>
-          <div class="box"><div class="box-top"><h3>Progressive<br>Education</h3></div><p>Support educators to keep up with the pace of change, enabling Europeans to master today and tomorrow.</p></div>
-          <div class="box"><div class="box-top"><h3>New Technology<br>and Media</h3></div><p>Create awareness, urgency and desire through impactful stories. Build prototypes and solutions in our focus areas.</p></div>
+          <div class="box reveal"><div class="box-top"><h3>Proud<br>Citizenship</h3></div><p>Activate Europeans to participate and contribute to society as informed, resilient and confident citizens.</p></div>
+          <div class="box reveal"><div class="box-top"><h3>Bold<br>Entrepreneurship</h3></div><p>Empower more people and companies to develop world changing solutions, for jobs and prosperity in Europe.</p></div>
+          <div class="box reveal"><div class="box-top"><h3>Progressive<br>Education</h3></div><p>Support educators to keep up with the pace of change, enabling Europeans to master today and tomorrow.</p></div>
+          <div class="box reveal"><div class="box-top"><h3>New Technology<br>and Media</h3></div><p>Create awareness, urgency and desire through impactful stories. Build prototypes and solutions in our focus areas.</p></div>
         </div>
       </div>
     </section>
 
     <section class="wrap teaser" id="perspectives">
       <div class="teaser-grid">
-        <div class="teaser-photo"><img src="/assets/images/home/perspectives.avif" alt="" loading="lazy" /></div>
-        <div class="teaser-copy">
+        <div class="teaser-photo reveal"><img src="/assets/images/home/perspectives.avif" alt="" loading="lazy" /></div>
+        <div class="teaser-copy reveal">
           <span class="eyebrow">Perspectives</span>
           <h2 class="h2-lg">Stories and ideas to shape Europe's future.</h2>
           <p class="lead">Ideas, essays and reporting from the groups building a new European Renaissance.</p>
@@ -135,7 +139,7 @@
 
     <section class="wrap join" id="join">
       <div class="join-grid">
-        <div class="join-card">
+        <div class="join-card reveal">
           <img src="/assets/images/home/join.avif" alt="" loading="lazy" />
           <div class="join-card-copy">
             <h2>Join the new renaissance</h2>
@@ -143,7 +147,7 @@
             <button class="btn btn-white" type="button" data-open-join>Get involved</button>
           </div>
         </div>
-        <div class="news-card" id="newsletter" data-flag-host>
+        <div class="news-card reveal" id="newsletter" data-flag-host>
           <div class="news-scrim" aria-hidden="true"></div>
           <span class="eyebrow">Stay in touch</span>
           <h2>Sign up for the New Renaissance Newsletter</h2>
@@ -161,7 +165,7 @@
   <main class="view" id="view-perspectives" data-title="Perspectives — NERO">
     <section class="masthead">
       <div class="wrap masthead-inner">
-        <div class="masthead-title">
+        <div class="masthead-title reveal">
           <h1>Perspectives</h1>
           <p class="masthead-sub">Stories and ideas to shape Europe's future.</p>
         </div>
@@ -171,16 +175,16 @@
 
     <section class="explore" aria-labelledby="exploreTitle">
       <div class="wrap explore-inner">
-        <div class="explore-head">
+        <div class="explore-head reveal">
           <h2 id="exploreTitle">Explore by action field</h2>
           <span>10 fields</span>
         </div>
-        <div class="tiles" id="tiles"></div>
+        <div class="tiles reveal" id="tiles"></div>
       </div>
     </section>
 
     <section class="wrap feed" id="latest">
-      <div class="feed-head">
+      <div class="feed-head reveal">
         <h2>All perspectives</h2>
         <span class="feed-count" id="feedCount" aria-live="polite"></span>
       </div>
@@ -203,11 +207,11 @@
 
     <section class="wrap mostread-wrap">
       <div class="mostread-grid">
-        <div class="mostread">
+        <div class="mostread reveal">
           <h2>More to read</h2>
           <div id="mostRead"></div>
         </div>
-        <div class="news-dark" id="newsletterP">
+        <div class="news-dark reveal" id="newsletterP">
           <span class="kicker">Newsletter</span>
           <h2>New perspectives in your inbox</h2>
           <p>Sign up for the New Renaissance Newsletter. We will inform you about our work, upcoming events and more.</p>

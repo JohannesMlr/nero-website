@@ -81,6 +81,7 @@
   }
 
   /* ───────────── Routing ───────────── */
+  const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const body = document.body;
   const header = $('#siteHeader');
   const VIEW_PATHS = { home: '/', perspectives: '/perspectives', imprint: '/imprint', privacy: '/privacy' };
@@ -125,6 +126,16 @@
   function showView(view, opts) {
     opts = opts || {};
     const changed = view !== currentView;
+    // Cross-fade between pages where the View Transitions API exists (not on first paint, not for reduced motion).
+    if (changed && !opts.instant && document.startViewTransition && !REDUCED_MOTION) {
+      const vt = document.startViewTransition(() => applyView(view, opts, changed));
+      // Skipped transitions (e.g. hidden tab) reject these promises; the page change itself still happens.
+      vt.ready.catch(() => {}); vt.finished.catch(() => {});
+      return;
+    }
+    applyView(view, opts, changed);
+  }
+  function applyView(view, opts, changed) {
     currentView = view;
     body.dataset.view = view;
     $$('.view').forEach((v) => { v.classList.toggle('is-active', v.id === 'view-' + view); });
@@ -147,7 +158,7 @@
   function applyFeedParams(search) {
     const p = new URLSearchParams(search || '');
     const f = p.get('field');
-    if (f && (f === COMMONPLACE.slug || fieldBySlug(f))) { feed.field = f; feed.limit = FIRST_PAGE; renderFeed(); return true; }
+    if (f && (f === COMMONPLACE.slug || fieldBySlug(f))) { feed.field = f; feed.limit = FIRST_PAGE; renderFeed(Infinity); return true; }
     return false;
   }
 
@@ -270,7 +281,8 @@
     });
     return { data, body: m[2].trim() };
   }
-  const fetchText = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.text(); });
+  const fetchOnce = (url) => fetch(url).then((r) => { if (!r.ok) throw new Error(url + ' ' + r.status); return r.text(); });
+  const fetchText = (url) => fetchOnce(url).catch(() => new Promise((ok) => setTimeout(ok, 400)).then(() => fetchOnce(url))); // one retry on flaky networks
 
   async function loadContent() {
     try {
@@ -330,7 +342,7 @@
     const tops = rest.slice(0, 2);
     if (!lead) { $('#stories').innerHTML = ''; return; }
     $('#stories').innerHTML = `
-      <a class="story-lead" href="${articleHref(lead)}" data-article>
+      <a class="story-lead reveal" href="${articleHref(lead)}" data-article>
         ${imgTag(lead, false, false)}
         <div class="story-lead-copy">
           <div class="badges"><span class="badge-type">${esc(lead.type)}</span><span class="badge-field">${esc(fieldLabel(lead))}</span></div>
@@ -340,7 +352,7 @@
         </div>
       </a>
       <div class="stories-side">${tops.map((a) => `
-        <a class="story-top" href="${articleHref(a)}" data-article>
+        <a class="story-top reveal" href="${articleHref(a)}" data-article>
           <div class="story-top-media">${imgTag(a, true, false)}</div>
           <div class="story-top-copy">
             <span class="kicker">${esc(a.type)} · ${esc(fieldLabel(a))}</span>
@@ -397,10 +409,11 @@
     $('#types').innerHTML = types.map((t) => `<button class="type-btn" data-type="${esc(t)}" aria-pressed="${feed.type === t}">${esc(TYPE_LABELS[t] || t)}</button>`).join('');
     $('#feedClear').hidden = !isFiltered();
   }
-  function renderFeed() {
+  // animateFrom: index of the first card that fades in (filters re-render instantly, 'load more' animates only the new cards).
+  function renderFeed(animateFrom = 0) {
     const list = feedMatches(), shown = list.slice(0, feed.limit), unfiltered = !isFiltered();
     $('#feedGrid').innerHTML = shown.map((a, i) => `
-      <a class="acard${unfiltered && i === 0 ? ' is-big' : ''}" href="${articleHref(a)}" data-article>
+      <a class="acard${unfiltered && i === 0 ? ' is-big' : ''}${i >= animateFrom ? ' reveal' : ''}" href="${articleHref(a)}" data-article>
         <div class="acard-media">${imgTag(a, true, true)}<span class="acard-type">${esc(a.type)}</span></div>
         <div class="acard-copy">
           <span class="acard-field">${esc(fieldLabel(a))}</span>
@@ -413,8 +426,9 @@
     $('#feedEmpty').hidden = list.length > 0;
     $('#feedMore').hidden = list.length <= feed.limit;
     renderFilters();
+    watchReveals();
   }
-  function setFeed(patch) { Object.assign(feed, patch, { limit: FIRST_PAGE }); closeDropdown(); renderFeed(); }
+  function setFeed(patch) { Object.assign(feed, patch, { limit: FIRST_PAGE }); closeDropdown(); renderFeed(Infinity); }
 
   function closeDropdown() { $('#ddMenu').hidden = true; $('#ddBtn').setAttribute('aria-expanded', 'false'); }
   function initPerspectives() {
@@ -434,7 +448,7 @@
     const reset = () => { $('#feedQuery').value = ''; setFeed({ field: null, type: 'All', q: '' }); };
     $('#feedClear').addEventListener('click', reset);
     $('#feedReset').addEventListener('click', reset);
-    $('#feedMore').addEventListener('click', () => { feed.limit += PAGE_STEP; renderFeed(); });
+    $('#feedMore').addEventListener('click', () => { const prev = feed.limit; feed.limit += PAGE_STEP; renderFeed(prev); });
     document.addEventListener('click', (e) => { if (!e.target.closest('.dropdown')) closeDropdown(); });
   }
 
@@ -577,6 +591,21 @@
     });
   });
 
+  /* ───────────── Scroll reveal ───────────── */
+  const revealIO = ('IntersectionObserver' in window && !REDUCED_MOTION)
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); } });
+      }, { rootMargin: '0px 0px -6% 0px', threshold: 0.04 })
+    : null;
+  function watchReveals() {
+    if (!revealIO) { document.documentElement.classList.remove('js'); return; }
+    // Stagger siblings inside grids.
+    $$('.cards, .boxes, .join-grid, .stories, .mostread-grid, .grid').forEach((g) => {
+      Array.from(g.children).forEach((c, i) => { if (!c.style.getPropertyValue('--d')) c.style.setProperty('--d', (i % 4) * 90 + 'ms'); });
+    });
+    $$('.reveal:not(.in)').forEach((el) => revealIO.observe(el)); // re-observing is a no-op
+  }
+
   /* ───────────── Boot ───────────── */
   initRings();
   initFields();
@@ -584,14 +613,18 @@
   initPerspectives();
   renderFilters();
 
+  window.__nero = true;
+  watchReveals();
+
   const initial = resolveLocation(location);
   if (initial.canonical) history.replaceState({}, '', initial.canonical);
   else if (initial.view === 'perspectives' && location.search) history.replaceState({}, '', '/perspectives');
-  showView(initial.view, { hash: initial.hash });
+  showView(initial.view, { hash: initial.hash, instant: true });
   if (initial.gate) openGate();
 
   loadContent().then(() => {
     renderMasthead();
+    watchReveals();
     renderMostRead();
     if (initial.view === 'perspectives') applyFeedParams(initial.search);
     renderFeed();

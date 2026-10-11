@@ -168,6 +168,12 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .field-panel { position: absolute; inset: 0; background: var(--surface); overflow: hidden; display: flex; flex-direction: column; }
 .field-photo { position: relative; flex: 1 1 auto; min-height: 120px; background: var(--dark-3); overflow: hidden; }
 .field-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.field-panel { background: var(--dark-3); }
+.field-panel .field-photo { position: absolute; inset: 0; min-height: 0; }
+.field-panel .field-text { position: absolute; left: clamp(14px, 1.8vw, 24px); right: clamp(14px, 1.8vw, 24px); bottom: clamp(14px, 1.8vw, 24px); padding: clamp(20px, 2.2vw, 30px); gap: 14px; color: var(--white); background: rgba(31,29,51,.46); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); border: 1px solid rgba(255,255,255,.2); }
+.field-panel .field-text h3 { color: var(--white); font-size: clamp(22px, 2.4vw, 32px); }
+.field-panel .field-statement { color: var(--white); }
+.field-panel .field-question { color: rgba(255,255,255,.82); }
 .field-text { padding: clamp(18px, 2.2vw, 28px) clamp(22px, 2.8vw, 36px) clamp(30px, 3.6vw, 48px); display: flex; flex-direction: column; gap: 16px; }
 .field-text h3 { font-weight: 500; font-size: clamp(24px, 2.8vw, 36px); line-height: 1.1; letter-spacing: -0.03em; text-wrap: balance; }
 .field-statement { font-size: clamp(15px, 1.5vw, 19px); line-height: 1.5; font-weight: 500; text-wrap: pretty; }
@@ -246,7 +252,7 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .story-lead:hover { color: var(--white); }
 @media (min-width: 1000px) { .story-lead { grid-column: span 2; } }
 .story-lead > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.story-lead-copy { position: relative; width: 100%; padding: clamp(24px, 3vw, 40px); background: linear-gradient(0deg, rgba(31,29,51,.92), rgba(31,29,51,.55) 60%, rgba(31,29,51,0)); display: flex; flex-direction: column; gap: 16px; }
+.story-lead-copy { position: relative; width: auto; max-width: 680px; margin: clamp(16px, 2.2vw, 28px); padding: clamp(22px, 2.6vw, 34px); background: rgba(31,29,51,.38); -webkit-backdrop-filter: blur(20px) saturate(140%); backdrop-filter: blur(20px) saturate(140%); border: 1px solid rgba(255,255,255,.2); display: flex; flex-direction: column; gap: 14px; }
 .badges { display: flex; gap: 8px; flex-wrap: wrap; }
 .badge-type { background: var(--mauve); color: var(--ink); font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 2px; letter-spacing: .04em; text-transform: uppercase; }
 .badge-field { border: 1px solid rgba(255,255,255,.5); color: var(--white); font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 2px; letter-spacing: .04em; text-transform: uppercase; }
@@ -348,9 +354,13 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 
 /* Dialogs: members-only notice + "Join the renaissance" flow. White, flat, 4px corners. */
 .modal { border: 0; padding: 0; width: min(540px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); background: var(--white); color: var(--ink); border-radius: 4px; box-shadow: 0 16px 48px rgba(31,29,51,.14); overflow: auto; }
-.modal::backdrop { background: rgba(31,29,51,.4); }
-.modal[open] { animation: modal-in .2s ease; }
-@keyframes modal-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+/* Soft open/close: fade + slight rise (falls back to instant where dialog transitions are unsupported). */
+.modal { opacity: 0; transform: translateY(10px); transition: opacity .25s ease, transform .25s ease, overlay .25s allow-discrete, display .25s allow-discrete; }
+.modal[open] { opacity: 1; transform: none; }
+@starting-style { .modal[open] { opacity: 0; transform: translateY(10px); } }
+.modal::backdrop { background: rgba(31,29,51,0); transition: background .25s ease, overlay .25s allow-discrete, display .25s allow-discrete; }
+.modal[open]::backdrop { background: rgba(31,29,51,.4); }
+@starting-style { .modal[open]::backdrop { background: rgba(31,29,51,0); } }
 .modal-body { --pad: clamp(28px, 4.5vw, 48px); padding: 68px var(--pad) var(--pad); display: flex; flex-direction: column; gap: 18px; }
 .modal-close { all: unset; cursor: pointer; position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; display: grid; place-items: center; font-size: 24px; line-height: 1; color: var(--ink-muted); border-radius: 4px; }
 .modal-close:hover { background: var(--surface); color: var(--ink); }
@@ -409,6 +419,16 @@ body[data-view="imprint"] .europa { display: block; }
 .europa-crop { position: absolute; bottom: 0; left: 40%; transform: translateX(-50%); height: 207px; overflow: hidden; opacity: .13; }
 .europa-crop img { height: 259px; width: auto; }
 
+
+/* ═══════════ SOFT MOTION ═══════════ */
+/* Scroll reveal: blocks fade up once as they enter the viewport (class .in is set by site.js). */
+.js .reveal { opacity: 0; }
+.js .reveal.in { animation: reveal-in .85s cubic-bezier(.2, .6, .2, 1) var(--d, 0ms) both; }
+@keyframes reveal-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+/* Page changes (Home ⇄ Perspectives ⇄ legal): cross-fade; the header stays put. */
+.site-header { view-transition-name: site-header; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .35s; animation-timing-function: ease; }
+
 /* ═══════════ MOTION + RESPONSIVE ═══════════ */
 @media (max-width: 800px) {
   :root { --gutter: 24px; }
@@ -440,6 +460,10 @@ body[data-view="imprint"] .europa { display: block; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .js .reveal { opacity: 1; }
+  .js .reveal.in { animation: none; }
+  .modal, .modal::backdrop { transition: none; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none; }
   .ring-spin, .ring-star, .ring-mini { animation: none !important; }
   .ring-big { transition: none; }
   .acard-media img { transition: none; }
