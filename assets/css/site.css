@@ -379,6 +379,7 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .check input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--ink); cursor: pointer; }
 .modal-legal { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
 .modal-legal a { color: var(--mauve-accent); }
+.modal-actions .modal-legal-end { margin-left: auto; }
 .modal-error { font-size: 14px; color: #B42318; }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .join-done { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
