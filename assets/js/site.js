@@ -448,34 +448,100 @@
     document.addEventListener('click', (e) => { if (!e.target.closest('.dropdown')) closeDropdown(); });
   }
 
-  /* ───────────── Members-only gate ───────────── */
-  const gate = $('#gate');
-  let gateReturnFocus = null;
-  function openGate() {
-    if (!gate.hidden) return;
-    gateReturnFocus = document.activeElement;
-    gate.hidden = false;
+  /* ───────────── Dialogs: members-only notice + "Join the renaissance" ───────────── */
+  const gate = $('#gate'), joinDlg = $('#join-modal'), joinForm = $('#joinForm');
+  let returnFocus = null;
+  function openDialog(d) {
+    if (d.open) return;
+    if (!returnFocus) returnFocus = document.activeElement;
+    d.showModal();
     document.documentElement.style.overflow = 'hidden';
-    $('#gateClose').focus();
   }
-  function closeGate() {
-    if (gate.hidden) return;
-    gate.hidden = true;
-    document.documentElement.style.overflow = '';
-    if (gateReturnFocus && gateReturnFocus.focus) gateReturnFocus.focus();
-  }
-  gate.addEventListener('click', (e) => { if (e.target === gate) closeGate(); });
-  $('#gateClose').addEventListener('click', closeGate);
-  $('#gateDismiss').addEventListener('click', closeGate);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') { closeGate(); closeDropdown(); }
-    if (e.key === 'Tab' && !gate.hidden) { // keep focus inside the dialog
-      const f = $$('button, a[href]', gate);
-      const first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
+  function closeDialogs() { $$('dialog[open]').forEach((d) => d.close()); }
+  const openGate = () => openDialog(gate);
+  const closeGate = closeDialogs;
+  $$('dialog.modal').forEach((d) => {
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); }); // backdrop
+    d.addEventListener('close', () => {
+      if ($$('dialog[open]').length) return; // e.g. notice → join flow handover
+      document.documentElement.style.overflow = '';
+      if (returnFocus && returnFocus.focus) returnFocus.focus();
+      returnFocus = null;
+    });
+    $$('[data-close]', d).forEach((b) => b.addEventListener('click', () => d.close()));
   });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDropdown(); });
+
+  // Join flow — 1 involvement, 2 spaces, 3 contact (+ optional newsletter), then thank-you.
+  const ROLES = ['Investor', 'Contributor', 'Initiative Owner', 'Other'];
+  const join = { step: 1, roles: new Set(), spaces: new Set() };
+  const joinEndpoint = () => (document.querySelector('meta[name="nero-join-endpoint"]') || {}).content || '';
+  const joinNext = $('#joinNext'), joinBack = $('#joinBack'), joinError = $('#joinError');
+
+  function renderOpts(host, values, set) {
+    host.innerHTML = values.map((v) => `<button type="button" class="opt" data-v="${esc(v)}" aria-pressed="${set.has(v)}">${esc(v)}</button>`).join('');
+  }
+  function showStep(n) {
+    join.step = n;
+    $$('.join-step', joinDlg).forEach((st) => { st.hidden = +st.dataset.step !== n; });
+    $$('.progress i', joinDlg).forEach((bar, i) => bar.classList.toggle('on', i < n));
+    $('#joinKicker').textContent = `Join the renaissance · Step ${n} of 3`;
+    joinBack.hidden = n === 1;
+    joinNext.textContent = n < 3 ? 'Continue' : 'Send';
+    joinNext.disabled = n === 1 && join.roles.size === 0;
+    joinError.hidden = true;
+    const focusEl = n === 3 ? joinForm.elements.email : $('.join-step:not([hidden]) .opt', joinDlg);
+    if (focusEl) focusEl.focus();
+  }
+  function openJoin() {
+    join.roles.clear(); join.spaces.clear();
+    joinForm.reset();
+    renderOpts($('#optsRole'), ROLES, join.roles);
+    renderOpts($('#optsSpaces'), FIELDS.map((f) => f.short), join.spaces);
+    $('.join-flow', joinDlg).hidden = false; $('#joinDone').hidden = true;
+    joinNext.disabled = true; joinNext.textContent = 'Continue';
+    gate.close();
+    openDialog(joinDlg);
+    showStep(1);
+  }
+  function joinFail(msg) { joinError.textContent = msg; joinError.hidden = false; }
+  function joinDone(name) {
+    $('#joinDoneTitle').textContent = name ? `Thank you, ${name.split(/\s+/)[0]}!` : 'Thank you!';
+    $('.join-flow', joinDlg).hidden = true; $('#joinDone').hidden = false;
+    $('#joinDone .btn').focus();
+  }
+  function joinSubmit() {
+    const f = joinForm.elements, name = f.name.value.trim(), email = f.email.value.trim();
+    joinError.hidden = true;
+    if (!email || !f.email.checkValidity()) { joinFail('Please enter a valid email address.'); f.email.focus(); return; }
+    if (f.website.value) { joinDone(name); return; } // honeypot: bots fill the hidden field
+    const endpoint = joinEndpoint();
+    if (!endpoint) { joinFail('Sign-up is not connected yet. Please write to johannes@anewrenaissance.com.'); return; }
+    const data = {
+      type: 'join', roles: Array.from(join.roles).join(', '), spaces: Array.from(join.spaces).join(', '),
+      name, email, message: f.message.value.trim(), updates: f.updates.checked ? 'yes' : 'no', page: location.href,
+    };
+    joinNext.disabled = true; joinNext.textContent = 'Sending…';
+    // Apps Script has no CORS headers, hence no-cors: the response is opaque but network errors still reject.
+    fetch(endpoint, { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) })
+      .then(() => joinDone(name))
+      .catch(() => joinFail('That did not work. Please try again later.'))
+      .then(() => { joinNext.disabled = false; joinNext.textContent = 'Send'; });
+  }
+  function joinAdvance() { if (join.step < 3) showStep(join.step + 1); else joinSubmit(); }
+
+  joinDlg.addEventListener('click', (e) => {
+    const o = e.target.closest('.opt');
+    if (!o) return;
+    const set = o.parentElement.id === 'optsRole' ? join.roles : join.spaces, v = o.dataset.v;
+    if (set.has(v)) set.delete(v); else set.add(v);
+    o.setAttribute('aria-pressed', String(set.has(v)));
+    if (join.step === 1) joinNext.disabled = join.roles.size === 0;
+  });
+  joinNext.addEventListener('click', joinAdvance);
+  joinBack.addEventListener('click', () => showStep(join.step - 1));
+  joinForm.addEventListener('submit', (e) => { e.preventDefault(); if (!joinNext.disabled) joinAdvance(); });
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-open-join]')) openJoin(); });
 
   /* ───────────── Boot ───────────── */
   initRings();

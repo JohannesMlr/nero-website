@@ -9,6 +9,8 @@
   <meta property="og:title" content="NERO — A New Renaissance" />
   <meta property="og:description" content="We work with Europe's most ambitious minds to build a better future for our continent." />
   <meta property="og:type" content="website" />
+  <!-- Google Apps Script web-app URL that stores "Join the renaissance" requests (see scripts/google-apps-script-join.js). Empty = not connected. -->
+  <meta name="nero-join-endpoint" content="" />
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
   <link rel="preload" href="/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="/assets/fonts/hanken-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
@@ -138,7 +140,7 @@
           <div class="join-card-copy">
             <h2>Join the new renaissance</h2>
             <p>Let us know your ideas and how you would like to contribute.</p>
-            <a class="btn btn-white" href="/#join" data-route>Get involved</a>
+            <button class="btn btn-white" type="button" data-open-join>Get involved</button>
           </div>
         </div>
         <div class="news-card" id="newsletter" data-flag-host>
@@ -324,19 +326,67 @@
   </footer>
 </div>
 
-<!-- Members-only gate for article links -->
-<div class="gate" id="gate" hidden>
-  <div class="gate-dialog" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
-    <button class="gate-close" id="gateClose" aria-label="Close">×</button>
-    <span class="kicker">Members only</span>
+<!-- Members-only notice, opened by any article link -->
+<dialog class="modal" id="gate" aria-labelledby="gateTitle">
+  <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+  <div class="modal-body">
+    <span class="modal-kicker">Members only</span>
     <h2 id="gateTitle">Currently, articles can only be read by members</h2>
-    <p>Join the renaissance to get access to all perspectives from our groups.</p>
-    <div class="gate-actions">
-      <a class="btn btn-ink" href="/#join" data-route id="gateJoin">Join the renaissance</a>
-      <button class="gate-secondary" id="gateDismiss">Not now</button>
+    <p class="modal-text">Join the renaissance to get access to all perspectives from our groups.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ink" type="button" data-open-join>Join the renaissance</button>
+      <button class="btn-text" type="button" data-close>Not now</button>
     </div>
   </div>
-</div>
+</dialog>
+
+<!-- Join the renaissance: 3 steps + thank-you -->
+<dialog class="modal" id="join-modal" aria-labelledby="joinTitle">
+  <button class="modal-close" type="button" data-close aria-label="Close">×</button>
+  <div class="modal-body">
+    <form id="joinForm" novalidate>
+      <div class="join-flow">
+        <div class="progress" aria-hidden="true"><i></i><i></i><i></i></div>
+        <span class="modal-kicker" id="joinKicker"></span>
+
+        <section class="join-step" data-step="1" aria-labelledby="joinTitle">
+          <h2 id="joinTitle">How would you like to get involved?</h2>
+          <p class="modal-text">Select all that apply.</p>
+          <div class="opts" id="optsRole" role="group" aria-labelledby="joinTitle"></div>
+        </section>
+
+        <section class="join-step" data-step="2" aria-labelledby="joinTitle2" hidden>
+          <h2 id="joinTitle2">Which spaces are you most interested in?</h2>
+          <p class="modal-text">Select as many as you like.</p>
+          <div class="opts" id="optsSpaces" role="group" aria-labelledby="joinTitle2"></div>
+        </section>
+
+        <section class="join-step" data-step="3" aria-labelledby="joinTitle3" hidden>
+          <h2 id="joinTitle3">How can we reach you?</h2>
+          <div class="hp" aria-hidden="true"><label>Website<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+          <label class="field"><span>Name <span class="opt-note">(optional)</span></span><input name="name" type="text" autocomplete="name"></label>
+          <label class="field"><span>Email address</span><input name="email" type="email" autocomplete="email" inputmode="email" required></label>
+          <label class="field"><span>Your ideas <span class="opt-note">(optional)</span></span><textarea name="message" rows="3" placeholder="Let us know your ideas and how you would like to contribute."></textarea></label>
+          <label class="check"><input name="updates" type="checkbox" value="yes"><span>I would also like to receive occasional information and updates about NERO by email (newsletter). You can unsubscribe at any time.</span></label>
+          <p class="modal-legal">We only use your details to get in touch about your interest and, if ticked, for updates. More in the <a href="/privacy" target="_blank" rel="noopener">privacy policy</a>.</p>
+        </section>
+
+        <p class="modal-error" id="joinError" role="alert" hidden></p>
+        <div class="modal-actions">
+          <button class="btn btn-ink" type="button" id="joinNext">Continue</button>
+          <button class="btn-text" type="button" id="joinBack" hidden>Back</button>
+        </div>
+      </div>
+
+      <div class="join-done" id="joinDone" aria-live="polite" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.5 12.5l3 3 6-6.5"/></svg>
+        <h2 id="joinDoneTitle">Thank you!</h2>
+        <p class="modal-text">We will get in touch with you shortly.</p>
+        <button class="btn btn-ink" type="button" data-close>Close</button>
+      </div>
+    </form>
+  </div>
+</dialog>
 
 <script src="/assets/js/site.js"></script>
 <script src="/assets/js/hero-sparkles.js"></script>

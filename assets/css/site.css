@@ -342,17 +342,50 @@ body[data-view="privacy"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .news-dark .news-form button { background: var(--mauve); color: var(--ink); font-weight: 700; }
 .news-dark .news-form button:hover { background: var(--mauve-soft); }
 
-/* Members-only gate */
-.gate { position: fixed; inset: 0; z-index: 100; background: rgba(31,29,51,.55); display: flex; align-items: center; justify-content: center; padding: 24px; }
-.gate[hidden] { display: none; }
-.gate-dialog { position: relative; width: 100%; max-width: 520px; background: var(--white); padding: clamp(28px, 4vw, 48px); display: flex; flex-direction: column; gap: 18px; box-shadow: 0 24px 64px rgba(31,29,51,.25); }
-.gate-close { all: unset; cursor: pointer; position: absolute; top: 16px; right: 18px; font-size: 22px; line-height: 1; color: var(--ink-muted); padding: 6px; }
-.gate .kicker { font-size: 12px; font-weight: 700; color: var(--mauve-accent); letter-spacing: .05em; text-transform: uppercase; }
-.gate h2 { font-weight: 600; font-size: clamp(26px, 3vw, 34px); line-height: 1.1; letter-spacing: -0.03em; text-wrap: balance; }
-.gate p { font-size: 17px; line-height: 1.55; color: var(--ink-muted); text-wrap: pretty; }
-.gate-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; align-items: center; }
-.gate-actions .btn-ink:hover { color: var(--white); }
-.gate-secondary { all: unset; cursor: pointer; padding: 15px 18px; font-weight: 600; font-size: 15px; color: var(--ink); }
+/* Dialogs: members-only notice + "Join the renaissance" flow. White, flat, 4px corners. */
+.modal { border: 0; padding: 0; width: min(540px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); background: var(--white); color: var(--ink); border-radius: 4px; box-shadow: 0 16px 48px rgba(31,29,51,.14); overflow: auto; }
+.modal::backdrop { background: rgba(31,29,51,.4); }
+.modal[open] { animation: modal-in .2s ease; }
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.modal-body { padding: clamp(28px, 4.5vw, 48px); display: flex; flex-direction: column; gap: 18px; }
+.modal-close { all: unset; cursor: pointer; position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; display: grid; place-items: center; font-size: 24px; line-height: 1; color: var(--ink-muted); border-radius: 4px; }
+.modal-close:hover { background: var(--surface); color: var(--ink); }
+.modal-close:focus-visible, .btn-text:focus-visible, .opt:focus-visible { outline: 2px solid var(--mauve-accent); outline-offset: 2px; }
+.modal-kicker { font-size: 12px; font-weight: 700; color: var(--mauve-accent); letter-spacing: .05em; text-transform: uppercase; }
+.modal h2 { font-weight: 600; font-size: clamp(25px, 3vw, 32px); line-height: 1.12; letter-spacing: -0.03em; text-wrap: balance; padding-right: 32px; }
+.modal-text { font-size: 17px; line-height: 1.55; color: var(--ink-muted); text-wrap: pretty; }
+.modal-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+.modal .btn-ink:hover { color: var(--white); }
+.btn-text { all: unset; cursor: pointer; padding: 15px 18px; font-weight: 600; font-size: 15px; color: var(--ink); border-radius: 4px; }
+.btn-text:hover { color: var(--mauve-accent); }
+.btn-text[hidden], .modal-error[hidden], .join-step[hidden], .join-done[hidden] { display: none; }
+.modal .btn[disabled] { opacity: .4; cursor: not-allowed; }
+.modal .btn[disabled]:hover { background: var(--ink); }
+.join-flow, #joinForm { display: flex; flex-direction: column; gap: 18px; }
+.join-flow[hidden] { display: none; }
+.join-step { display: flex; flex-direction: column; gap: 16px; }
+.progress { display: flex; gap: 6px; padding-right: 40px; }
+.progress i { flex: 1; height: 2px; background: var(--line); transition: background .2s ease; }
+.progress i.on { background: var(--ink); }
+.opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 150px), 1fr)); gap: 8px; margin-top: 4px; }
+.opt { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 12px 16px; border: 1px solid var(--input-border); border-radius: 4px; font-size: 15px; font-weight: 500; line-height: 1.25; background: var(--white); transition: border-color .15s ease, background .15s ease; }
+.opt::before { content: ''; flex: none; width: 18px; height: 18px; border: 1px solid var(--input-border); border-radius: 2px; background: var(--white) center / 12px no-repeat; transition: background-color .15s ease, border-color .15s ease; }
+.opt:hover { border-color: var(--ink-muted); }
+.opt[aria-pressed="true"] { border-color: var(--ink); background: var(--surface); }
+.opt[aria-pressed="true"]::before { border-color: var(--ink); background-color: var(--ink); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 6.3l2.4 2.4 4.6-5'/%3E%3C/svg%3E"); }
+.field { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: 15px; }
+.opt-note { font-weight: 400; color: var(--ink-muted); }
+.field input, .field textarea { font: 400 16px var(--font-body); color: var(--ink); padding: 0 16px; height: 52px; border: 1px solid var(--input-border); border-radius: 4px; background: var(--white); outline: none; }
+.field textarea { height: auto; min-height: 92px; padding: 14px 16px; resize: vertical; }
+.field input:focus, .field textarea:focus { border-color: var(--mauve-accent); box-shadow: 0 0 0 3px rgba(140,109,137,.15); }
+.check { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.5; color: var(--ink-muted); cursor: pointer; }
+.check input { flex: none; width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--ink); cursor: pointer; }
+.modal-legal { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+.modal-legal a { color: var(--mauve-accent); }
+.modal-error { font-size: 14px; color: #B42318; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.join-done { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.join-done svg { width: 44px; height: 44px; color: var(--ink); }
 
 /* ═══════════ IMPRINT + PRIVACY ═══════════ */
 .legal { position: relative; flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: 120px var(--gutter) 96px; display: flex; flex-direction: column; gap: 48px; }
