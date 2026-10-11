@@ -160,6 +160,7 @@
       window.scrollTo({ top: 0, left: 0, behavior: changed ? 'instant' : 'smooth' });
     }
     if (view === 'article') renderArticle();
+    if (view === 'home') fitFieldText();
     updateHeader();
   }
 
@@ -269,9 +270,30 @@
       </div>`;
     }).join('');
   }
+  // The photo area is whatever the text block leaves over. Reserve the height of the tallest text so the
+  // photo keeps the same size for every item (no jumping when switching).
+  function fitFieldText() {
+    const panel = $('#fieldPanel');
+    if (!panel || !panel.offsetParent) return; // hidden (mobile layout / other page)
+    const text = $('.field-text', panel), t = $('#fieldTitle'), st = $('#fieldStatement'), q = $('#fieldQuestion');
+    text.style.minHeight = '';
+    let max = 0;
+    FIELDS.forEach((f) => {
+      t.textContent = f.title; st.textContent = f.statement; q.textContent = f.question;
+      max = Math.max(max, text.offsetHeight);
+    });
+    const cur = FIELDS[activeField];
+    t.textContent = cur.title; st.textContent = cur.statement; q.textContent = cur.question;
+    text.style.minHeight = max + 'px';
+  }
+  let fitTimer = null;
+  window.addEventListener('resize', () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitFieldText, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitFieldText);
+
   function setField(i) { if (i === activeField) return; activeField = i; renderFieldPanel(true); renderFieldAccordion(true); }
   function initFields() {
     renderFieldRows(); renderFieldPanel(); renderFieldAccordion();
+    fitFieldText();
     const onClick = (e) => { const b = e.target.closest('.field-row'); if (b) setField(+b.dataset.i); };
     fieldsList.addEventListener('click', onClick);
     fieldsMobile.addEventListener('click', onClick);
