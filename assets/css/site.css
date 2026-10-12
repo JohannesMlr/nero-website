@@ -161,7 +161,7 @@ body[data-view="article"] .nav .nav-cta:hover { background: var(--mauve-accent);
 .card-link:hover h3, .card-link:focus-visible h3 { color: var(--mauve-accent); }
 .card-link:focus-visible { outline: 2px solid var(--mauve-accent); outline-offset: 4px; }
 /* Headline size follows the card width, so each initiative headline stays at two lines. */
-.card h3 { font-weight: 500; font-size: clamp(18px, 7.2cqi, 28px); line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
+.card h3 { font-weight: 500; font-size: clamp(16px, 6.3cqi, 26px); line-height: 1.15; letter-spacing: -0.03em; text-wrap: balance; }
 @media (max-width: 880px) { .cards { grid-template-columns: 1fr; } .card h3 { font-size: clamp(16px, 6.4cqi, 26px); } }
 .card p { font-size: 16px; line-height: 1.55; color: var(--ink-muted); text-wrap: pretty; }
 
